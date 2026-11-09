@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>JET-Česko – Synchronizovaná Prezentace</title>
+  <script type="module" crossorigin src="./assets/index-CrH90kah.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-e90D3wbr.css">
+</head>
+<body>
+  <div id="app-root">
+    <!-- Subtle Master Mode HUD (Hidden in Client Mode) -->
+    <div id="master-hud" class="hidden" data-testid="master-hud">
+      <span id="sync-dot" class="hud-dot"></span>
+      <span>MASTER</span>
+      <span>•</span>
+      <span>Diváci: <strong id="viewer-count" data-testid="viewer-count">0</strong></span>
+      <span>•</span>
+      <span id="master-slide-pos" data-testid="master-slide-pos">0/0</span>
+    </div>
+
+    <!-- Reveal.js Presentation Viewport -->
+    <div class="reveal">
+      <div class="slides" id="slides-container"></div>
+    </div>
+  </div>
+
+</body>
+</html>
