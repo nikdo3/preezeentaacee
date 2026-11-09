@@ -4,6 +4,77 @@ const STAGE_WIDTH = presentationData.metadata?.stageWidth || 960;
 const STAGE_HEIGHT = presentationData.metadata?.stageHeight || 540;
 
 /**
+ * Extracts a dynamic color palette for a given slide index so that both the
+ * ambient viewport background (#app-root) and the Three.js 3D scene (rings,
+ * wireframe beacons, particles, and glow) dynamically adapt to the active slide!
+ */
+export function getSlideThemePalette(slideIndex = 0) {
+  const slides = presentationData.slides || [];
+  const slide = slides[Math.max(0, Math.min(slideIndex, slides.length - 1))] || slides[0];
+  if (!slide) {
+    return {
+      primary: '#2A4D14',
+      secondary: '#11457E',
+      accent: '#D8973C',
+      glow: '#85AC7E'
+    };
+  }
+
+  let primary = '#2A4D14';
+  let secondary = '#11457E';
+  let accent = '#D8973C';
+  let glow = '#85AC7E';
+
+  const bg = slide.bg;
+  if (bg) {
+    if (bg.type === 'linear' && Array.isArray(bg.stops) && bg.stops.length >= 2) {
+      primary = bg.stops[0].color || '#D7141A';
+      secondary = bg.stops[bg.stops.length - 1].color || '#11457E';
+      accent = '#FFFFFF';
+      glow = primary;
+    } else if (bg.type === 'radial' && Array.isArray(bg.stops) && bg.stops.length >= 2) {
+      // e.g. Slide 2 & Slide 11: center #FFFFFF to edge #2A4D14
+      const outer = bg.stops[bg.stops.length - 1].color || '#2A4D14';
+      primary = outer;
+      secondary = '#5DA271';
+      accent = '#11457E';
+      glow = '#85AC7E';
+    } else if (bg.type === 'solid' && bg.color) {
+      primary = bg.color;
+      if (bg.color.toUpperCase() === '#2A4D14') {
+        // Dark forest green section slides (e.g. Slide 6 Hideři, Slide 14 Seekři)
+        secondary = '#85AC7E';
+        accent = '#D8973C';
+        glow = '#5DA271';
+      } else if (bg.color.toUpperCase() === '#85AC7E') {
+        // Sage green content slides: pair with the layout arch color (#11457E or #D7141A)
+        secondary = '#11457E';
+        accent = '#D7141A';
+        glow = '#5DA271';
+      }
+    }
+  }
+
+  // Check layout arch color if present
+  if (Array.isArray(slide.layoutElements)) {
+    for (const el of slide.layoutElements) {
+      if (el.kind === 'sp' && el.fill && el.fill.type === 'solid' && el.fill.color) {
+        secondary = el.fill.color;
+        break;
+      }
+    }
+  }
+
+  // Rotate accent slightly across slides so adjacent slides still trigger a visible background shift
+  const accentCycle = ['#D8973C', '#D7141A', '#11457E', '#5DA271'];
+  if (bg?.type === 'solid' && bg.color?.toUpperCase() === '#85AC7E') {
+    accent = accentCycle[slideIndex % accentCycle.length];
+  }
+
+  return { primary, secondary, accent, glow, slideIndex };
+}
+
+/**
  * Computes and applies uniform CSS scaling so the 960x540 (16:9) PPTX stage
  * fits any viewport (mobile 375x667 up to 4K 3840x2160) with zero overflow
  * while leaving a subtle margin for the 3D WebGL background around the frame.
@@ -13,9 +84,8 @@ export function updateStageScale() {
   const vw = window.innerWidth || 1920;
   const vh = window.innerHeight || 1080;
 
-  // Use 94% width / 92% height on desktop so the 3D animated space frames the slide
-  const marginFactorW = vw < 600 ? 0.96 : 0.93;
-  const marginFactorH = vh < 600 ? 0.94 : 0.91;
+  const marginFactorW = vw < 600 ? 0.96 : 0.92;
+  const marginFactorH = vh < 600 ? 0.94 : 0.90;
 
   const scaleX = (vw * marginFactorW) / STAGE_WIDTH;
   const scaleY = (vh * marginFactorH) / STAGE_HEIGHT;
@@ -28,11 +98,10 @@ function fillToCss(fill, isSlideBg = false) {
   if (!fill || fill.type === 'none') return 'transparent';
   if (fill.type === 'solid') {
     if (isSlideBg && fill.color && fill.color.startsWith('#') && fill.color.length === 7) {
-      // Subtle translucency (92% opacity) so the 3D background shimmer is visible through the slide
       const r = parseInt(fill.color.slice(1, 3), 16);
       const g = parseInt(fill.color.slice(3, 5), 16);
       const b = parseInt(fill.color.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, 0.92)`;
+      return `rgba(${r}, ${g}, ${b}, 0.90)`;
     }
     return fill.color || 'transparent';
   }
@@ -55,7 +124,7 @@ function buildTransformCss(box) {
   return parts.length > 0 ? parts.join(' ') : '';
 }
 
-function renderPicElement(el, slideIdx) {
+function renderPicElement(el, slideIdx, elOrder) {
   const { box, src, crop, extraPhoto } = el;
   const wrapper = document.createElement('div');
   wrapper.className = extraPhoto ? 'pptx-el pptx-pic pptx-extra-photo' : 'pptx-el pptx-pic';
@@ -63,9 +132,13 @@ function renderPicElement(el, slideIdx) {
   wrapper.style.top = `${box.y}px`;
   wrapper.style.width = `${box.w}px`;
   wrapper.style.height = `${box.h}px`;
+  wrapper.style.setProperty('--el-order', String(elOrder));
 
   const tf = buildTransformCss(box);
   if (tf) wrapper.style.transform = tf;
+
+  const animInner = document.createElement('div');
+  animInner.className = 'pptx-pic-motion';
 
   const img = document.createElement('img');
   img.src = src;
@@ -74,7 +147,7 @@ function renderPicElement(el, slideIdx) {
   img.decoding = 'async';
 
   if (crop && (crop.l || crop.t || crop.r || crop.b)) {
-    wrapper.classList.add('pptx-pic-cropped');
+    animInner.classList.add('pptx-pic-cropped');
     const visW = Math.max(0.05, 1 - (crop.l || 0) - (crop.r || 0));
     const visH = Math.max(0.05, 1 - (crop.t || 0) - (crop.b || 0));
     img.style.width = `${+(100 / visW).toFixed(3)}%`;
@@ -85,7 +158,8 @@ function renderPicElement(el, slideIdx) {
     img.className = 'pptx-pic-img';
   }
 
-  wrapper.appendChild(img);
+  animInner.appendChild(img);
+  wrapper.appendChild(animInner);
   return wrapper;
 }
 
@@ -122,10 +196,11 @@ function renderCustGeomSvg(el) {
   return svg;
 }
 
-function renderSpElement(el) {
+function renderSpElement(el, elOrder, globalPCountRef) {
   const { box, prst, fill, stroke, custPaths, anchor, paragraphs, phKey } = el;
   const div = document.createElement('div');
   div.className = `pptx-el pptx-sp pptx-prst-${prst || 'rect'}`;
+  div.style.setProperty('--el-order', String(elOrder));
   if (phKey) {
     div.setAttribute('data-ph', phKey);
   }
@@ -139,6 +214,7 @@ function renderSpElement(el) {
   if (tf) div.style.transform = tf;
 
   if (custPaths && custPaths.length > 0) {
+    div.classList.add('pptx-has-cust-svg');
     div.appendChild(renderCustGeomSvg(el));
   } else {
     if (fill && fill.type !== 'none') {
@@ -156,6 +232,7 @@ function renderSpElement(el) {
     for (const p of paragraphs) {
       const pEl = document.createElement('div');
       pEl.className = 'pptx-p';
+      pEl.style.setProperty('--p-idx', String(globalPCountRef.count++));
       pEl.style.textAlign =
         p.algn === 'ctr' ? 'center' :
         p.algn === 'r' ? 'right' :
@@ -209,12 +286,12 @@ function renderSpElement(el) {
   return div;
 }
 
-function renderSceneElement(el, slideIdx) {
+function renderSceneElement(el, slideIdx, elOrder, globalPCountRef) {
   if (el.kind === 'pic') {
-    return renderPicElement(el, slideIdx);
+    return renderPicElement(el, slideIdx, elOrder);
   }
   if (el.kind === 'sp') {
-    return renderSpElement(el);
+    return renderSpElement(el, elOrder, globalPCountRef);
   }
   return null;
 }
@@ -223,6 +300,7 @@ function renderSceneElement(el, slideIdx) {
  * Builds the 1:1 PPTX Reveal.js DOM hierarchy from presentation-data.json.
  * - Zero fake "Snímek X" or "#12" badges
  * - Zero per-bullet fragment clicks (1 click = 1 slide, all text immediately visible)
+ * - Automatic choreographed entrance & continuous 3D motion on slide elements
  * - Exact 960x540 (16:9) PPTX layout, typography, colors, and cropped images
  */
 export function buildSlides(slidesContainer) {
@@ -251,10 +329,18 @@ export function buildSlides(slidesContainer) {
     stage.style.height = `${STAGE_HEIGHT}px`;
     stage.style.background = fillToCss(slide.bg, true);
 
+    // Dynamic ambient light sheen layer inside the slide that reacts to 3D tilt/transitions
+    const sheen = document.createElement('div');
+    sheen.className = 'pptx-stage-sheen';
+    stage.appendChild(sheen);
+
+    let elOrder = 0;
+    const globalPCountRef = { count: 0 };
+
     // 1. Render Slide Layout background elements (arches, border frames, decorative shapes)
     if (Array.isArray(slide.layoutElements)) {
       for (const el of slide.layoutElements) {
-        const node = renderSceneElement(el, idx);
+        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef);
         if (node) {
           node.classList.add('pptx-layout-el');
           stage.appendChild(node);
@@ -265,7 +351,7 @@ export function buildSlides(slidesContainer) {
     // 2. Render Slide Foreground elements (photos, titles, cards, custom vectors, slide numbers)
     if (Array.isArray(slide.elements)) {
       for (const el of slide.elements) {
-        const node = renderSceneElement(el, idx);
+        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef);
         if (node) {
           stage.appendChild(node);
         }

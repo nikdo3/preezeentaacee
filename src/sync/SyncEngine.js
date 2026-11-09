@@ -171,7 +171,6 @@ export class SyncEngine {
       });
     }
 
-    this._createMasterBadge();
     saveMasterStateToStorage(this.authoritativeState);
     this._applyStateToReveal(this.authoritativeState, true);
     this._updateUrlSilently(this.authoritativeState);
@@ -842,79 +841,7 @@ export class SyncEngine {
     }
   }
 
-  _createMasterBadge() {
-    if (typeof document === 'undefined') return;
-    if (!this.isMaster) return;
-
-    const existingBadge = document.getElementById('master-status-badge');
-    if (existingBadge) {
-      this.badgeElement = existingBadge;
-      this.badgeTextElement = document.getElementById('master-status-badge-text');
-      return;
-    }
-
-    const badge = document.createElement('div');
-    badge.id = 'master-status-badge';
-    badge.setAttribute('role', 'status');
-    badge.setAttribute('aria-live', 'polite');
-    badge.style.cssText = [
-      'position: fixed',
-      'bottom: 14px',
-      'left: 18px',
-      'z-index: 9999',
-      'display: inline-flex',
-      'align-items: center',
-      'gap: 8px',
-      'padding: 6px 14px',
-      'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      'font-size: 12px',
-      'font-weight: 500',
-      'letter-spacing: 0.02em',
-      'color: #e2e8f0',
-      'background: rgba(15, 23, 42, 0.85)',
-      'backdrop-filter: blur(8px)',
-      '-webkit-backdrop-filter: blur(8px)',
-      'border: 1px solid rgba(255, 255, 255, 0.12)',
-      'border-radius: 9999px',
-      'box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3)',
-      'pointer-events: none',
-      'user-select: none',
-      'transition: opacity 0.25s ease'
-    ].join('; ');
-
-    const dot = document.createElement('span');
-    dot.style.cssText = [
-      'display: inline-block',
-      'width: 8px',
-      'height: 8px',
-      'border-radius: 50%',
-      'background: #10b981',
-      'box-shadow: 0 0 8px #10b981'
-    ].join('; ');
-
-    const text = document.createElement('span');
-    text.id = 'master-status-badge-text';
-    text.textContent = 'Master (0 viewers)';
-
-    badge.appendChild(dot);
-    badge.appendChild(text);
-    if (document.body && typeof document.body.appendChild === 'function') {
-      document.body.appendChild(badge);
-    }
-
-    this.badgeElement = badge;
-    this.badgeTextElement = text;
-  }
-
-  _updateViewerBadge(count) {
-    if (this.badgeTextElement) {
-      const viewerLabel = count === 1 ? '1 viewer' : `${count} viewers`;
-      this.badgeTextElement.textContent = `Master (${viewerLabel})`;
-    }
-  }
-
   _emitStatus() {
-    this._updateViewerBadge(this.viewersCount);
     if (typeof this.onStatusChange === 'function') {
       this.onStatusChange({
         isMaster: this.isMaster,

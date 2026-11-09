@@ -1,7 +1,7 @@
 import 'reveal.js/dist/reveal.css';
 import './styles/main.css';
 import Reveal from 'reveal.js';
-import { buildSlides } from './slides/SlideBuilder.js';
+import { buildSlides, getSlideThemePalette } from './slides/SlideBuilder.js';
 import { SyncEngine } from './sync/SyncEngine.js';
 import { isMasterMode } from './sync/stateMachine.js';
 import { Background3D } from './graphics/Background3D.js';
@@ -20,6 +20,7 @@ async function bootstrap() {
   // 2. Initialize 60 FPS WebGL 3D background (with automatic fallback)
   const bg3d = new Background3D(appRoot);
   bg3d.init();
+  bg3d.onSlideChange(0, 0, getSlideThemePalette(0));
   window.__bg3d = bg3d;
 
   // 3. Configure Reveal.js based on Master vs Client mode
@@ -28,6 +29,7 @@ async function bootstrap() {
     disableLayout: true,
     center: false,
     controls: master,
+    controlsTutorial: false,
     progress: master,
     keyboard: master,
     touch: master,
@@ -44,6 +46,14 @@ async function bootstrap() {
 
   await reveal.initialize();
   window.__reveal = reveal;
+
+  // Sync initial slide theme palette in case Reveal restored or jumped to another slide
+  const initialIndices = reveal.getIndices ? reveal.getIndices() : { h: 0, v: 0 };
+  bg3d.onSlideChange(
+    initialIndices.h || 0,
+    initialIndices.v || 0,
+    getSlideThemePalette(initialIndices.h || 0)
+  );
 
   // 4. Initialize Master-Client Synchronization Engine
   const url = new URL(window.location.href);
@@ -64,8 +74,7 @@ async function bootstrap() {
         viewerCountEl.textContent = String(viewersCount ?? 0);
       }
       if (slidePosEl && state) {
-        const f = (state.indexf ?? -1) >= 0 ? `/${state.indexf}` : '';
-        slidePosEl.textContent = `${state.indexh}/${state.indexv}${f}`;
+        slidePosEl.textContent = `${(state.indexh ?? 0) + 1} / 51`;
       }
       if (syncDotEl) {
         syncDotEl.classList.toggle('offline', !connected);
@@ -76,9 +85,11 @@ async function bootstrap() {
   syncEngine.init();
   window.__syncEngine = syncEngine;
 
-  // 5. Connect 3D background camera parallax to Reveal slide changes
+  // 5. Connect 3D background camera parallax & dynamic slide palette to Reveal slide changes
   reveal.on('slidechanged', (event) => {
-    bg3d.onSlideChange(event.indexh || 0, event.indexv || 0);
+    const idxH = event.indexh || 0;
+    const idxV = event.indexv || 0;
+    bg3d.onSlideChange(idxH, idxV, getSlideThemePalette(idxH));
   });
 }
 

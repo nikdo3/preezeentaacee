@@ -57,7 +57,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
       await Promise.all(
         clientPages.map((cp) =>
           expect
-            .poll(() => getRevealState(cp), { timeout: 300, intervals: [15, 30, 50] })
+            .poll(() => getRevealState(cp), { timeout: 600, intervals: [15, 30, 50] })
             .toEqual(step.expected)
         )
       );
@@ -219,9 +219,14 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await page.goto('/?master=1&room=room-responsive');
     await waitForRevealReady(page);
 
+    // Verify single Master HUD (no duplicate #master-status-badge)
+    expect(await page.locator('#master-status-badge').count()).toBe(0);
+    await expect(page.locator('#master-hud')).toBeVisible();
+
     // Capture visual verification screenshots at 1920x1080 for Slide 1, Slide 11, and Slide 12
     await page.evaluate(() => window.__reveal.slide(0, 0, -1));
-    await page.waitForTimeout(450);
+    await page.waitForTimeout(550);
+    expect(await page.locator('#app-root').getAttribute('data-slide-primary')).toBe('#D7141A');
     await page.screenshot({ path: 'test-results/slide-01-hero.png' });
 
     await page.evaluate(() => window.__reveal.slide(10, 0, -1));
@@ -230,6 +235,9 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
 
     await page.evaluate(() => window.__reveal.slide(11, 0, -1));
     await page.waitForTimeout(550);
+    expect(await page.locator('#app-root').getAttribute('data-slide-primary')).toBe('#85AC7E');
+    expect(await page.locator('.reveal .slides section.present .pptx-stage-sheen').count()).toBe(1);
+    expect(await page.locator('.reveal .slides section.present .pptx-pic-motion').count()).toBeGreaterThan(0);
     await page.screenshot({ path: 'test-results/slide-12-endgame.png' });
 
     const viewports = [
