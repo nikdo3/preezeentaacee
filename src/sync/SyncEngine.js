@@ -40,7 +40,7 @@ export class SyncEngine {
 
     this.isMaster = options.isMaster !== undefined ? Boolean(options.isMaster) : isMasterMode();
     this.masterId = options.masterId || this._getOrCreateMasterId();
-    this.clientId = 'c_' + Math.random().toString(36).slice(2, 10);
+    this.clientId = options.clientId || this._getOrCreateClientId();
     this.seq = 0;
     this.viewersCount = 0;
     this.connected = false;
@@ -64,6 +64,7 @@ export class SyncEngine {
     this._heartbeatTimer = null;
     this._pollTimer = null;
     this._peerRetryTimer = null;
+    this._lastSyncRequestTime = 0;
 
     this._boundKeyDown = this._handleKeyDown.bind(this);
     this._boundTouchStart = this._handleTouchEvent.bind(this);
@@ -75,17 +76,47 @@ export class SyncEngine {
     this._boundOffline = this._handleOffline.bind(this);
     this._boundSlideChanged = this._handleRevealChange.bind(this);
     this._boundFragmentChanged = this._handleRevealChange.bind(this);
+    this._boundPageHide = this._handlePageHide.bind(this);
   }
 
   _getOrCreateMasterId() {
     try {
-      const existing = sessionStorage.getItem('reveal_master_id');
-      if (existing) return existing;
-      const id = 'm_' + Math.random().toString(36).slice(2, 10);
-      sessionStorage.setItem('reveal_master_id', id);
-      return id;
-    } catch {
-      return 'm_default';
+      if (typeof sessionStorage !== 'undefined') {
+        const existing = sessionStorage.getItem('reveal_master_id');
+        if (existing) return existing;
+        const id = 'm_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('reveal_master_id', id);
+        return id;
+      }
+    } catch {}
+    return 'm_default';
+  }
+
+  _getOrCreateClientId() {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        const existing = sessionStorage.getItem('reveal_client_id');
+        if (existing) return existing;
+        const id = 'c_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('reveal_client_id', id);
+        return id;
+      }
+    } catch {}
+    return 'c_' + Math.random().toString(36).slice(2, 10);
+  }
+
+  _handlePageHide() {
+    if (!this.isMaster) {
+      if (this.mqtt) {
+        try {
+          this.mqtt.publish('ctrl', { type: 'client_leave', clientId: this.clientId, role: 'client' }, false);
+        } catch {}
+      }
+      if (this.ws) {
+        try {
+          this.ws.close();
+        } catch {}
+      }
     }
   }
 
@@ -111,6 +142,11 @@ export class SyncEngine {
     if (!this._isStaticHost()) {
       this._connectWebSocket();
       this._startPollingFallback();
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('pagehide', this._boundPageHide);
+      window.addEventListener('beforeunload', this._boundPageHide);
     }
 
     this._startHeartbeat();
@@ -268,9 +304,26 @@ export class SyncEngine {
 
   enableMasterMode() {
     if (this.isMaster) return;
+
+    if (this.mqtt) {
+      try {
+        this.mqtt.publish('ctrl', { type: 'client_leave', clientId: this.clientId, role: 'client' }, false);
+      } catch {}
+    }
+    if (this.ws) {
+      try {
+        this.ws.close();
+      } catch {}
+      this.ws = null;
+    }
+
     this.isMaster = true;
     this.hasUserNavigated = true;
     this._removeClientLockListeners();
+
+    if (!this._isStaticHost()) {
+      this._connectWebSocket();
+    }
 
     if (this.reveal) {
       this.reveal.configure({
@@ -487,11 +540,18 @@ export class SyncEngine {
       onConnectChange: (isConnected) => {
         if (isConnected) {
           this.connected = true;
-          if (this.isMaster && (this.hasRestoredState || this.hasUserNavigated)) {
-            this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+          if (this.isMaster) {
+            if (this.hasRestoredState || this.hasUserNavigated) {
+              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+            } else {
+              this.mqtt.publish('ctrl', { type: 'master_sync_request', masterId: this.masterId, role: 'master' }, false);
+            }
           } else {
-            // Request current state from any active Master (and receive broker's retained state)
-            this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId }, false);
+            const now = Date.now();
+            if (now - this._lastSyncRequestTime > 2000) {
+              this._lastSyncRequestTime = now;
+              this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId, role: 'client' }, false);
+            }
           }
         } else if (this._isStaticHost() && this.peerConnections.size === 0) {
           this.connected = false;
@@ -503,13 +563,26 @@ export class SyncEngine {
         if (subTopic === 'state' && data.type === 'state' && data.payload) {
           this._handleIncomingState(data.payload);
         } else if (subTopic === 'ctrl') {
-          if (data.type === 'sync_request' || data.type === 'client_ping') {
-            if (data.clientId && data.clientId !== this.clientId) {
+          if (data.type === 'client_leave') {
+            if (data.clientId) {
+              this.mqttViewers.delete(data.clientId);
+              this._recomputeStaticViewersCount();
+            }
+          } else if (data.type === 'sync_request' || data.type === 'client_ping') {
+            if (data.role === 'client' && typeof data.clientId === 'string' && data.clientId !== this.clientId) {
               this.mqttViewers.set(data.clientId, Date.now());
               this._recomputeStaticViewersCount();
             }
             if (
               data.type === 'sync_request' &&
+              this.isMaster &&
+              this.authoritativeState &&
+              (this.hasUserNavigated || this.hasRestoredState || this.authoritativeState.indexh > 0)
+            ) {
+              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+            }
+          } else if (data.type === 'master_sync_request') {
+            if (
               this.isMaster &&
               this.authoritativeState &&
               (this.hasUserNavigated || this.hasRestoredState || this.authoritativeState.indexh > 0)
@@ -527,7 +600,7 @@ export class SyncEngine {
   _recomputeStaticViewersCount() {
     const now = Date.now();
     for (const [cid, ts] of this.mqttViewers.entries()) {
-      if (now - ts > 25000) {
+      if (now - ts > 10000) {
         this.mqttViewers.delete(cid);
       }
     }
@@ -566,7 +639,7 @@ export class SyncEngine {
 
       const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const role = this.isMaster ? 'master' : 'client';
-      const wsUrl = `${proto}//${window.location.host}/__sync_ws?room=${encodeURIComponent(this.roomId)}&role=${role}`;
+      const wsUrl = `${proto}//${window.location.host}/__sync_ws?room=${encodeURIComponent(this.roomId)}&role=${role}&clientId=${encodeURIComponent(this.clientId)}`;
 
       const ws = new WebSocket(wsUrl);
       this.ws = ws;
@@ -800,7 +873,7 @@ export class SyncEngine {
           this._recomputeStaticViewersCount();
         }
       } else if (!this.isMaster && this.mqtt) {
-        this.mqtt.publish('ctrl', { type: 'client_ping', clientId: this.clientId }, false);
+        this.mqtt.publish('ctrl', { type: 'client_ping', clientId: this.clientId, role: 'client' }, false);
       }
     }, 3000);
   }
@@ -837,7 +910,15 @@ export class SyncEngine {
       } catch {}
     }
     if (this.mqtt) {
-      this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId }, false);
+      if (this.isMaster) {
+        this.mqtt.publish('ctrl', { type: 'master_sync_request', masterId: this.masterId, role: 'master' }, false);
+      } else {
+        const now = Date.now();
+        if (now - this._lastSyncRequestTime > 2000) {
+          this._lastSyncRequestTime = now;
+          this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId, role: 'client' }, false);
+        }
+      }
     }
   }
 
@@ -862,9 +943,16 @@ export class SyncEngine {
     if (typeof window !== 'undefined') {
       window.removeEventListener('online', this._boundOnline);
       window.removeEventListener('offline', this._boundOffline);
+      window.removeEventListener('pagehide', this._boundPageHide);
+      window.removeEventListener('beforeunload', this._boundPageHide);
     }
     if (this.badgeElement && this.badgeElement.parentNode) {
       this.badgeElement.parentNode.removeChild(this.badgeElement);
+    }
+    if (!this.isMaster && this.mqtt) {
+      try {
+        this.mqtt.publish('ctrl', { type: 'client_leave', clientId: this.clientId, role: 'client' }, false);
+      } catch {}
     }
     if (this.ws) {
       try {

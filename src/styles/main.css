@@ -40,7 +40,6 @@ html, body {
     radial-gradient(circle at 18% 84%, rgba(var(--ambient-glow-rgb), 0.45) 0%, transparent 50%),
     linear-gradient(135deg, rgba(var(--ambient-primary-rgb), 0.55) 0%, rgba(10, 16, 22, 0.94) 52%, rgba(var(--ambient-secondary-rgb), 0.62) 100%);
   perspective: 1400px;
-  transition: background 0.6s ease;
 }
 
 #app-root.webgl-fallback-active {
@@ -50,7 +49,76 @@ html, body {
     linear-gradient(145deg, rgba(var(--ambient-primary-rgb), 0.8) 0%, #101A12 52%, rgba(var(--ambient-secondary-rgb), 0.8) 100%);
 }
 
-/* Reveal.js full-viewport container overrides */
+/* ============================================================================
+   Perimeter Floating Photos Layer in 3D Surroundings
+   ============================================================================ */
+#ambient-floating-photos {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-photo-slot {
+  position: absolute;
+  width: clamp(100px, 9.5vw, 155px);
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.62),
+    0 0 0 1.5px rgba(255, 255, 255, 0.28),
+    0 0 24px rgba(var(--ambient-glow-rgb, 133, 172, 126), 0.35);
+  background: rgba(14, 22, 28, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translate3d(
+    calc(var(--stage-tilt-y, 0deg) * 2.8),
+    calc(var(--stage-tilt-x, 0deg) * -2.8 + var(--stage-float-y, 0px)),
+    0
+  ) rotate(var(--slot-rot, 0deg));
+  transition: transform 0.25s ease-out;
+}
+
+/* 6 Strategic Perimeter Slot Positions framing the center presentation */
+.slot-tl { top: clamp(16px, 3vh, 32px); left: clamp(16px, 2.5vw, 42px); }
+.slot-ml { top: 50%; left: clamp(12px, 2vw, 36px); transform: translateY(-50%) translate3d(calc(var(--stage-tilt-y, 0deg) * 2.8), calc(var(--stage-tilt-x, 0deg) * -2.8 + var(--stage-float-y, 0px)), 0) rotate(var(--slot-rot, 0deg)); }
+.slot-bl { bottom: clamp(16px, 3.5vh, 36px); left: clamp(16px, 2.5vw, 42px); }
+.slot-tr { top: clamp(16px, 3vh, 32px); right: clamp(16px, 2.5vw, 42px); }
+.slot-mr { top: 50%; right: clamp(12px, 2vw, 36px); transform: translateY(-50%) translate3d(calc(var(--stage-tilt-y, 0deg) * 2.8), calc(var(--stage-tilt-x, 0deg) * -2.8 + var(--stage-float-y, 0px)), 0) rotate(var(--slot-rot, 0deg)); }
+.slot-br { bottom: clamp(16px, 3.5vh, 36px); right: clamp(16px, 2.5vw, 42px); }
+
+.floating-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.floating-photo-img.active {
+  opacity: 0.72;
+  transform: scale(1);
+}
+
+.floating-photo-img.inactive {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+@media (max-width: 1080px), (max-height: 640px) {
+  #ambient-floating-photos {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   Reveal.js full-viewport container overrides
+   ============================================================================ */
 .reveal {
   position: relative;
   width: 100% !important;
@@ -88,7 +156,9 @@ html, body {
   pointer-events: none !important;
 }
 
-/* 1:1 PPTX 960x540 Stage & Uniform Viewport Scaling */
+/* ============================================================================
+   1:1 PPTX 960x540 Stage & Uniform Viewport Scaling
+   ============================================================================ */
 .pptx-stage-outer {
   position: relative;
   width: calc(960px * var(--pptx-stage-scale, 1));
@@ -114,9 +184,33 @@ html, body {
   transform: scale(var(--pptx-stage-scale, 1));
   transform-origin: top left;
   will-change: transform;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   user-select: none;
+}
+
+/* Dedicated Stage Background Layer */
+.pptx-stage-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  transform-origin: center center;
+  transition: transform 0.6s ease;
+}
+
+.pptx-bg-breathe {
+  animation: pptxBgBreathe 7.5s ease-in-out infinite alternate;
+}
+
+@keyframes pptxBgBreathe {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1.06);
+    filter: brightness(1.08);
+  }
 }
 
 /* Interactive 3D Ambient Light Sheen across the active slide */
@@ -148,6 +242,21 @@ html, body {
   position: absolute;
   box-sizing: border-box;
   transform-origin: center center;
+}
+
+/* Frosted Card Contrast Layer */
+.pptx-frosted-card {
+  background: rgba(244, 250, 242, 0.92) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px !important;
+  padding: 14px 18px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
+}
+
+.pptx-frosted-card .pptx-run {
+  color: #14221A !important;
 }
 
 /* Picture Elements & 3D Floating Motion Wrapper */
@@ -202,7 +311,6 @@ html, body {
   flex-direction: column;
 }
 
-/* Google Slides / PPTX round2SameRect preset (arch shape with top 2 corners rounded) */
 .pptx-prst-round2SameRect {
   border-radius: 999px 999px 0 0;
 }
@@ -281,7 +389,7 @@ html, body {
 }
 
 /* ============================================================================
-   Slide-Interactive Animations & 3D Depth Coupling (Active on section.present)
+   Slide-Interactive Animations (NON-FLICKERING, strictly single-entrance for opacity)
    ============================================================================ */
 
 @keyframes pptxSheenSweep {
@@ -330,22 +438,27 @@ html, body {
   }
 }
 
-@keyframes pptxPicPopAndFloat {
+/* Single Entrance Animation for Photos: NEVER infinite so zero flickering! */
+@keyframes pptxPicEnter {
   0% {
     opacity: 0;
     transform: translate3d(14px, 18px, 0) scale(0.92);
   }
-  12% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  56% {
-    opacity: 1;
-    transform: translate3d(-3px, -9px, 0) scale(1.018);
-  }
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Grounded Character Cutouts Entrance: NEVER moves vertically */
+@keyframes pptxPicEnterGrounded {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -380,21 +493,28 @@ html, body {
 }
 
 /* Title kinetic entrance */
-.reveal .slides section.present .pptx-sp[data-ph="title"] .pptx-p {
+.reveal .slides section.present .pptx-sp[data-ph="title"] .pptx-p,
+.reveal .slides section.present .pptx-sp[data-ph="ctrTitle"] .pptx-p {
   animation: pptxTitleEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Body & card paragraphs staggered entrance */
-.reveal .slides section.present .pptx-sp:not([data-ph="title"]):not([data-ph="sldNum"]) .pptx-p {
+.reveal .slides section.present .pptx-sp:not([data-ph="title"]):not([data-ph="ctrTitle"]):not([data-ph="sldNum"]) .pptx-p {
   animation: pptxParagraphEnter 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(min(var(--p-idx, 0), 5) * 35ms + 30ms);
 }
 
-/* Foreground photos, character cutouts, maps, and diagrams pop in & continuously float in 3D */
+/* Foreground photos: SINGLE entrance animation (NO infinite loop flickering!) */
 .reveal .slides section.present .pptx-pic:not(.pptx-layout-el) .pptx-pic-motion {
   filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.36));
-  animation: pptxPicPopAndFloat 3.6s ease-in-out infinite;
+  animation: pptxPicEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) 1 both;
   animation-delay: calc(min(var(--el-order, 0), 4) * 40ms);
+}
+
+/* Grounded Character Cutouts (Slides 19-24 & boundary touchers): strictly zero vertical movement */
+.reveal .slides section.present .pptx-pic.pptx-pic-grounded .pptx-pic-motion {
+  transform: none !important;
+  animation: pptxPicEnterGrounded 0.42s cubic-bezier(0.22, 1, 0.36, 1) 1 both !important;
 }
 
 /* Custom vector arrows & callouts pulse subtly */
@@ -403,9 +523,579 @@ html, body {
 }
 
 /* ============================================================================
-   Redesigned Navigation Arrows (Master Mode Controls)
+   Slide 1: Prague Silhouette & PID SVG
    ============================================================================ */
-.reveal .controls {
+.pptx-prague-svg-wrapper {
+  pointer-events: none;
+}
+
+.pptx-prague-silhouette-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.35));
+}
+
+/* ============================================================================
+   Slide 11: 3x2 Grid of Question Categories
+   ============================================================================ */
+.pptx-qcard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.pptx-qcard {
+  background: rgba(244, 250, 242, 0.94);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #16241C;
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.pptx-qcard.fragment:not(.visible) {
+  opacity: 0.18;
+  filter: grayscale(0.8) blur(1px);
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+.pptx-qcard.fragment.visible {
+  opacity: 1;
+  filter: none;
+  transform: scale(1);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.32),
+    0 0 16px rgba(var(--ambient-accent-rgb, 216, 151, 60), 0.45);
+}
+
+.qcard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid rgba(17, 69, 126, 0.18);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.qcard-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #11457E;
+}
+
+.qcard-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #D7141A;
+}
+
+.qcard-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4A6352;
+  margin-bottom: 4px;
+}
+
+.qcard-ex {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #1F3025;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.qcard-draw {
+  font-size: 10.5px;
+  font-weight: 700;
+  background: rgba(17, 69, 126, 0.1);
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  align-self: flex-start;
+  color: #11457E;
+}
+
+/* ============================================================================
+   Slide 25: Map Placeholder & Container
+   ============================================================================ */
+.pptx-map-container {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.pptx-map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pptx-map-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, #1A3222 0%, #0E1A12 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.radar-bg-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.radar-scan-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, #4ADE80, transparent);
+  box-shadow: 0 0 14px #4ADE80;
+  animation: radarSweep 6s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.map-badge-center {
+  position: relative;
+  z-index: 5;
+  background: rgba(14, 22, 28, 0.92);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 16px;
+  padding: 20px 28px;
+  text-align: center;
+  max-width: 580px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.map-badge-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.map-badge-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.map-badge-sub {
+  font-size: 12.5px;
+  color: #B4C8BA;
+  line-height: 1.4;
+}
+
+.map-badge-sub code {
+  color: #4ADE80;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ============================================================================
+   Slides 30 & 31: Modal Showcase Overlay (.pptx-popup-showcase)
+   ============================================================================ */
+.pptx-popup-showcase {
+  pointer-events: none;
+  transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pptx-popup-showcase.fragment:not(.visible) {
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
+}
+
+.pptx-popup-showcase.fragment.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.pptx-popup-card {
+  width: 100%;
+  height: 100%;
+  background: rgba(14, 22, 28, 0.94);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 18px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.85),
+    0 0 32px rgba(var(--ambient-accent-rgb, 216, 151, 60), 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pptx-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.pptx-popup-badge {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: #11457E;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+.pptx-popup-hint {
+  font-size: 11px;
+  color: #85AC7E;
+}
+
+.pptx-popup-img-wrap {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pptx-popup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ============================================================================
+   Slides 33, 35, 39, 40: Detail Zoom Reveal & Viewfinder
+   ============================================================================ */
+.pptx-pic-zoom-reveal.fragment:not(.visible) {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
+
+.pptx-pic-zoom-reveal.fragment.visible {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.72),
+    0 0 0 2.5px #4ADE80,
+    0 0 24px rgba(74, 222, 128, 0.55);
+  border-radius: 12px;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pptx-zoom-viewfinder {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(74, 222, 128, 0.85);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.pptx-zoom-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(14, 22, 28, 0.92);
+  color: #4ADE80;
+  border: 1.5px solid #4ADE80;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================================
+   Slides 34 & 41: Road Outline Overlays
+   ============================================================================ */
+.pptx-road-outline-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 12, 10, 0.92);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+.pptx-road-outline-overlay.fragment:not(.visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pptx-road-outline-overlay.fragment.visible {
+  opacity: 1;
+}
+
+.pptx-road-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pptx-road-path {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: roadTrace 1.6s ease-out forwards;
+}
+
+@keyframes roadTrace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================================================
+   Slide 46: Filming 2x2 Grid (.pptx-filming-grid)
+   ============================================================================ */
+.pptx-filming-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.pptx-film-card {
+  background: rgba(244, 250, 242, 0.94);
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #14221A;
+}
+
+.film-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.film-card-icon {
+  font-size: 24px;
+}
+
+.film-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #11457E;
+}
+
+.film-card-text {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #2D3D32;
+}
+
+/* ============================================================================
+   Slide 49: Map Links & Expandable Previews
+   ============================================================================ */
+.pptx-map-links-container {
+  display: flex;
+  gap: 20px;
+}
+
+.pptx-map-links-left {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map-link-nav {
+  background: rgba(244, 250, 242, 0.94);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #16241C;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.nav-icon {
+  font-size: 22px;
+}
+
+.nav-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-info strong {
+  font-size: 13.5px;
+  color: #11457E;
+}
+
+.nav-info span {
+  font-size: 11px;
+  color: #556D5E;
+}
+
+.pptx-map-links-right {
+  flex: 1;
+  position: relative;
+}
+
+.pptx-link-preview-card {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 22, 28, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.pptx-link-preview-card.fragment:not(.visible) {
+  opacity: 0;
+  transform: translateX(18px);
+  pointer-events: none;
+}
+
+.pptx-link-preview-card.fragment.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.preview-badge {
+  font-size: 12px;
+  font-weight: 800;
+  color: #4ADE80;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.preview-diagram {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.preview-svg {
+  width: 100%;
+  height: 120px;
+}
+
+.preview-tip {
+  font-size: 12px;
+  color: #DDEEE2;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.preview-web-box,
+.preview-app-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.web-url-bar {
+  font-size: 11.5px;
+  color: #93C5FD;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+
+.web-preview-features {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.feat-pill {
+  font-size: 11px;
+  background: rgba(17, 69, 126, 0.5);
+  color: #FFF;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.app-desc {
+  font-size: 12.5px;
+  color: #B4C8BA;
+  line-height: 1.4;
+}
+
+.preview-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #11457E;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  transition: background 0.2s, transform 0.2s;
+  align-self: flex-start;
+}
+
+.preview-link-btn:hover {
+  background: #D8973C;
+  transform: translateY(-2px);
+}
+
+/* ============================================================================
+   Redesigned Navigation Arrows (Strictly Master Only, Hidden for Viewers)
+   ============================================================================ */
+#app-root:not(.is-master) .reveal .controls {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#app-root.is-master .reveal .controls {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
@@ -486,6 +1176,46 @@ html, body {
 }
 
 /* ============================================================================
+   Floating Fullscreen Button (Bottom-Left)
+   ============================================================================ */
+.floating-fullscreen-btn {
+  position: fixed;
+  bottom: 18px;
+  left: 18px;
+  z-index: 96;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(14, 22, 28, 0.86);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 16px rgba(var(--ambient-glow-rgb, 133, 172, 126), 0.35);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.floating-fullscreen-btn:hover {
+  transform: scale(1.08);
+  background: rgba(var(--ambient-accent-rgb, 216, 151, 60), 0.9);
+  border-color: #FFFFFF;
+}
+
+.floating-fullscreen-btn svg {
+  display: block;
+}
+
+.floating-fullscreen-btn svg.hidden {
+  display: none !important;
+}
+
+/* ============================================================================
    Single Master HUD Indicator (Top-Right, Hidden in Client Mode)
    ============================================================================ */
 #master-hud {
@@ -525,4 +1255,121 @@ html, body {
 .hud-dot.offline {
   background: var(--color-danger);
   box-shadow: 0 0 8px var(--color-danger);
+}
+
+.hud-notes-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.hud-notes-btn:hover {
+  background: rgba(var(--ambient-accent-rgb, 216, 151, 60), 0.8);
+  transform: translateY(-1px);
+}
+
+/* ============================================================================
+   Presenter Notes Side Panel (Drawer)
+   ============================================================================ */
+#presenter-notes-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: clamp(300px, 28vw, 420px);
+  height: 100vh;
+  background: rgba(12, 18, 24, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.22);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.7);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#presenter-notes-panel.hidden {
+  transform: translateX(105%);
+  pointer-events: none;
+}
+
+.notes-panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notes-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notes-header-icon {
+  font-size: 18px;
+}
+
+#notes-slide-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.notes-close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.notes-close-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.notes-panel-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #E2ECE5;
+}
+
+.notes-panel-content p {
+  margin-bottom: 12px;
+}
+
+.notes-panel-content .notes-empty {
+  font-style: italic;
+  color: #7A9182;
+}
+
+.notes-panel-footer {
+  padding: 12px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 11px;
+  color: #8CA696;
+  line-height: 1.4;
+}
+
+.notes-panel-footer code {
+  color: #4ADE80;
 }

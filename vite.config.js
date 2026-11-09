@@ -21,6 +21,22 @@ function createSyncRelay() {
     return rooms.get(roomId);
   }
 
+  function getClientCount(room) {
+    if (!room || !room.clients) return 0;
+    const uniqueClientIds = new Set();
+    let unkeyedCount = 0;
+    for (const client of room.clients) {
+      if (client.readyState === 1 && client.syncRole === 'client') {
+        if (client.syncClientId) {
+          uniqueClientIds.add(client.syncClientId);
+        } else {
+          unkeyedCount++;
+        }
+      }
+    }
+    return uniqueClientIds.size + unkeyedCount;
+  }
+
   return {
     setup(httpServer, middlewares) {
       if (!httpServer) return;
@@ -45,20 +61,28 @@ function createSyncRelay() {
           const url = new URL(req.url, 'http://localhost');
           const roomId = url.searchParams.get('room') || 'default';
           const role = url.searchParams.get('role') || 'client';
+          const clientId = url.searchParams.get('clientId') || null;
           const room = getRoom(roomId);
+
+          ws.syncRole = role;
+          ws.syncClientId = clientId;
+
+          if (clientId) {
+            for (const existingClient of Array.from(room.clients)) {
+              if (existingClient !== ws && existingClient.syncClientId === clientId) {
+                room.clients.delete(existingClient);
+                try { existingClient.close(); } catch {}
+              }
+            }
+          }
 
           room.clients.add(ws);
           if (role === 'master') {
             room.masterWs = ws;
           }
 
-          const getClientCount = () => {
-            const hasMaster = room.masterWs && room.clients.has(room.masterWs);
-            return Math.max(0, room.clients.size - (hasMaster ? 1 : 0));
-          };
-
           const broadcastViewerCount = () => {
-            const countMsg = JSON.stringify({ type: 'viewers_count', count: getClientCount() });
+            const countMsg = JSON.stringify({ type: 'viewers_count', count: getClientCount(room) });
             for (const client of room.clients) {
               if (client.readyState === 1) { // 1 = OPEN
                 client.send(countMsg);
@@ -73,7 +97,7 @@ function createSyncRelay() {
             ws.send(JSON.stringify({
               type: 'state',
               payload: room.state,
-              clientsCount: getClientCount()
+              clientsCount: getClientCount(room)
             }));
           }
 
@@ -82,7 +106,7 @@ function createSyncRelay() {
               const message = JSON.parse(data.toString());
               if (message.type === 'state' && message.payload) {
                 room.state = message.payload;
-                const clientCount = getClientCount();
+                const clientCount = getClientCount(room);
                 const outMsg = JSON.stringify({
                   type: 'state',
                   payload: message.payload,
@@ -98,13 +122,13 @@ function createSyncRelay() {
                   ws.send(JSON.stringify({
                     type: 'state',
                     payload: room.state,
-                    clientsCount: getClientCount()
+                    clientsCount: getClientCount(room)
                   }));
                 }
               } else if (message.type === 'heartbeat') {
                 ws.send(JSON.stringify({
                   type: 'heartbeat_ack',
-                  clientsCount: getClientCount()
+                  clientsCount: getClientCount(room)
                 }));
               }
             } catch (err) {
@@ -145,8 +169,7 @@ function createSyncRelay() {
             return;
           }
 
-          const hasMaster = room.masterWs && room.clients.has(room.masterWs);
-          const clientCount = Math.max(0, room.clients.size - (hasMaster ? 1 : 0));
+          const clientCount = getClientCount(room);
 
           if (req.method === 'GET') {
             res.statusCode = 200;

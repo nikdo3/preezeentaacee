@@ -102,7 +102,7 @@ function buildPublishPacket(topic, jsonString, retain = false) {
 export class MqttSyncTransport {
   constructor({ roomId, onMessage, onConnectChange, brokers = DEFAULT_BROKERS }) {
     this.roomId = roomId || 'jet-cesko';
-    this.baseTopic = `preezeentaacee/v2/${this.roomId}`;
+    this.baseTopic = `preezeentaacee/v3/${this.roomId}`;
     this.onMessage = onMessage;
     this.onConnectChange = onConnectChange;
     this.brokers = brokers;
@@ -113,6 +113,7 @@ export class MqttSyncTransport {
     this.destroyed = false;
     this._pingTimer = null;
     this._reconnectTimers = new Map();
+    this._wasConnected = false;
   }
 
   init() {
@@ -275,8 +276,12 @@ export class MqttSyncTransport {
   }
 
   _notifyConnectionState() {
-    if (typeof this.onConnectChange === 'function') {
-      this.onConnectChange(this.connectedBrokers.size > 0);
+    const isConnected = this.connectedBrokers.size > 0;
+    if (this._wasConnected !== isConnected) {
+      this._wasConnected = isConnected;
+      if (typeof this.onConnectChange === 'function') {
+        this.onConnectChange(isConnected);
+      }
     }
   }
 

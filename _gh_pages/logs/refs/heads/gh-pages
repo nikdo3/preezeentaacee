@@ -1,1 +1,4 @@
 0000000000000000000000000000000000000000 055d854d2fd4ff1f18c640509589e1e64999394c nikdo3 <miroslavjiri.cani@unob.cz> 1794247238 +0100	commit (initial): Deploy dist to gh-pages
+055d854d2fd4ff1f18c640509589e1e64999394c 627b6f66902d49125822d6aa9ccec5373c8f1676 nikdo3 <miroslavjiri.cani@unob.cz> 1794255170 +0100	commit: Deploy updated interactive 3D presentation to GitHub Pages
+627b6f66902d49125822d6aa9ccec5373c8f1676 5cce13bf0a24a70c358cf9a91adbd40416e77e31 nikdo3 <miroslavjiri.cani@unob.cz> 1794255201 +0100	commit (amend): Deploy updated interactive 3D presentation to GitHub Pages
+5cce13bf0a24a70c358cf9a91adbd40416e77e31 24ae7e333a632ac1192fa74204988a9c0160e376 nikdo3 <miroslavjiri.cani@unob.cz> 1794261609 +0100	commit: Deploy finalized interactive presentation with 50 slides, editable texts, and smooth transitions

@@ -9,3 +9,4 @@ _*.js
 /*.jpg
 /*.png
 !public/assets/**
+scratch/

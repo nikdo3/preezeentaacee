@@ -258,7 +258,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
       [22, 0],  // Slide 23 (includes extra Lucie photo)
       [36, 0],  // Slide 37 (Fotky – park)
       [42, 0],  // Slide 43 (includes extra Lucie photo)
-      [50, 0]   // Slide 51 (Všechno!)
+      [49, 0]   // Slide 50 (Všechno!)
     ];
 
     for (const vp of viewports) {

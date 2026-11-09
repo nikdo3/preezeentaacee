@@ -9,10 +9,77 @@ function hexToRgbString(hex, fallback = '133, 172, 126') {
   return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
 }
 
+const PHOTO_SETS = [
+  // Phase 0: Úvod & Pravidla (slides 1-5)
+  [
+    './assets/team/lucie-1.png',
+    './assets/slides/image2.png',
+    './assets/slides/image3.png',
+    './assets/team/lucie-2.png',
+    './assets/slides/image1.png',
+    './assets/slides/image10.png'
+  ],
+  // Phase 1: Hideři & Schovávání (slides 6-13)
+  [
+    './assets/slides/image11.png',
+    './assets/slides/image13.png',
+    './assets/slides/image16.png',
+    './assets/slides/image17.jpg',
+    './assets/team/lucie-3.png',
+    './assets/slides/image18.png'
+  ],
+  // Phase 2: Seekři & Mapy (slides 14-24)
+  [
+    './assets/slides/image20.png',
+    './assets/slides/image22.jpg',
+    './assets/slides/image23.jpg',
+    './assets/slides/image24.png',
+    './assets/team/lucie-4.png',
+    './assets/slides/image25.jpg'
+  ],
+  // Phase 3: Karty, Decky & Bonusy (slides 25-31)
+  [
+    './assets/slides/image27.png',
+    './assets/slides/image33.jpg',
+    './assets/slides/image35.jpg',
+    './assets/slides/image37.png',
+    './assets/team/lucie-5.png',
+    './assets/slides/image40.png'
+  ],
+  // Phase 4: Fotografické výzvy (slides 32-41)
+  [
+    './assets/slides/image43.jpg',
+    './assets/slides/image45.jpg',
+    './assets/slides/image53.jpg',
+    './assets/slides/image56.jpg',
+    './assets/slides/image57.jpg',
+    './assets/team/lucie-6.png'
+  ],
+  // Phase 5: Taktika, Filmování & Závěr (slides 42-50)
+  [
+    './assets/slides/image64.png',
+    './assets/slides/image66.png',
+    './assets/slides/image69.png',
+    './assets/slides/image72.png',
+    './assets/slides/image73.png',
+    './assets/team/lucie-7.png'
+  ]
+];
+
+const SLOT_CONFIGS = [
+  { id: 'tl', label: 'top-left', rot: -4 },
+  { id: 'ml', label: 'mid-left', rot: 3 },
+  { id: 'bl', label: 'bottom-left', rot: -3 },
+  { id: 'tr', label: 'top-right', rot: 4 },
+  { id: 'mr', label: 'mid-right', rot: -2 },
+  { id: 'br', label: 'bottom-right', rot: 3 }
+];
+
 /**
  * 60 FPS Three.js WebGL 3D background synchronized with each slide's color palette,
  * featuring rotating 3D radar rings, floating 3D wireframe polyhedra,
- * dynamic 3D particle field, and interactive 3D stage parallax & transition impulses.
+ * dynamic 3D particle field, perimeter floating photos framing the slide,
+ * and interactive 3D stage parallax & smooth gradient transitions.
  * Automatically falls back to static CSS when WebGL is unavailable or context is lost.
  */
 export class Background3D {
@@ -42,7 +109,7 @@ export class Background3D {
     this.smoothPointerX = 0;
     this.smoothPointerY = 0;
 
-    // Dynamic palette colors (smoothly lerped per slide)
+    // Dynamic palette colors (smoothly lerped per frame at 60 FPS)
     this.currColors = [
       new THREE.Color('#D7141A'),
       new THREE.Color('#11457E'),
@@ -56,6 +123,11 @@ export class Background3D {
       new THREE.Color('#FFFFFF')
     ];
 
+    // Floating photos surroundings
+    this.floatingPhotosContainer = null;
+    this.floatingSlots = [];
+    this.currentPhotoSetIdx = -1;
+
     this._boundResize = this._onResize.bind(this);
     this._boundPointerMove = this._onPointerMove.bind(this);
     this._boundContextLost = this._onContextLost.bind(this);
@@ -66,6 +138,9 @@ export class Background3D {
     if (!this.container || typeof window === 'undefined') return;
 
     window.addEventListener('pointermove', this._boundPointerMove, { passive: true });
+
+    // Initialize the perimeter floating photos layer in the surroundings
+    this._initFloatingPhotos();
 
     try {
       const canvas = document.createElement('canvas');
@@ -115,6 +190,91 @@ export class Background3D {
       console.warn('[Background3D] WebGL initialization failed, activating static fallback:', err);
       this._activateStaticFallback('webgl-error');
     }
+  }
+
+  _initFloatingPhotos() {
+    if (!this.container || typeof document === 'undefined') return;
+
+    let el = this.container.querySelector('#ambient-floating-photos');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'ambient-floating-photos';
+      el.setAttribute('data-testid', 'ambient-floating-photos');
+      this.container.appendChild(el);
+    }
+    this.floatingPhotosContainer = el;
+    this.floatingPhotosContainer.innerHTML = '';
+    this.floatingSlots = [];
+
+    SLOT_CONFIGS.forEach((cfg) => {
+      const slotEl = document.createElement('div');
+      slotEl.className = `floating-photo-slot slot-${cfg.id}`;
+      slotEl.style.setProperty('--slot-rot', `${cfg.rot}deg`);
+
+      const imgA = document.createElement('img');
+      imgA.className = 'floating-photo-img active';
+      imgA.alt = '';
+      imgA.loading = 'lazy';
+
+      const imgB = document.createElement('img');
+      imgB.className = 'floating-photo-img inactive';
+      imgB.alt = '';
+      imgB.loading = 'lazy';
+
+      slotEl.appendChild(imgA);
+      slotEl.appendChild(imgB);
+      this.floatingPhotosContainer.appendChild(slotEl);
+
+      this.floatingSlots.push({
+        slotEl,
+        imgA,
+        imgB,
+        activeTarget: 'A',
+        currentSrc: ''
+      });
+    });
+
+    this._updateFloatingPhotos(0);
+  }
+
+  _getPhotoSetIndex(slideIndex = 0) {
+    if (slideIndex <= 5) return 0;
+    if (slideIndex <= 13) return 1;
+    if (slideIndex <= 24) return 2;
+    if (slideIndex <= 31) return 3;
+    if (slideIndex <= 41) return 4;
+    return 5;
+  }
+
+  _updateFloatingPhotos(slideIndex = 0) {
+    const setIdx = this._getPhotoSetIndex(slideIndex);
+    if (setIdx === this.currentPhotoSetIdx && this.currentPhotoSetIdx !== -1) return;
+    this.currentPhotoSetIdx = setIdx;
+
+    const photos = PHOTO_SETS[setIdx] || PHOTO_SETS[0];
+
+    this.floatingSlots.forEach((slot, i) => {
+      const newSrc = photos[i % photos.length];
+      if (!newSrc || slot.currentSrc === newSrc) return;
+      slot.currentSrc = newSrc;
+
+      // Cross-fade between imgA and imgB
+      if (slot.activeTarget === 'A') {
+        slot.imgB.src = newSrc;
+        slot.imgB.classList.remove('inactive');
+        slot.imgB.classList.add('active');
+        slot.imgA.classList.remove('active');
+        slot.imgA.classList.add('inactive');
+        slot.activeTarget = 'B';
+      } else {
+        slot.imgA.src = newSrc;
+        slot.imgA.classList.remove('inactive');
+        slot.imgA.classList.add('active');
+        slot.imgB.classList.remove('active');
+        slot.imgB.classList.add('inactive');
+        slot.activeTarget = 'A';
+      }
+    });
   }
 
   _buildSceneObjects() {
@@ -232,15 +392,6 @@ export class Background3D {
 
   _applyAmbientTheme(palette) {
     if (!this.container || !palette) return;
-    const pRgb = hexToRgbString(palette.primary, '42, 77, 20');
-    const sRgb = hexToRgbString(palette.secondary, '133, 172, 126');
-    const aRgb = hexToRgbString(palette.accent, '216, 151, 60');
-    const gRgb = hexToRgbString(palette.glow, '133, 172, 126');
-
-    this.container.style.setProperty('--ambient-primary-rgb', pRgb);
-    this.container.style.setProperty('--ambient-secondary-rgb', sRgb);
-    this.container.style.setProperty('--ambient-accent-rgb', aRgb);
-    this.container.style.setProperty('--ambient-glow-rgb', gRgb);
     this.container.setAttribute('data-slide-primary', palette.primary);
   }
 
@@ -258,6 +409,8 @@ export class Background3D {
       this.targetColors[3].set(palette.glow || '#FFFFFF');
       this._applyAmbientTheme(palette);
     }
+
+    this._updateFloatingPhotos(indexh);
   }
 
   _onPointerMove(event) {
@@ -280,7 +433,7 @@ export class Background3D {
       this.transitionImpulse *= 0.93;
       if (this.transitionImpulse < 0.001) this.transitionImpulse = 0;
 
-      // Smooth pointer parallax for both 3D camera and active slide stage
+      // Smooth pointer parallax for both 3D camera, active slide stage, and surrounding photos
       this.smoothPointerX += (this.pointerX - this.smoothPointerX) * 0.08;
       this.smoothPointerY += (this.pointerY - this.smoothPointerY) * 0.08;
 
@@ -295,9 +448,34 @@ export class Background3D {
         this.container.style.setProperty('--stage-float-y', `${floatY}px`);
       }
 
-      // Smoothly interpolate active slide palette colors in 3D space
+      // Smoothly interpolate active slide palette colors in 3D space & CSS at 60 FPS
       for (let s = 0; s < 4; s++) {
         this.currColors[s].lerp(this.targetColors[s], 0.06);
+      }
+
+      // Update ambient gradient CSS variables every frame for buttery-smooth 60 FPS transitions
+      if (this.container) {
+        const c0 = this.currColors[0];
+        const c1 = this.currColors[1];
+        const c2 = this.currColors[2];
+        const c3 = this.currColors[3];
+        const r0 = Math.round(c0.r * 255);
+        const g0 = Math.round(c0.g * 255);
+        const b0 = Math.round(c0.b * 255);
+        const r1 = Math.round(c1.r * 255);
+        const g1 = Math.round(c1.g * 255);
+        const b1 = Math.round(c1.b * 255);
+        const r2 = Math.round(c2.r * 255);
+        const g2 = Math.round(c2.g * 255);
+        const b2 = Math.round(c2.b * 255);
+        const r3 = Math.round(c3.r * 255);
+        const g3 = Math.round(c3.g * 255);
+        const b3 = Math.round(c3.b * 255);
+
+        this.container.style.setProperty('--ambient-primary-rgb', `${r0}, ${g0}, ${b0}`);
+        this.container.style.setProperty('--ambient-secondary-rgb', `${r1}, ${g1}, ${b1}`);
+        this.container.style.setProperty('--ambient-accent-rgb', `${r2}, ${g2}, ${b2}`);
+        this.container.style.setProperty('--ambient-glow-rgb', `${r3}, ${g3}, ${b3}`);
       }
 
       if (this.ringMeshes.length === 3) {

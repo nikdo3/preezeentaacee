@@ -3,10 +3,35 @@ import presentationData from '../data/presentation-data.json';
 const STAGE_WIDTH = presentationData.metadata?.stageWidth || 960;
 const STAGE_HEIGHT = presentationData.metadata?.stageHeight || 540;
 
+// Safe dynamic/optional import of EDITABLE_SLIDES from src/data/editovatelne-texty.js
+const editableMod = import.meta.glob('../data/editovatelne-texty.js', { eager: true })['../data/editovatelne-texty.js'];
+export const EDITABLE_SLIDES = editableMod?.EDITABLE_SLIDES || editableMod?.default || {};
+
+/**
+ * Returns presenter notes for the given slide index, prioritizing EDITABLE_SLIDES overrides.
+ */
+export function getSlideNotes(slideIndex = 0) {
+  const slides = presentationData.slides || [];
+  const slide = slides[slideIndex];
+  if (!slide) return '';
+  const override = EDITABLE_SLIDES[slide.slideNumber];
+  return override?.notes || slide.notes || '';
+}
+
+/**
+ * Returns the title for the given slide index, prioritizing EDITABLE_SLIDES overrides.
+ */
+export function getSlideTitle(slideIndex = 0) {
+  const slides = presentationData.slides || [];
+  const slide = slides[slideIndex];
+  if (!slide) return '';
+  const override = EDITABLE_SLIDES[slide.slideNumber];
+  return override?.title || slide.title || `Snímek ${slide.slideNumber}`;
+}
+
 /**
  * Extracts a dynamic color palette for a given slide index so that both the
- * ambient viewport background (#app-root) and the Three.js 3D scene (rings,
- * wireframe beacons, particles, and glow) dynamically adapt to the active slide!
+ * ambient viewport background (#app-root) and the Three.js 3D scene dynamically adapt.
  */
 export function getSlideThemePalette(slideIndex = 0) {
   const slides = presentationData.slides || [];
@@ -33,7 +58,6 @@ export function getSlideThemePalette(slideIndex = 0) {
       accent = '#FFFFFF';
       glow = primary;
     } else if (bg.type === 'radial' && Array.isArray(bg.stops) && bg.stops.length >= 2) {
-      // e.g. Slide 2 & Slide 11: center #FFFFFF to edge #2A4D14
       const outer = bg.stops[bg.stops.length - 1].color || '#2A4D14';
       primary = outer;
       secondary = '#5DA271';
@@ -42,12 +66,10 @@ export function getSlideThemePalette(slideIndex = 0) {
     } else if (bg.type === 'solid' && bg.color) {
       primary = bg.color;
       if (bg.color.toUpperCase() === '#2A4D14') {
-        // Dark forest green section slides (e.g. Slide 6 Hideři, Slide 14 Seekři)
         secondary = '#85AC7E';
         accent = '#D8973C';
         glow = '#5DA271';
       } else if (bg.color.toUpperCase() === '#85AC7E') {
-        // Sage green content slides: pair with the layout arch color (#11457E or #D7141A)
         secondary = '#11457E';
         accent = '#D7141A';
         glow = '#5DA271';
@@ -55,7 +77,6 @@ export function getSlideThemePalette(slideIndex = 0) {
     }
   }
 
-  // Check layout arch color if present
   if (Array.isArray(slide.layoutElements)) {
     for (const el of slide.layoutElements) {
       if (el.kind === 'sp' && el.fill && el.fill.type === 'solid' && el.fill.color) {
@@ -65,7 +86,6 @@ export function getSlideThemePalette(slideIndex = 0) {
     }
   }
 
-  // Rotate accent slightly across slides so adjacent slides still trigger a visible background shift
   const accentCycle = ['#D8973C', '#D7141A', '#11457E', '#5DA271'];
   if (bg?.type === 'solid' && bg.color?.toUpperCase() === '#85AC7E') {
     accent = accentCycle[slideIndex % accentCycle.length];
@@ -76,16 +96,15 @@ export function getSlideThemePalette(slideIndex = 0) {
 
 /**
  * Computes and applies uniform CSS scaling so the 960x540 (16:9) PPTX stage
- * fits any viewport (mobile 375x667 up to 4K 3840x2160) with zero overflow
- * while leaving a subtle margin for the 3D WebGL background around the frame.
+ * fits any viewport with zero overflow while framing the 3D surroundings.
  */
 export function updateStageScale() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const vw = window.innerWidth || 1920;
   const vh = window.innerHeight || 1080;
 
-  const marginFactorW = vw < 600 ? 0.96 : 0.92;
-  const marginFactorH = vh < 600 ? 0.94 : 0.90;
+  const marginFactorW = vw < 600 ? 0.96 : 0.90;
+  const marginFactorH = vh < 600 ? 0.94 : 0.88;
 
   const scaleX = (vw * marginFactorW) / STAGE_WIDTH;
   const scaleY = (vh * marginFactorH) / STAGE_HEIGHT;
@@ -101,7 +120,7 @@ function fillToCss(fill, isSlideBg = false) {
       const r = parseInt(fill.color.slice(1, 3), 16);
       const g = parseInt(fill.color.slice(3, 5), 16);
       const b = parseInt(fill.color.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, 0.90)`;
+      return `rgba(${r}, ${g}, ${b}, 0.92)`;
     }
     return fill.color || 'transparent';
   }
@@ -124,10 +143,178 @@ function buildTransformCss(box) {
   return parts.length > 0 ? parts.join(' ') : '';
 }
 
-function renderPicElement(el, slideIdx, elOrder) {
+/**
+ * Creates a crisp, stylized white line-art SVG of Prague & PID transit network for Slide 1.
+ */
+function createPragueSvg() {
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('class', 'pptx-prague-silhouette-svg');
+  svg.setAttribute('viewBox', '0 0 400 400');
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', '100%');
+  svg.setAttribute('aria-label', 'Praha – JET-PID mapa a silueta');
+
+  svg.innerHTML = `
+    <defs>
+      <filter id="glow-prague" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+      <linearGradient id="vltava-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.85" />
+        <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.95" />
+        <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.85" />
+      </linearGradient>
+    </defs>
+
+    <!-- Outer Stylized Shield / Prague Emblem Frame -->
+    <circle cx="200" cy="200" r="182" fill="none" stroke="rgba(255, 255, 255, 0.45)" stroke-width="2" stroke-dasharray="6 4" />
+    <circle cx="200" cy="200" r="174" fill="none" stroke="rgba(255, 255, 255, 0.75)" stroke-width="2.5" />
+    <circle cx="200" cy="200" r="162" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1.2" />
+
+    <!-- Administrative Prague Outline Boundary (Stylized polygon) -->
+    <path d="M 125,70 L 195,52 L 275,64 L 335,115 L 358,185 L 342,270 L 295,335 L 205,358 L 115,335 L 62,265 L 50,175 L 82,108 Z"
+          fill="rgba(17, 69, 126, 0.35)" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" filter="url(#glow-prague)" />
+
+    <!-- Radar / Coordinate Grid Axis -->
+    <line x1="200" y1="26" x2="200" y2="374" stroke="rgba(255, 255, 255, 0.22)" stroke-width="1" stroke-dasharray="3 3" />
+    <line x1="26" y1="200" x2="374" y2="200" stroke="rgba(255, 255, 255, 0.22)" stroke-width="1" stroke-dasharray="3 3" />
+
+    <!-- Iconic Winding Vltava River Curve (South to North through Prague center with islands) -->
+    <path d="M 215,355 C 220,310 205,280 185,250 C 165,220 162,188 180,165 C 200,140 248,142 260,118 C 272,94 250,68 252,54"
+          fill="none" stroke="url(#vltava-grad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-prague)" />
+
+    <!-- River Islands (Střelecký ostrov & Štvanice) -->
+    <ellipse cx="178" cy="205" rx="3.5" ry="9" fill="#FFFFFF" stroke="none" transform="rotate(-15 178 205)" />
+    <ellipse cx="232" cy="138" rx="4.5" ry="11" fill="#FFFFFF" stroke="none" transform="rotate(25 232 138)" />
+
+    <!-- Pražský Hrad (Prague Castle) & St. Vitus Cathedral Spire Silhouette (West Bank) -->
+    <g transform="translate(112, 142) scale(0.72)" stroke="#FFFFFF" stroke-width="2" fill="none">
+      <!-- Hill base -->
+      <path d="M 0,55 Q 35,42 70,55" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" />
+      <!-- Cathedral twin spires + central tower -->
+      <path d="M 18,48 L 18,22 L 23,8 L 28,22 L 28,48" stroke="#FFFFFF" fill="rgba(255,255,255,0.2)" />
+      <path d="M 42,48 L 42,16 L 47,2 L 52,16 L 52,48" stroke="#FFFFFF" fill="rgba(255,255,255,0.2)" />
+      <path d="M 28,34 L 42,34" stroke="#FFFFFF" stroke-width="1.5" />
+      <!-- Castle palace fortifications -->
+      <path d="M 2,52 L 2,42 L 18,42 L 52,42 L 68,42 L 68,52" stroke="#FFFFFF" />
+    </g>
+
+    <!-- Karlův Most (Charles Bridge) with arches crossing the Vltava -->
+    <g transform="translate(162, 196)" stroke="#FFFFFF" stroke-width="2" fill="none">
+      <line x1="0" y1="8" x2="52" y2="4" stroke="#FFFFFF" stroke-width="3" />
+      <!-- Arch spans -->
+      <path d="M 4,8 Q 12,0 20,7" />
+      <path d="M 20,7 Q 28,-1 36,6" />
+      <path d="M 36,6 Q 44,-2 50,5" />
+      <!-- Bridge Tower -->
+      <path d="M 46,6 L 46,-8 L 50,-14 L 54,-8 L 54,6" fill="rgba(255,255,255,0.25)" />
+    </g>
+
+    <!-- PID / Metro Transit Hub Nodes along Prague corridors -->
+    <!-- Line A (Green) -->
+    <path d="M 98,198 L 175,202 L 245,188 L 310,165" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-dasharray="4 2" />
+    <!-- Line B (Yellow) -->
+    <path d="M 92,260 L 165,225 L 235,160 L 305,105" fill="none" stroke="#EAB308" stroke-width="2.5" stroke-dasharray="4 2" />
+    <!-- Line C (Red) -->
+    <path d="M 268,78 L 245,148 L 235,215 L 242,320" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="4 2" />
+
+    <!-- Station Nodes (Dots) -->
+    <circle cx="175" cy="202" r="4.5" fill="#FFFFFF" stroke="#11457E" stroke-width="2" />
+    <circle cx="235" cy="160" r="4.5" fill="#FFFFFF" stroke="#11457E" stroke-width="2" />
+    <circle cx="245" cy="188" r="4.5" fill="#FFFFFF" stroke="#11457E" stroke-width="2" />
+    <circle cx="165" cy="225" r="4" fill="#FFFFFF" stroke="#11457E" stroke-width="1.8" />
+    <circle cx="235" cy="215" r="4" fill="#FFFFFF" stroke="#11457E" stroke-width="1.8" />
+
+    <!-- Badge Pills -->
+    <g transform="translate(200, 318)">
+      <rect x="-64" y="-14" width="128" height="26" rx="13" fill="#11457E" stroke="#FFFFFF" stroke-width="1.8" filter="url(#glow-prague)" />
+      <text x="0" y="4" text-anchor="middle" font-family="'Red Hat Display', sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" letter-spacing="1.5">JET-PID PRAHA</text>
+    </g>
+  `;
+
+  return svg;
+}
+
+function renderPicElement(el, slideIdx, elOrder, slide) {
   const { box, src, crop, extraPhoto } = el;
+  const slideNum = slide?.slideNumber || slideIdx + 1;
+
+  // Grounded check: if extra photo, touching any boundary, or on slides 19-24
+  const touchesBoundary =
+    box.y + box.h >= 460 || box.y <= 30 || box.x <= 30 || box.x + box.w >= 860;
+  const isGroundedSlide = slideNum >= 19 && slideNum <= 24;
+
   const wrapper = document.createElement('div');
   wrapper.className = extraPhoto ? 'pptx-el pptx-pic pptx-extra-photo' : 'pptx-el pptx-pic';
+
+  if (el.extraPhoto || touchesBoundary || isGroundedSlide) {
+    wrapper.classList.add('pptx-pic-grounded');
+  }
+
+  // Slide 1 Prague SVG Silhouette replacement
+  const isSlide1PragueSvg =
+    el.replaceWithPragueSvg || (slideNum === 1 && src && src.includes('image2.png'));
+  if (isSlide1PragueSvg) {
+    wrapper.classList.add('pptx-prague-svg-wrapper');
+    wrapper.style.left = '26px';
+    wrapper.style.top = '65px';
+    wrapper.style.width = '355px';
+    wrapper.style.height = '410px';
+    wrapper.style.zIndex = '12';
+    wrapper.appendChild(createPragueSvg());
+    return wrapper;
+  }
+
+  // Slides 30 & 31: fragmentPopup modal showcase overlay
+  const isFragmentPopup =
+    el.fragmentPopup ||
+    (slideNum === 30 && src?.includes('image33')) ||
+    (slideNum === 31 && src?.includes('image35'));
+
+  if (isFragmentPopup) {
+    const popup = document.createElement('div');
+    popup.className = 'pptx-el pptx-popup-showcase fragment';
+    popup.setAttribute('data-fragment-index', '0');
+    popup.style.left = '85px';
+    popup.style.top = '48px';
+    popup.style.width = '790px';
+    popup.style.height = '444px';
+    popup.style.zIndex = '35';
+
+    const card = document.createElement('div');
+    card.className = 'pptx-popup-card';
+
+    const header = document.createElement('div');
+    header.className = 'pptx-popup-header';
+
+    const badge = document.createElement('span');
+    badge.className = 'pptx-popup-badge';
+    badge.textContent = el.popupCaption || (slideNum === 30 ? '🎴 DETAIL POWER-UP KARET' : '💀 DETAIL CURSY KARET');
+
+    const hint = document.createElement('span');
+    hint.className = 'pptx-popup-hint';
+    hint.textContent = 'Kliknutím pokračujete';
+
+    header.appendChild(badge);
+    header.appendChild(hint);
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'pptx-popup-img-wrap';
+
+    const popImg = document.createElement('img');
+    popImg.src = src;
+    popImg.className = 'pptx-popup-img';
+    popImg.alt = 'Detail karet';
+    imgWrap.appendChild(popImg);
+
+    card.appendChild(header);
+    card.appendChild(imgWrap);
+    popup.appendChild(card);
+    return popup;
+  }
+
   wrapper.style.left = `${box.x}px`;
   wrapper.style.top = `${box.y}px`;
   wrapper.style.width = `${box.w}px`;
@@ -136,6 +323,20 @@ function renderPicElement(el, slideIdx, elOrder) {
 
   const tf = buildTransformCss(box);
   if (tf) wrapper.style.transform = tf;
+
+  // Slides 33, 35, 39, 40: Detail Zoom Reveal
+  const isFragmentZoom =
+    el.fragmentZoom ||
+    (slideNum === 33 && src?.includes('image43')) ||
+    (slideNum === 35 && elOrder >= 2 && src?.includes('image53')) ||
+    (slideNum === 39 && src?.includes('image59')) ||
+    (slideNum === 40 && src?.includes('image58'));
+
+  if (isFragmentZoom) {
+    wrapper.classList.add('fragment', 'pptx-pic-zoom-reveal');
+    wrapper.setAttribute('data-fragment-index', '0');
+    wrapper.style.zIndex = '28';
+  }
 
   const animInner = document.createElement('div');
   animInner.className = 'pptx-pic-motion';
@@ -159,6 +360,80 @@ function renderPicElement(el, slideIdx, elOrder) {
   }
 
   animInner.appendChild(img);
+
+  // If zoom reveal, append glowing viewfinder frame and badge
+  if (isFragmentZoom) {
+    const vf = document.createElement('div');
+    vf.className = 'pptx-zoom-viewfinder';
+    const badge = document.createElement('div');
+    badge.className = 'pptx-zoom-badge';
+    badge.textContent = el.zoomBadge || '🔍 DETAIL ZOOM';
+    vf.appendChild(badge);
+    animInner.appendChild(vf);
+  }
+
+  // Slides 34 & 41: Phone Screen Road Outline Overlays
+  const isRoadOutline =
+    el.fragmentRoadOutline ||
+    (slideNum === 34 && src?.includes('image41') ? 'nearest' : null) ||
+    (slideNum === 41 && src?.includes('image57') ? '1km' : null);
+
+  if (isRoadOutline) {
+    const roadOverlay = document.createElement('div');
+    roadOverlay.className = 'fragment pptx-road-outline-overlay';
+    roadOverlay.setAttribute('data-fragment-index', '0');
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const roadSvg = document.createElementNS(svgNS, 'svg');
+    roadSvg.setAttribute('viewBox', '0 0 280 430');
+    roadSvg.setAttribute('class', 'pptx-road-svg');
+
+    if (isRoadOutline === 'nearest' || isRoadOutline === true) {
+      roadSvg.innerHTML = `
+        <defs>
+          <filter id="road-glow-nearest" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+        <!-- Obrys nejbližší cesty: plynulá křivka -->
+        <path class="pptx-road-path" d="M 45,385 C 90,340 120,290 145,210 C 165,140 210,85 240,45"
+              fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-nearest)" />
+        <circle cx="45" cy="385" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="240" cy="45" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <text x="58" y="390" fill="#FFFFFF" font-size="12" font-weight="700">Start cesty</text>
+        <text x="160" y="42" fill="#4ADE80" font-size="12" font-weight="700">Nejbližší cesta</text>
+      `;
+    } else {
+      // 1 km route with 5 numbered turns
+      roadSvg.innerHTML = `
+        <defs>
+          <filter id="road-glow-1km" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+        <!-- Obrys +-1 km cesty: 5 zatáček s čísly -->
+        <path class="pptx-road-path" d="M 60,375 L 125,320 L 85,245 L 205,190 L 165,115 L 235,55"
+              fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-1km)" />
+        <!-- Turn points 1..5 -->
+        <g fill="#11457E" stroke="#FFFFFF" stroke-width="2" font-size="10" font-weight="800" text-anchor="middle">
+          <circle cx="60" cy="375" r="9" /><text x="60" y="379" fill="#FFF" stroke="none">S</text>
+          <circle cx="125" cy="320" r="9" /><text x="125" y="324" fill="#FFF" stroke="none">1</text>
+          <circle cx="85" cy="245" r="9" /><text x="85" y="249" fill="#FFF" stroke="none">2</text>
+          <circle cx="205" cy="190" r="9" /><text x="205" y="194" fill="#FFF" stroke="none">3</text>
+          <circle cx="165" cy="115" r="9" /><text x="165" y="119" fill="#FFF" stroke="none">4</text>
+          <circle cx="235" cy="55" r="9" fill="#4ADE80" /><text x="235" y="59" fill="#0E161C" stroke="none">5</text>
+        </g>
+        <rect x="55" y="15" width="170" height="24" rx="12" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
+        <text x="140" y="31" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">📍 Trasa +-1 km (5 zatáček)</text>
+      `;
+    }
+
+    roadOverlay.appendChild(roadSvg);
+    animInner.appendChild(roadOverlay);
+  }
+
   wrapper.appendChild(animInner);
   return wrapper;
 }
@@ -196,13 +471,18 @@ function renderCustGeomSvg(el) {
   return svg;
 }
 
-function renderSpElement(el, elOrder, globalPCountRef) {
+function renderSpElement(el, elOrder, globalPCountRef, slide, slidePCountRef) {
   const { box, prst, fill, stroke, custPaths, anchor, paragraphs, phKey } = el;
   const div = document.createElement('div');
   div.className = `pptx-el pptx-sp pptx-prst-${prst || 'rect'}`;
   div.style.setProperty('--el-order', String(elOrder));
   if (phKey) {
     div.setAttribute('data-ph', phKey);
+  }
+
+  // Frosted Card Contrast
+  if (el.frostedCard) {
+    div.classList.add('pptx-frosted-card');
   }
 
   div.style.left = `${box.x}px`;
@@ -225,11 +505,16 @@ function renderSpElement(el, elOrder, globalPCountRef) {
     }
   }
 
+  // Check editable text override for title
+  const isTitleEl = phKey === 'title' || phKey === 'ctrTitle';
+  const overrideTitle = slide ? EDITABLE_SLIDES[slide.slideNumber]?.title : null;
+
   if (paragraphs && paragraphs.length > 0) {
     const textWrap = document.createElement('div');
     textWrap.className = `pptx-txbody pptx-anchor-${anchor || 't'}`;
 
-    for (const p of paragraphs) {
+    for (let pIdx = 0; pIdx < paragraphs.length; pIdx++) {
+      const p = paragraphs[pIdx];
       const pEl = document.createElement('div');
       pEl.className = 'pptx-p';
       pEl.style.setProperty('--p-idx', String(globalPCountRef.count++));
@@ -257,24 +542,81 @@ function renderSpElement(el, elOrder, globalPCountRef) {
         pEl.appendChild(runContainer);
       }
 
-      for (const run of p.runs) {
-        if (run.br) {
-          runContainer.appendChild(document.createElement('br'));
-          continue;
-        }
+      // Check editable paragraph override from src/data/editovatelne-texty.js
+      const isSldNum = phKey === 'sldNum';
+      const currPIdx = (!isSldNum && slidePCountRef) ? slidePCountRef.count++ : -1;
+      const editablePText = (currPIdx >= 0 && slide) ? EDITABLE_SLIDES[slide.slideNumber]?.paragraphs?.[currPIdx] : null;
+
+      // Title override support
+      if (isTitleEl && pIdx === 0 && overrideTitle) {
         const span = document.createElement('span');
         span.className = 'pptx-run';
-        span.textContent = run.text;
-        const pxSize = +((run.sz || 16) * (4 / 3)).toFixed(2);
+        span.textContent = overrideTitle;
+        const firstRun = p.runs?.[0] || {};
+        const pxSize = +((firstRun.sz || 28) * (4 / 3)).toFixed(2);
         span.style.fontSize = `${pxSize}px`;
-        if (run.font) {
-          span.style.fontFamily = `'${run.font}', 'Red Hat Text', sans-serif`;
-        }
-        if (run.b) span.style.fontWeight = '700';
-        if (run.i) span.style.fontStyle = 'italic';
-        if (run.u) span.style.textDecoration = 'underline';
-        if (run.color) span.style.color = run.color;
+        span.style.fontWeight = '700';
+        if (firstRun.font) span.style.fontFamily = `'${firstRun.font}', 'Red Hat Display', sans-serif`;
+        if (firstRun.color) span.style.color = firstRun.color;
         runContainer.appendChild(span);
+      } else if (typeof editablePText === 'string') {
+        const originalPText = p.runs.map((r) => r.text).join('');
+        if (editablePText.trim() !== originalPText.trim()) {
+          // User edited this paragraph in editovatelne-texty.js!
+          const span = document.createElement('span');
+          span.className = 'pptx-run';
+          span.textContent = editablePText;
+          const firstRun = p.runs?.[0] || {};
+          const pxSize = +((firstRun.sz || 16) * (4 / 3)).toFixed(2);
+          span.style.fontSize = `${pxSize}px`;
+          if (firstRun.font) span.style.fontFamily = `'${firstRun.font}', 'Red Hat Text', sans-serif`;
+          if (firstRun.b) span.style.fontWeight = '700';
+          if (firstRun.i) span.style.fontStyle = 'italic';
+          if (firstRun.u) span.style.textDecoration = 'underline';
+          if (firstRun.color) span.style.color = firstRun.color;
+          runContainer.appendChild(span);
+        } else {
+          // Paragraph unchanged: render exact original runs
+          for (const run of p.runs) {
+            if (run.br) {
+              runContainer.appendChild(document.createElement('br'));
+              continue;
+            }
+            const span = document.createElement('span');
+            span.className = 'pptx-run';
+            span.textContent = run.text;
+            const pxSize = +((run.sz || 16) * (4 / 3)).toFixed(2);
+            span.style.fontSize = `${pxSize}px`;
+            if (run.font) {
+              span.style.fontFamily = `'${run.font}', 'Red Hat Text', sans-serif`;
+            }
+            if (run.b) span.style.fontWeight = '700';
+            if (run.i) span.style.fontStyle = 'italic';
+            if (run.u) span.style.textDecoration = 'underline';
+            if (run.color) span.style.color = run.color;
+            runContainer.appendChild(span);
+          }
+        }
+      } else {
+        for (const run of p.runs) {
+          if (run.br) {
+            runContainer.appendChild(document.createElement('br'));
+            continue;
+          }
+          const span = document.createElement('span');
+          span.className = 'pptx-run';
+          span.textContent = run.text;
+          const pxSize = +((run.sz || 16) * (4 / 3)).toFixed(2);
+          span.style.fontSize = `${pxSize}px`;
+          if (run.font) {
+            span.style.fontFamily = `'${run.font}', 'Red Hat Text', sans-serif`;
+          }
+          if (run.b) span.style.fontWeight = '700';
+          if (run.i) span.style.fontStyle = 'italic';
+          if (run.u) span.style.textDecoration = 'underline';
+          if (run.color) span.style.color = run.color;
+          runContainer.appendChild(span);
+        }
       }
 
       textWrap.appendChild(pEl);
@@ -286,22 +628,293 @@ function renderSpElement(el, elOrder, globalPCountRef) {
   return div;
 }
 
-function renderSceneElement(el, slideIdx, elOrder, globalPCountRef) {
+function renderSceneElement(el, slideIdx, elOrder, globalPCountRef, slide, slidePCountRef) {
   if (el.kind === 'pic') {
-    return renderPicElement(el, slideIdx, elOrder);
+    return renderPicElement(el, slideIdx, elOrder, slide);
   }
   if (el.kind === 'sp') {
-    return renderSpElement(el, elOrder, globalPCountRef);
+    return renderSpElement(el, elOrder, globalPCountRef, slide, slidePCountRef);
   }
   return null;
 }
 
 /**
+ * Slide 11: 3x2 Grid of 6 sleek Question Category cards with sequential fragments.
+ */
+function createQuestionCategoriesGrid() {
+  const container = document.createElement('div');
+  container.className = 'pptx-el pptx-qcard-grid';
+  container.style.left = '96px';
+  container.style.top = '155px';
+  container.style.width = '780px';
+  container.style.height = '320px';
+  container.style.zIndex = '20';
+
+  const cardsData = [
+    {
+      badge: '1. MATCHING',
+      icon: '🔀',
+      title: 'Shoda',
+      subtitle: 'Stejná linka, okres, stanice, silnice…',
+      example: '„Je vaše nejbližší X stejné jako naše X?“',
+      draw: '🎴 Taháte 3, berete 1 kartu'
+    },
+    {
+      badge: '2. MEASURING',
+      icon: '📏',
+      title: 'Měření',
+      subtitle: 'Blíž / dál k objektu než vy',
+      example: '„Vzhledem k nám jste blíž nebo dál od X?“',
+      draw: '🎴 Taháte 3, berete 1 kartu'
+    },
+    {
+      badge: '3. RADAR',
+      icon: '📡',
+      title: 'Okruh',
+      subtitle: 'Jste v okruhu X km od nás?',
+      example: '„Nacházíte se v okruhu X km od naší pozice?“',
+      draw: '🎴 Taháte 2, berete 1 kartu'
+    },
+    {
+      badge: '4. TEPLOMĚR',
+      icon: '🌡️',
+      title: 'Pohyb',
+      subtitle: 'Přiblížili jsme se po přesunu?',
+      example: '„Právě jsme urazili X km. Jsme k vám blíž, nebo dál?“',
+      draw: '🎴 Taháte 2, berete 1 kartu'
+    },
+    {
+      badge: '5. FOTKY',
+      icon: '📸',
+      title: 'Vizuální stopy',
+      subtitle: 'Budovy, ulice, obrys cesty, památky…',
+      example: '„Pošli nám fotku nejvyšší budovy / hory / 1 km cesty…“',
+      draw: '🎴 Berete si 1 kartu'
+    },
+    {
+      badge: '6. CHAPADLA',
+      icon: '🐙',
+      title: 'Tentacles',
+      subtitle: 'Který z bodů v okruhu je nejblíž?',
+      example: '„Ze všech vybraných míst v okruhu X km, ke kterému jste nejblíž?“',
+      draw: '🎴 Taháte 4, berete 2 karty'
+    }
+  ];
+
+  cardsData.forEach((c, idx) => {
+    const card = document.createElement('div');
+    card.className = 'pptx-qcard fragment';
+    card.setAttribute('data-fragment-index', String(idx));
+
+    card.innerHTML = `
+      <div class="qcard-header">
+        <span class="qcard-badge">${c.icon} ${c.badge}</span>
+        <span class="qcard-name">${c.title}</span>
+      </div>
+      <div class="qcard-sub">${c.subtitle}</div>
+      <div class="qcard-ex">${c.example}</div>
+      <div class="qcard-draw">${c.draw}</div>
+    `;
+    container.appendChild(card);
+  });
+
+  return container;
+}
+
+/**
+ * Slide 25: Styled map container with optional user image or Prague PID transit radar placeholder.
+ */
+function createMapSlot(slideNumber = 25) {
+  const container = document.createElement('div');
+  container.className = 'pptx-el pptx-map-container';
+  container.style.left = '110px';
+  container.style.top = '135px';
+  container.style.width = '760px';
+  container.style.height = '350px';
+  container.style.zIndex = '20';
+
+  const mapOverride = EDITABLE_SLIDES[slideNumber]?.mapImage;
+
+  if (mapOverride && typeof mapOverride === 'string' && mapOverride.trim().length > 0) {
+    const img = document.createElement('img');
+    img.src = mapOverride;
+    img.alt = 'Herní mapa';
+    img.className = 'pptx-map-img';
+    container.appendChild(img);
+  } else {
+    // Stylized Prague transit radar map placeholder
+    const placeholder = document.createElement('div');
+    placeholder.className = 'pptx-map-placeholder';
+    placeholder.innerHTML = `
+      <div class="radar-scan-line"></div>
+      <svg class="radar-bg-svg" viewBox="0 0 760 350" preserveAspectRatio="none">
+        <circle cx="380" cy="175" r="70" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
+        <circle cx="380" cy="175" r="140" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4 4" />
+        <circle cx="380" cy="175" r="210" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
+        <!-- Metro Lines -->
+        <path d="M 120,290 L 320,180 L 460,160 L 640,90" stroke="#22C55E" stroke-width="3" fill="none" stroke-opacity="0.8" />
+        <path d="M 160,70 L 350,150 L 440,210 L 620,280" stroke="#EAB308" stroke-width="3" fill="none" stroke-opacity="0.8" />
+        <path d="M 390,40 L 380,175 L 395,310" stroke="#EF4444" stroke-width="3" fill="none" stroke-opacity="0.8" />
+      </svg>
+      <div class="map-badge-center">
+        <div class="map-badge-icon">🗺️</div>
+        <div class="map-badge-title">Místo připravené pro herní mapu</div>
+        <div class="map-badge-sub">Stačí vložit cestu k obrázku do <code>src/data/editovatelne-texty.js</code> u snímku ${slideNumber}</div>
+      </div>
+    `;
+    container.appendChild(placeholder);
+  }
+
+  return container;
+}
+
+/**
+ * Slide 46 (orig 47): 2x2 Filming guidelines cards grid.
+ */
+function createFilmingGrid() {
+  const container = document.createElement('div');
+  container.className = 'pptx-el pptx-filming-grid';
+  container.style.left = '108px';
+  container.style.top = '135px';
+  container.style.width = '775px';
+  container.style.height = '355px';
+  container.style.zIndex = '20';
+
+  const cards = [
+    {
+      icon: '🎥',
+      title: 'Co natáčet u hiderů a seekerů',
+      text: 'Vymýšlení otázek, reakce na odpovědi, radost z nalezení dobrého spotu nebo napětí při chycení týmu.'
+    },
+    {
+      icon: '🗣️',
+      title: 'Komentujte dění',
+      text: 'Mluvte přímo do kamery, popisujte svoji taktiku, napětí při čekání i aktuální situaci v terénu.'
+    },
+    {
+      icon: '📐',
+      title: 'Technika natáčení',
+      text: 'Natáčejte zásadně <strong>na šířku (landscape)</strong>. Pravidelně kontrolujte čistotu čočky a kvalitu zvuku.'
+    },
+    {
+      icon: '📤',
+      title: 'Odevzdání záznamů',
+      text: 'Videa z herního dne prosím pošlete <strong>tak, ať neztratí tolik kvalitu</strong> (např. přes Úschovnu, Disk či Signal).'
+    }
+  ];
+
+  cards.forEach((c) => {
+    const cardEl = document.createElement('div');
+    cardEl.className = 'pptx-film-card';
+    cardEl.innerHTML = `
+      <div class="film-card-header">
+        <span class="film-card-icon">${c.icon}</span>
+        <h4 class="film-card-title">${c.title}</h4>
+      </div>
+      <p class="film-card-text">${c.text}</p>
+    `;
+    container.appendChild(cardEl);
+  });
+
+  return container;
+}
+
+/**
+ * Slide 49 (orig 50): Map links & 3 expandable preview cards.
+ */
+function createMapLinksSection() {
+  const container = document.createElement('div');
+  container.className = 'pptx-el pptx-map-links-container';
+  container.style.left = '100px';
+  container.style.top = '125px';
+  container.style.width = '785px';
+  container.style.height = '375px';
+  container.style.zIndex = '20';
+
+  container.innerHTML = `
+    <!-- Left Column: Link navigation items -->
+    <div class="pptx-map-links-left">
+      <div class="map-link-nav active">
+        <span class="nav-icon">📏</span>
+        <div class="nav-info">
+          <strong>1. Měření vzdálenosti</strong>
+          <span>Mapy.cz & Google Mapy (vzdušná čára)</span>
+        </div>
+      </div>
+      <div class="map-link-nav">
+        <span class="nav-icon">🌐</span>
+        <div class="nav-info">
+          <strong>2. Online nástroj JetLag</strong>
+          <span>taibeled.github.io/JetLagHideAndSeek</span>
+        </div>
+      </div>
+      <div class="map-link-nav">
+        <span class="nav-icon">✏️</span>
+        <div class="nav-info">
+          <strong>3. Kreslení do map</strong>
+          <span>Fullscreen Maps aplikace pro Android</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: 3 Sequential Expandable Preview Cards -->
+    <div class="pptx-map-links-right">
+      <!-- Preview 1: Ukázka měření vzdálenosti -->
+      <div class="fragment pptx-link-preview-card" data-fragment-index="0">
+        <div class="preview-badge">📏 UKÁZKA MĚŘENÍ VZDÁLENOSTI</div>
+        <div class="preview-diagram">
+          <svg viewBox="0 0 380 140" class="preview-svg">
+            <line x1="60" y1="90" x2="310" y2="45" stroke="#4ADE80" stroke-width="3" stroke-dasharray="6 4" />
+            <circle cx="60" cy="90" r="10" fill="#11457E" stroke="#FFF" stroke-width="2.5" />
+            <text x="60" y="122" fill="#FFF" font-size="11" text-anchor="middle" font-weight="700">Stanice A</text>
+            <circle cx="310" cy="45" r="10" fill="#D7141A" stroke="#FFF" stroke-width="2.5" />
+            <text x="310" y="28" fill="#FFF" font-size="11" text-anchor="middle" font-weight="700">Hider Spot</text>
+            <rect x="150" y="52" width="85" height="26" rx="13" fill="#0E161C" stroke="#4ADE80" stroke-width="1.5" />
+            <text x="192" y="69" fill="#4ADE80" font-size="12" font-weight="800" text-anchor="middle">2 450 m</text>
+          </svg>
+        </div>
+        <div class="preview-tip">
+          💡 V Mapy.cz: dlouhý stisk bodu ➔ „Změřit vzdálenost“ ➔ vzdušná čára v metrech!
+        </div>
+      </div>
+
+      <!-- Preview 2: Online nástroj JetLag Hide & Seek -->
+      <div class="fragment pptx-link-preview-card" data-fragment-index="1">
+        <div class="preview-badge">🌐 ONLINE NÁSTROJ JETLAG HIDE & SEEK</div>
+        <div class="preview-web-box">
+          <div class="web-url-bar">
+            <span>🔒 https://taibeled.github.io/JetLagHideAndSeek/?pb=eaNKMU8J</span>
+          </div>
+          <div class="web-preview-features">
+            <div class="feat-pill">⭕ Kružnice radarů</div>
+            <div class="feat-pill">📐 Osy teploměru</div>
+            <div class="feat-pill">✂️ Polygon clipping</div>
+          </div>
+        </div>
+        <a href="https://taibeled.github.io/JetLagHideAndSeek/?pb=eaNKMU8J" target="_blank" rel="noopener noreferrer" class="preview-link-btn">
+          Otevřít nástroj v novém okně ↗
+        </a>
+      </div>
+
+      <!-- Preview 3: Kreslení do map (Fullscreen Maps) -->
+      <div class="fragment pptx-link-preview-card" data-fragment-index="2">
+        <div class="preview-badge">✏️ KRESLENÍ DO MAP NA TELEFONU</div>
+        <div class="preview-app-box">
+          <div class="app-title">Fullscreen Maps</div>
+          <div class="app-desc">Rychlé zakreslování zakázaných zón, kružnic a poznámek přímo na satelitní či turistickou mapu.</div>
+        </div>
+        <a href="https://play.google.com/store/apps/details?id=com.service.fullscreenmaps" target="_blank" rel="noopener noreferrer" class="preview-link-btn">
+          Zobrazit v Google Play ↗
+        </a>
+      </div>
+    </div>
+  `;
+
+  return container;
+}
+
+/**
  * Builds the 1:1 PPTX Reveal.js DOM hierarchy from presentation-data.json.
- * - Zero fake "Snímek X" or "#12" badges
- * - Zero per-bullet fragment clicks (1 click = 1 slide, all text immediately visible)
- * - Automatic choreographed entrance & continuous 3D motion on slide elements
- * - Exact 960x540 (16:9) PPTX layout, typography, colors, and cropped images
  */
 export function buildSlides(slidesContainer) {
   if (!slidesContainer) return;
@@ -327,20 +940,33 @@ export function buildSlides(slidesContainer) {
     stage.className = 'pptx-stage';
     stage.style.width = `${STAGE_WIDTH}px`;
     stage.style.height = `${STAGE_HEIGHT}px`;
-    stage.style.background = fillToCss(slide.bg, true);
 
-    // Dynamic ambient light sheen layer inside the slide that reacts to 3D tilt/transitions
+    // Dedicated Stage Background layer (behind all slide elements)
+    const stageBg = document.createElement('div');
+    stageBg.className = 'pptx-stage-bg';
+    if (slide.bg?.type === 'image' && slide.bg?.src) {
+      stageBg.style.background = `url("${slide.bg.src}") center / cover no-repeat`;
+    } else {
+      stageBg.style.background = fillToCss(slide.bg, true);
+    }
+    if (slide.bg?.breathe || slide.slideNumber === 2) {
+      stageBg.classList.add('pptx-bg-breathe');
+    }
+    stage.appendChild(stageBg);
+
+    // Dynamic ambient light sheen layer inside the slide
     const sheen = document.createElement('div');
     sheen.className = 'pptx-stage-sheen';
     stage.appendChild(sheen);
 
     let elOrder = 0;
     const globalPCountRef = { count: 0 };
+    const slidePCountRef = { count: 0 };
 
     // 1. Render Slide Layout background elements (arches, border frames, decorative shapes)
     if (Array.isArray(slide.layoutElements)) {
       for (const el of slide.layoutElements) {
-        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef);
+        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef, slide, null);
         if (node) {
           node.classList.add('pptx-layout-el');
           stage.appendChild(node);
@@ -348,14 +974,52 @@ export function buildSlides(slidesContainer) {
       }
     }
 
-    // 2. Render Slide Foreground elements (photos, titles, cards, custom vectors, slide numbers)
+    // 2. Custom Layout Handlers for Slides 11, 25, 46/47, 49/50
+    const isSlide11 = slide.customLayout === 'question-categories-6' || slide.slideNumber === 11;
+    const isSlide25 = slide.customLayout === 'map-placeholder' || slide.slideNumber === 25;
+    const isSlideNataceni =
+      slide.customLayout === 'nataceni' ||
+      slide.title?.toLowerCase().includes('natáčení') ||
+      slide.slideNumber === 47;
+    const isSlideMapLinks =
+      slide.customLayout === 'map-links' ||
+      slide.title?.toLowerCase().includes('delší poznámka k mapám') ||
+      slide.slideNumber === 50;
+
+    // 3. Render Slide Foreground elements
     if (Array.isArray(slide.elements)) {
       for (const el of slide.elements) {
-        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef);
+        // Skip messy body elements on custom layout slides
+        if (isSlide11 && el.kind === 'sp' && el.phKey !== 'title' && el.phKey !== 'sldNum' && el.box.y > 130) {
+          continue;
+        }
+        if (isSlideNataceni && el.kind === 'sp' && el.phKey !== 'title' && el.phKey !== 'sldNum') {
+          continue;
+        }
+        if (isSlideMapLinks && el.kind === 'sp' && el.phKey !== 'title' && el.phKey !== 'sldNum') {
+          continue;
+        }
+
+        const node = renderSceneElement(el, idx, elOrder++, globalPCountRef, slide, slidePCountRef);
         if (node) {
+          // Adjust title on Slide 25 so it sits cleanly above map slot
+          if (isSlide25 && el.kind === 'sp' && (el.phKey === 'title' || el.box.y > 200)) {
+            node.style.top = '75px';
+          }
           stage.appendChild(node);
         }
       }
+    }
+
+    // Append rich layout extensions
+    if (isSlide11) {
+      stage.appendChild(createQuestionCategoriesGrid());
+    } else if (isSlide25) {
+      stage.appendChild(createMapSlot(slide.slideNumber));
+    } else if (isSlideNataceni) {
+      stage.appendChild(createFilmingGrid());
+    } else if (isSlideMapLinks) {
+      stage.appendChild(createMapLinksSection());
     }
 
     stageOuter.appendChild(stage);

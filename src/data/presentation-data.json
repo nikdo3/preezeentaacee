@@ -1,10 +1,10 @@
 {
   "metadata": {
     "title": "JET-Česko – Prezentace",
-    "totalSlides": 51,
+    "totalSlides": 50,
     "stageWidth": 960,
     "stageHeight": 540,
-    "extractedAt": "2026-11-09T18:41:09.669Z"
+    "extractedAt": "2026-11-09T21:47:13.375Z"
   },
   "themeColors": [
     "#2A4D14",
@@ -27,8 +27,9 @@
   "slides": [
     {
       "slideNumber": 1,
+      "originalSlideNumber": 1,
       "fileName": "slide1.xml",
-      "title": "JET-Česko Prezentace",
+      "title": "JET-PID Prezentace",
       "bg": {
         "type": "linear",
         "angle": 45,
@@ -99,7 +100,8 @@
             "t": 0.3292,
             "r": 0,
             "b": 0.3267
-          }
+          },
+          "replaceWithPragueSvg": true
         },
         {
           "kind": "sp",
@@ -130,7 +132,7 @@
               "bulletColor": "#FFFFFF",
               "runs": [
                 {
-                  "text": "JET-Česko ",
+                  "text": "JET-PID ",
                   "sz": 48,
                   "b": false,
                   "i": false,
@@ -340,10 +342,12 @@
       ],
       "texts": [
         "JET-Česko Prezentace"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 2,
+      "originalSlideNumber": 2,
       "fileName": "slide2.xml",
       "title": "Základní instrukce (hrajeme variantu L)",
       "bg": {
@@ -352,17 +356,18 @@
         "stops": [
           {
             "pos": 0,
-            "color": "#2A4D14"
+            "color": "#F4FAF2"
           },
           {
-            "pos": 35,
-            "color": "#5DA271"
+            "pos": 62,
+            "color": "#A8CCA1"
           },
           {
             "pos": 100,
-            "color": "#FFFFFF"
+            "color": "#2A4D14"
           }
-        ]
+        ],
+        "breathe": true
       },
       "layoutElements": [
         {
@@ -476,10 +481,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.64,
-            "y": 144.45,
-            "w": 756.69,
-            "h": 341.67,
+            "x": 112,
+            "y": 112,
+            "w": 785,
+            "h": 382,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -502,11 +507,11 @@
               "runs": [
                 {
                   "text": "Jak se hra hraje?",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -521,20 +526,20 @@
               "runs": [
                 {
                   "text": "1.  ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Jeden tým použije PID a dostane se na svůj hiding spot",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -549,74 +554,74 @@
               "runs": [
                 {
                   "text": "2.",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "  ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Ostatní hráči spolupracují ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "a snaží se je najít, ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "za pomocí otázek ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "ohledně jejich ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "lo",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "kace, které jsou vybírány z šesti kategorií",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -631,56 +636,56 @@
               "runs": [
                 {
                   "text": "3.",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " Po každé ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "zodpovězené",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " otázce si hideři tahají karty ze svého balíčku karet (",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "hider deck",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ")",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -695,20 +700,20 @@
               "runs": [
                 {
                   "text": "4.",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " Poté, co je tým nalezen se schovává další tým",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -723,38 +728,38 @@
               "runs": [
                 {
                   "text": "5. ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Na konci vyhrává tým s nejdelším časem, kdy byli schováni (",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "časy se nesčítají, počítá se nejdelší run",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ")",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -769,43 +774,44 @@
               "runs": [
                 {
                   "text": "6. ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Týmy se mohou rozdělit ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "pouze, pokud to danné skupině nepřinese taktickou výhodu ",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "(tzn pokud třeba plní úkol musí být skupina pohromadě)",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -982,10 +988,12 @@
         "4. Poté, co je tým nalezen se schovává další tým",
         "5. Na konci vyhrává tým s nejdelším časem, kdy byli schováni (časy se nesčítají, počítá se nejdelší run)",
         "6. Týmy se mohou rozdělit pouze, pokud to danné skupině nepřinese taktickou výhodu (tzn pokud třeba plní úkol musí být skupina pohromadě)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 3,
+      "originalSlideNumber": 3,
       "fileName": "slide3.xml",
       "title": "Začátek hry",
       "bg": {
@@ -1146,10 +1154,12 @@
       "texts": [
         "Začátek hry",
         "1"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 4,
+      "originalSlideNumber": 4,
       "fileName": "slide4.xml",
       "title": "Vždyť to nemusíme řešit schováš se a jedem, ne?",
       "bg": {
@@ -1394,14 +1404,31 @@
               ]
             }
           ]
+        },
+        {
+          "kind": "pic",
+          "src": "./assets/team/lucie-1.png",
+          "box": {
+            "x": 705,
+            "y": 212,
+            "w": 225,
+            "h": 300,
+            "rot": 0,
+            "flipH": false,
+            "flipV": false
+          },
+          "crop": null,
+          "extraPhoto": true
         }
       ],
       "texts": [
         "Vždyť to nemusíme řešit schováš se a jedem, ne?"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 5,
+      "originalSlideNumber": 5,
       "fileName": "slide5.xml",
       "title": "Začátek",
       "bg": {
@@ -1511,10 +1538,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.66,
-            "y": 128.72,
-            "w": 756.69,
-            "h": 314.95,
+            "x": 110,
+            "y": 132,
+            "w": 430,
+            "h": 350,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -1537,11 +1564,11 @@
               "runs": [
                 {
                   "text": "Tým vždy při začátku svého schovávacího kola musí:",
-                  "sz": 16,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -1556,11 +1583,11 @@
               "runs": [
                 {
                   "text": "Vypnout tracker (je-li u někoho zapnutý)",
-                  "sz": 16,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -1575,29 +1602,29 @@
               "runs": [
                 {
                   "text": "Převzít balíček karet, který před ostatními ",
-                  "sz": 16,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "(alespoň 7x ho zamíchá )",
-                  "sz": 14,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "(chcete-li matematicky vysvětlit proč, míra rád vysvětlí 😏)",
-                  "sz": 11,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -1612,11 +1639,11 @@
               "runs": [
                 {
                   "text": "Předat Investigační knihu těm co budou hledat",
-                  "sz": 16,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -1631,16 +1658,17 @@
               "runs": [
                 {
                   "text": "(Pokud nemají) převzít knihu s pravidly",
-                  "sz": 16,
+                  "sz": 16.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -1939,10 +1967,12 @@
         "Převzít balíček karet, který před ostatními (alespoň 7x ho zamíchá )(chcete-li matematicky vysvětlit proč, míra rád vysvětlí 😏)",
         "Předat Investigační knihu těm co budou hledat",
         "(Pokud nemají) převzít knihu s pravidly"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 6,
+      "originalSlideNumber": 6,
       "fileName": "slide6.xml",
       "title": "Hideři",
       "bg": {
@@ -2392,10 +2422,12 @@
       "texts": [
         "Hideři",
         "čas nastartovat nepravděpodobnostní pohon"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 7,
+      "originalSlideNumber": 7,
       "fileName": "slide7.xml",
       "title": "Kde se teda schovat?",
       "bg": {
@@ -2840,10 +2872,12 @@
         "- Je na oblasti PID P, 0, B,",
         "- Je pro něj dosažitelná do 1 hodiny pomocí kombinace ČD a chůze/běhu*",
         "Po hodině se musíte zastavit na místě kde jste!!!"
-      ]
+      ],
+      "notes": "Nezapomenout říct, že se může stát edge case, kdy člověk přeběhne někde, kde se to na idosu neukazuje"
     },
     {
       "slideNumber": 8,
+      "originalSlideNumber": 8,
       "fileName": "slide8.xml",
       "title": "Není spuštěn END-GAME",
       "bg": {
@@ -2907,10 +2941,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.64,
-            "y": 146.98,
-            "w": 353.54,
-            "h": 304.44,
+            "x": 88,
+            "y": 130,
+            "w": 345,
+            "h": 355,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -2933,11 +2967,11 @@
               "runs": [
                 {
                   "text": "Není spuštěn END-GAME",
-                  "sz": 20,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -2952,61 +2986,62 @@
               "runs": [
                 {
                   "text": "Hiding zóna je určena ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "půl kilometrovou ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "kružnicí ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "okolo stanice Hiderů. Mohou se v ní volně pohybovat a hledat místo pro end game. Nicméně během toho ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "MUSÍ ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "být schopni odpovídat na otázky seekrů",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -3053,10 +3088,10 @@
           "kind": "sp",
           "phKey": "body:2",
           "box": {
-            "x": 512.8,
-            "y": 146.98,
-            "w": 353.54,
-            "h": 315.64,
+            "x": 525,
+            "y": 130,
+            "w": 365,
+            "h": 355,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -3079,20 +3114,20 @@
               "runs": [
                 {
                   "text": "Nadešel",
-                  "sz": 20,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " END-GAME",
-                  "sz": 20,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -3107,115 +3142,116 @@
               "runs": [
                 {
                   "text": "END-GAME",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " nastává ve chvíli, ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "kdy seekři ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "dorazí na stanici ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "hidera. ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "V tento moment ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "musí",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " zůstat na místě kde ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "aktuálně",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " jsou. Pokud je v tento moment položena otázka, na kterou ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "fyzicky nejde odpovědět ",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "odesílají „nelze odpovědět“",
-                  "sz": 18,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -3513,25 +3549,18 @@
         "Co je Hiding zóna?",
         "Nadešel END-GAME",
         "END-GAME nastává ve chvíli, kdy seekři dorazí na stanici hidera. V tento moment musí zůstat na místě kde aktuálně jsou. Pokud je v tento moment položena otázka, na kterou fyzicky nejde odpovědět odesílají „nelze odpovědět“"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 9,
+      "originalSlideNumber": 9,
       "fileName": "slide9.xml",
       "title": "Typy otázek?",
       "bg": {
-        "type": "linear",
-        "angle": 45,
-        "stops": [
-          {
-            "pos": 0,
-            "color": "#D7141A"
-          },
-          {
-            "pos": 100,
-            "color": "#2E1E0F"
-          }
-        ]
+        "type": "image",
+        "src": "./assets/slides/image12.png",
+        "color": "#85AC7E"
       },
       "layoutElements": [
         {
@@ -3813,11 +3842,11 @@
           "kind": "pic",
           "src": "./assets/team/lucie-2.png",
           "box": {
-            "x": 585,
-            "y": 115,
-            "w": 275,
-            "h": 310,
-            "rot": 3,
+            "x": 665,
+            "y": 192,
+            "w": 255,
+            "h": 320,
+            "rot": 0,
             "flipH": false,
             "flipV": false
           },
@@ -3827,10 +3856,12 @@
       ],
       "texts": [
         "Typy otázek?"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 10,
+      "originalSlideNumber": 10,
       "fileName": "slide10.xml",
       "title": "Otázky",
       "bg": {
@@ -3935,10 +3966,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.66,
-            "y": 128.72,
-            "w": 756.69,
-            "h": 314.95,
+            "x": 245,
+            "y": 118,
+            "w": 645,
+            "h": 376,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -3961,146 +3992,146 @@
               "runs": [
                 {
                   "text": "Hideři ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "mají",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "na zodpovězení otázek ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "5 min",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " s výjimkou foto otázek, na ty ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "mají ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "10 ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "min. ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Pokud ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "nestihnou",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " čas jejich pozastaven do doby než ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "odpov",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "í a",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "netahají si za otázku karty.",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -4115,47 +4146,47 @@
               "runs": [
                 {
                   "text": "Po ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "zo",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "dpovězení",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "otázky si tahají karty (konkrétní počty později). ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -4170,146 +4201,146 @@
               "runs": [
                 {
                   "text": "Pokud",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " se seekři",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "na stejnou otázku ptají podruhé, je tahání karet ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "znásobeno",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " (2x, 3x, …). ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "ALE",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "taháno",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "postupně ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "(vytáhnu 3, vyberu si jednu, vytáhnu další 3 ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "vybe",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "ru si ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "druhou) ",
-                  "sz": 18,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "NE JINAK!",
-                  "sz": 18,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -4324,20 +4355,20 @@
               "runs": [
                 {
                   "text": "Maxi",
-                  "sz": 14,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#FFFFFF",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "mální počet karet v ruce je 6 (pokud není rozšířena)*",
-                  "sz": 14,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -4352,16 +4383,17 @@
               "runs": [
                 {
                   "text": "\t",
-                  "sz": 14,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -4659,10 +4691,12 @@
         "Po zodpovězení otázky si tahají karty (konkrétní počty později).",
         "Pokud se seekři na stejnou otázku ptají podruhé, je tahání karet znásobeno (2x, 3x, …). ALE taháno postupně (vytáhnu 3, vyberu si jednu, vytáhnu další 3 vyberu si druhou) NE JINAK!",
         "Maximální počet karet v ruce je 6 (pokud není rozšířena)*"
-      ]
+      ],
+      "notes": "Strana 7 vysvětli co dělat když bude mít moc karet"
     },
     {
       "slideNumber": 11,
+      "originalSlideNumber": 11,
       "fileName": "slide11.xml",
       "title": "Typy otázek a karty za ně",
       "bg": {
@@ -5899,10 +5933,13 @@
         "Fotky",
         "Pošli nám fotku *něco*.",
         "Berete si 1 kartu."
-      ]
+      ],
+      "notes": "",
+      "customLayout": "question-categories-6"
     },
     {
       "slideNumber": 12,
+      "originalSlideNumber": 12,
       "fileName": "slide12.xml",
       "title": "END-GAME",
       "bg": {
@@ -6573,10 +6610,12 @@
         "Pokud se spustí END-GAME  a nenacházíte se na validním místě, musíte se přesunout na nejbližší takové místo. (vyhodnoceno za pomoci mapy)",
         "Přijde-li nějaká otázka která není možná odpovědět posíláte již zmíněné „nelze odpovědět“ ale i tak i za otázku berete příslušný počet karet!",
         "Dobře zvolený spot může přinést hodinu i víc do vašeho času, vybírejte pořádně!"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 13,
+      "originalSlideNumber": 13,
       "fileName": "slide13.xml",
       "title": "Nalezení",
       "bg": {
@@ -7089,10 +7128,12 @@
         "Hideři se počítají jako nalezení pouze když je vidíte a zároveň jste maximálně 2 m od nich. (počítá se i horizontálně🗼)",
         "Po nalezení a předání všech propriet startuje čas na schování pro následující tým, který startuje z místa, kde byl nalezen tým předchozí.",
         "(tým má v tento moment maximálně 10 min na předání všech propriet  nemůže udělat delší přestávku na research)"
-      ]
+      ],
+      "notes": "Nezapomenout říct, že se může stát edge case, kdy člověk přeběhne někde, kde se to na idosu neukazuje"
     },
     {
       "slideNumber": 14,
+      "originalSlideNumber": 14,
       "fileName": "slide14.xml",
       "title": "Seekři",
       "bg": {
@@ -7537,10 +7578,12 @@
       "texts": [
         "Seekři",
         "Srandokupa ve čtyřech 7:P"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 15,
+      "originalSlideNumber": 15,
       "fileName": "slide15.xml",
       "title": "Je „zakreslování random věcí do mapy“ a „strategizování kam jet“ fakt tak easy?",
       "bg": {
@@ -7794,10 +7837,12 @@
       ],
       "texts": [
         "Je „zakreslování random věcí do mapy“ a „strategizování kam jet“ fakt tak easy?"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 16,
+      "originalSlideNumber": 16,
       "fileName": "slide16.xml",
       "title": "Seekři – základní info",
       "bg": {
@@ -8519,6 +8564,21 @@
           ],
           "anchor": "ctr",
           "paragraphs": []
+        },
+        {
+          "kind": "pic",
+          "src": "./assets/team/lucie-5.png",
+          "box": {
+            "x": 700,
+            "y": 212,
+            "w": 230,
+            "h": 300,
+            "rot": 0,
+            "flipH": false,
+            "flipV": false
+          },
+          "crop": null,
+          "extraPhoto": true
         }
       ],
       "texts": [
@@ -8528,10 +8588,12 @@
         "VŽDY se můžete ptát jen na jednu otázku, dokud není zodpovězena není možné položit další.",
         "Je přísně zakázáno používat street view (obrázky na google mapách v náhledu místa jsou dovoleny, nicméně nesmíte jimy scrollovat)",
         "JE doporučeno dělat si zastávky k projednání strategie a dalšího postupu"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 17,
+      "originalSlideNumber": 17,
       "fileName": "slide17.xml",
       "title": "Krátká poznámka k mapám",
       "bg": {
@@ -9137,25 +9199,18 @@
         "Musíme používat stejnou mapovou aplikaci. Hra je navržena kolem Google map. Nicméně pro pro nás v tomto ohledu budou mnohem lepší mapy.cz",
         "hledající při použití otázky musí specifikovat jakou mapu použili a jaká mista na ní viděli, např, pošlou screen s těmito místy apod.",
         "Pokud nastane jakákoli nejasnost je na hledajících aby požádali a podali dodatečné informace (screenshot jejich mapové aplikace a popis co mají za problém)"
-      ]
+      ],
+      "notes": "Strana 14 v pravidlech"
     },
     {
       "slideNumber": 18,
+      "originalSlideNumber": 18,
       "fileName": "slide18.xml",
       "title": "Jak si zapisovat jednotlivé typy otázek a jak se na ně ptát?",
       "bg": {
-        "type": "linear",
-        "angle": 45,
-        "stops": [
-          {
-            "pos": 0,
-            "color": "#D7141A"
-          },
-          {
-            "pos": 100,
-            "color": "#2E1E0F"
-          }
-        ]
+        "type": "image",
+        "src": "./assets/slides/image26.png",
+        "color": "#85AC7E"
       },
       "layoutElements": [
         {
@@ -9200,10 +9255,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 118.81,
-            "y": 237.35,
-            "w": 416.39,
-            "h": 66.49,
+            "x": 112,
+            "y": 46,
+            "w": 760,
+            "h": 95,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -9226,16 +9281,17 @@
               "runs": [
                 {
                   "text": "Jak si zapisovat jednotlivé typy otázek a jak se na ně ptát?",
-                  "sz": 21,
+                  "sz": 28,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -9437,11 +9493,11 @@
           "kind": "pic",
           "src": "./assets/team/lucie-3.png",
           "box": {
-            "x": 585,
-            "y": 115,
-            "w": 275,
-            "h": 310,
-            "rot": -3,
+            "x": 665,
+            "y": 192,
+            "w": 255,
+            "h": 320,
+            "rot": 0,
             "flipH": false,
             "flipV": false
           },
@@ -9451,10 +9507,12 @@
       ],
       "texts": [
         "Jak si zapisovat jednotlivé typy otázek a jak se na ně ptát?"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 19,
+      "originalSlideNumber": 19,
       "fileName": "slide19.xml",
       "title": "Matching otázky",
       "bg": {
@@ -10032,10 +10090,12 @@
         "Matching otázky",
         "Věci, které jsou mimo ČR nepočítáme (např. zahraniční letiště)",
         "PřepravníLetiště (komerční letiště, ze kterého létají letadla*), Vlaková linka (seekři musí být v hýbajícím se vlaku), délka názvu stanice (počítají se i mezery), ulice/cestaPřírodníHora, ŘekaZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
-      ]
+      ],
+      "notes": "Poznámka k nástroji, zkontrolovat jestli +- sedí, poznámka k tomu, že letadla se počítají jen letadla na které se dá koupit lístek (flights.google.com)\nStrany 16-22"
     },
     {
       "slideNumber": 20,
+      "originalSlideNumber": 20,
       "fileName": "slide20.xml",
       "title": "Mesuring otázky",
       "bg": {
@@ -10648,10 +10708,12 @@
       "texts": [
         "Mesuring otázky",
         "PřepravníKomerční letiště, Trasy via czechia, Vlakové staniceHraniceStátní hranice, Hranice historického dělení, Kraje, OkresyPřírodníNadmořská výška, Vodní plochy, pobřeží, Hory, ParkyZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
-      ]
+      ],
+      "notes": "Strana 22-28"
     },
     {
       "slideNumber": 21,
+      "originalSlideNumber": 21,
       "fileName": "slide21.xml",
       "title": "Radary",
       "bg": {
@@ -11328,10 +11390,12 @@
         "80 km",
         "160 km",
         "??? (vyber si libovolnou vzdálenost)"
-      ]
+      ],
+      "notes": "Vysvětlit libovolnou vzdálenost, nezapomenout zmínit doublování ceny za otázky,\nStrana 28-30"
     },
     {
       "slideNumber": 22,
+      "originalSlideNumber": 22,
       "fileName": "slide22.xml",
       "title": "Teploměry",
       "bg": {
@@ -11917,10 +11981,12 @@
         "5 km",
         "15 km",
         "75 km"
-      ]
+      ],
+      "notes": "Strana 30-31"
     },
     {
       "slideNumber": 23,
+      "originalSlideNumber": 23,
       "fileName": "slide23.xml",
       "title": "Fotečky",
       "bg": {
@@ -12433,11 +12499,11 @@
           "kind": "pic",
           "src": "./assets/team/lucie-8.png",
           "box": {
-            "x": 705,
-            "y": 295,
-            "w": 190,
-            "h": 210,
-            "rot": 3,
+            "x": 695,
+            "y": 222,
+            "w": 230,
+            "h": 290,
+            "rot": 0,
             "flipH": false,
             "flipV": false
           },
@@ -12449,10 +12515,12 @@
         "Fotečky",
         "Fotky musí být vyfoceny v originálním poměru, jako má telefon. Zoomování je dovoleno, ale na fotce musí být zachycena všechna vypsaná kritéria. Pokud fotografii nelze vyfotit je odesláno „nelze odpovědět“",
         "*K fotkám bude dále speciální sekce později*"
-      ]
+      ],
+      "notes": "Strana 32-36"
     },
     {
       "slideNumber": 24,
+      "originalSlideNumber": 24,
       "fileName": "slide24.xml",
       "title": "Chapadla (tentacles)",
       "bg": {
@@ -13068,10 +13136,12 @@
         "Seekři vyšlou svá „chapadla“, která vycítí.Otázka je opravdu drahá, ale velmi efektivní v zabydlených oblastech.",
         "Použitelná místa:2 kmMuzea, Knihovny, Kina, Nemocnice25kmLinky metra, Zoo, Akvária, Zábavní parky",
         "Doporučuji použít, minule jsme moc nepoužívalí"
-      ]
+      ],
+      "notes": "Strana 36-39"
     },
     {
       "slideNumber": 25,
+      "originalSlideNumber": 25,
       "fileName": "slide25.xml",
       "title": "Mapa",
       "bg": {
@@ -13417,10 +13487,13 @@
       ],
       "texts": [
         "Mapa"
-      ]
+      ],
+      "notes": "",
+      "customLayout": "map-placeholder"
     },
     {
       "slideNumber": 26,
+      "originalSlideNumber": 26,
       "fileName": "slide26.xml",
       "title": "Dopřesnění",
       "bg": {
@@ -13623,10 +13696,12 @@
         "Dopřesnění",
         "Spánek, jídlo, nebezpečí?",
         "2"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 27,
+      "originalSlideNumber": 27,
       "fileName": "slide27.xml",
       "title": "Vůbec nevím co se děje a mám tak tisíc otázek…(ptej se)",
       "bg": {
@@ -13889,10 +13964,12 @@
       ],
       "texts": [
         "Vůbec nevím co se děje a mám tak tisíc otázek…(ptej se)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 28,
+      "originalSlideNumber": 28,
       "fileName": "slide28.xml",
       "title": "Hajdr dek (hider deck)",
       "bg": {
@@ -14121,20 +14198,38 @@
             "r": 0.0529,
             "b": 0.2254
           }
+        },
+        {
+          "kind": "pic",
+          "src": "./assets/team/lucie-6.png",
+          "box": {
+            "x": 695,
+            "y": 212,
+            "w": 230,
+            "h": 300,
+            "rot": 0,
+            "flipH": false,
+            "flipV": false
+          },
+          "crop": null,
+          "extraPhoto": true
         }
       ],
       "texts": [
         "Hajdr dek (hider deck)",
         "Obsahuje 3 typy karet – power up, časový bonus, prokletí",
         "Je důležité karty hrát a hrát je ve správný moment, aby měli co největší efekt! (a nebojte se je používat)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 29,
+      "originalSlideNumber": 29,
       "fileName": "slide29.xml",
       "title": "Časové bonusy",
       "bg": {
-        "type": "solid",
+        "type": "image",
+        "src": "./assets/slides/image39.jpg",
         "color": "#85AC7E"
       },
       "layoutElements": [
@@ -14432,10 +14527,12 @@
         "Časové bonusy",
         "Na kartách bereme čas pro variantu L, je jich zhruba polovina balíčku a jsou v různých velikostech.",
         "Tyto karty platí pouze pokud je máte v ruce, když jste chyceni (ne nutně fyzicky, ale chápeme se)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 30,
+      "originalSlideNumber": 30,
       "fileName": "slide30.xml",
       "title": "Power-upy",
       "bg": {
@@ -14485,10 +14582,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 110,
+            "y": 128,
+            "w": 615,
+            "h": 365,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -14511,16 +14608,17 @@
               "runs": [
                 {
                   "text": "Power-upy",
-                  "sz": 32,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -14658,7 +14756,10 @@
             "t": 0.0713,
             "r": 0.0393,
             "b": 0.0915
-          }
+          },
+          "fragmentPopup": true,
+          "fragmentIndex": 1,
+          "popupCaption": "Karty Power-upů v balíčku"
         },
         {
           "kind": "pic",
@@ -14679,10 +14780,12 @@
         "Power-upy",
         "Karty můžete zahrát kdykoliv, balíček jich obsahuje několik typů:",
         "Veto; randomize; Discard 1, draw 2; Draw 1, expand max hand size by 1; Duplicate; Move"
-      ]
+      ],
+      "notes": "Strana 46-48"
     },
     {
       "slideNumber": 31,
+      "originalSlideNumber": 31,
       "fileName": "slide31.xml",
       "title": "Kurvy (cursy)",
       "bg": {
@@ -14814,10 +14917,10 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 90.67,
-            "y": 144.45,
-            "w": 684.57,
-            "h": 334.39,
+            "x": 110,
+            "y": 128,
+            "w": 590,
+            "h": 365,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -14840,65 +14943,65 @@
               "runs": [
                 {
                   "text": "Je jich ",
-                  "sz": 24,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "spousta",
-                  "sz": 24,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ", každá má ",
-                  "sz": 24,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "casting cost",
-                  "sz": 24,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ". Některé se dají zahrát ",
-                  "sz": 24,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "jen",
-                  "sz": 24,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " v určité chvíle.",
-                  "sz": 24,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -14913,16 +15016,17 @@
               "runs": [
                 {
                   "text": "bla bla bla obrázek",
-                  "sz": 24,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "pic",
@@ -14941,7 +15045,10 @@
             "t": 0,
             "r": 0.1672,
             "b": 0.1915
-          }
+          },
+          "fragmentPopup": true,
+          "fragmentIndex": 1,
+          "popupCaption": "Karty kleteb (Curses) v balíčku"
         },
         {
           "kind": "pic",
@@ -14962,10 +15069,12 @@
         "Kurvy (cursy)",
         "Je jich spousta, každá má casting cost. Některé se dají zahrát jen v určité chvíle.",
         "bla bla bla obrázek"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 32,
+      "originalSlideNumber": 32,
       "fileName": "slide32.xml",
       "title": "Fotky – nejvyšší budova viditelná ze zastávky",
       "bg": {
@@ -15116,10 +15225,10 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 141.33,
-            "y": 144.45,
-            "w": 426.16,
-            "h": 334.39,
+            "x": 175,
+            "y": 132,
+            "w": 380,
+            "h": 358,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15142,47 +15251,47 @@
               "runs": [
                 {
                   "text": "Nejedná se o fyzicky ",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "nejvyšší",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " budovu, ale o nejvyšší z ",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "vašeho",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " pohledu",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -15197,11 +15306,11 @@
               "runs": [
                 {
                   "text": "Musíte stát přímo u východu ze stanice, pokud je východů víc hideři si vyberou.",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -15216,29 +15325,29 @@
               "runs": [
                 {
                   "text": "Budova se musí nacházet v ",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "horní",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " 1/3 fotky a fotka musí obsahovat střechu a obě strany budovy",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -15253,34 +15362,35 @@
               "runs": [
                 {
                   "text": "Přepravní budova a její součásti se ",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "nepočítají",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ".",
-                  "sz": 24,
+                  "sz": 14.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "pic",
@@ -15308,10 +15418,12 @@
         "Musíte stát přímo u východu ze stanice, pokud je východů víc hideři si vyberou.",
         "Budova se musí nacházet v horní 1/3 fotky a fotka musí obsahovat střechu a obě strany budovy",
         "Přepravní budova a její součásti se nepočítají."
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 33,
+      "originalSlideNumber": 33,
       "fileName": "slide33.xml",
       "title": "Fotky – nejvyšší hora viditelná ze stanice",
       "bg": {
@@ -15375,10 +15487,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 112,
+            "y": 40,
+            "w": 780,
+            "h": 86,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15401,7 +15513,7 @@
               "runs": [
                 {
                   "text": "Fotky – nejvyšší hora viditelná ze stanice",
-                  "sz": 32,
+                  "sz": 27,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -15457,10 +15569,10 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 88.7,
-            "y": 130.35,
-            "w": 316.1,
-            "h": 334.39,
+            "x": 175,
+            "y": 142,
+            "w": 375,
+            "h": 345,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15483,52 +15595,53 @@
               "runs": [
                 {
                   "text": "Největší z vaší perspektivy. ",
-                  "sz": 24,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "Max 3x ",
-                  "sz": 24,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "zoom, musí být ve ",
-                  "sz": 24,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "vrchní",
-                  "sz": 24,
+                  "sz": 15.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " 1/3 fotky",
-                  "sz": 24,
+                  "sz": 15.5,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "pic",
@@ -15542,16 +15655,21 @@
             "flipH": false,
             "flipV": false
           },
-          "crop": null
+          "crop": null,
+          "fragmentZoom": true,
+          "fragmentIndex": 1,
+          "zoomBadge": "3× PŘIBLÍŽENÍ"
         }
       ],
       "texts": [
         "Fotky – nejvyšší hora viditelná ze stanice",
         "Největší z vaší perspektivy. Max 3x zoom, musí být ve vrchní 1/3 fotky"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 34,
+      "originalSlideNumber": 34,
       "fileName": "slide34.xml",
       "title": "Fotky – Obrys nejbližší cesty",
       "bg": {
@@ -15633,16 +15751,18 @@
             "t": 0,
             "r": 0,
             "b": 0
-          }
+          },
+          "fragmentRoadOutline": "nearest",
+          "fragmentIndex": 1
         },
         {
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 110,
+            "y": 138,
+            "w": 435,
+            "h": 345,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15669,12 +15789,13 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -15883,10 +16004,12 @@
         "Cesta/ulice musí být viditelná na mapě. Mapa musí být severem nahoru.",
         "Jak na to?",
         "Tužka/fix + papírnebo screenshot cesty a začernění všeho okolo na telefonu"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 35,
+      "originalSlideNumber": 35,
       "fileName": "slide35.xml",
       "title": "Fotky – 2 budovy",
       "bg": {
@@ -15950,10 +16073,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 185,
+            "y": 138,
+            "w": 298,
+            "h": 350,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15976,16 +16099,17 @@
               "runs": [
                 {
                   "text": "Fotky – 2 budovy",
-                  "sz": 32,
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -16059,7 +16183,9 @@
             "t": 0.1712,
             "r": 0.3018,
             "b": 0.1712
-          }
+          },
+          "fragmentZoom": true,
+          "fragmentIndex": 1
         },
         {
           "kind": "sp",
@@ -16180,10 +16306,12 @@
         "Fotky – 2 budovy",
         "Spodek a až 4 patra (pokud má budova méně, tak všechny parta, ale můžete zoomovat)",
         "Začernění všech identifikovatelných textů a čísel je povoleno"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 36,
+      "originalSlideNumber": 36,
       "fileName": "slide36.xml",
       "title": "Fotky – interiér restaurece",
       "bg": {
@@ -16459,10 +16587,12 @@
         "Fotky – interiér restaurece",
         "Není dovoleno zoomování, pouze začernění.",
         "Musí být pořízeno zvenku skrz okno."
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 37,
+      "originalSlideNumber": 37,
       "fileName": "slide37.xml",
       "title": "Fotky – park",
       "bg": {
@@ -16767,10 +16897,12 @@
       "texts": [
         "Fotky – park",
         "Není dovoleno zoomování, telefon musí být vzpřímený vzhledem k zemi, fotící musí stát alespoň 2 m od překážky bránící ve výhledu, začernění čísel a názvů dovoleno."
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 38,
+      "originalSlideNumber": 38,
       "fileName": "slide38.xml",
       "title": "Fotky – ulička v obchodě",
       "bg": {
@@ -17034,15 +17166,32 @@
             "flipV": false
           },
           "crop": null
+        },
+        {
+          "kind": "pic",
+          "src": "./assets/team/lucie-7.png",
+          "box": {
+            "x": 18,
+            "y": 232,
+            "w": 210,
+            "h": 280,
+            "rot": 0,
+            "flipH": false,
+            "flipV": false
+          },
+          "crop": null,
+          "extraPhoto": true
         }
       ],
       "texts": [
         "Fotky – ulička v obchodě",
         "Není dovoleno zoomování, fotící musí stát na jednom konci uličky, telefon musí být vzpřímený vzhledem k zemi, začernění identifikujících čísel a názvů dovoleno."
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 39,
+      "originalSlideNumber": 39,
       "fileName": "slide39.xml",
       "title": "Fotky – místo vyznání víry",
       "bg": {
@@ -17092,10 +17241,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 110,
+            "y": 142,
+            "w": 465,
+            "h": 340,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -17122,12 +17271,13 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -17296,7 +17446,10 @@
             "t": 0,
             "r": 0.0101,
             "b": 0.1231
-          }
+          },
+          "fragmentZoom": true,
+          "fragmentIndex": 1,
+          "zoomBadge": "DETAIL 2 × 2 m"
         },
         {
           "kind": "pic",
@@ -17321,10 +17474,12 @@
       "texts": [
         "Fotky – místo vyznání víry",
         "Musí obsahovat 2 m x 2 m sekci budovy s alespoň třemi identifikujícími znaky. (pokud by na to místo někdo došel musí si být jistý že našel správné místo)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 40,
+      "originalSlideNumber": 40,
       "fileName": "slide40.xml",
       "title": "Fotky – nádražní budova",
       "bg": {
@@ -17393,10 +17548,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 75.56,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 110,
+            "y": 142,
+            "w": 465,
+            "h": 340,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -17423,12 +17578,13 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -17603,10 +17759,12 @@
       "texts": [
         "Fotky – nádražní budova",
         "Musí obsahovat 2 m x 2 m sekci budovy s alespoň třemi identifikujícími znaky. (pokud by na to místo někdo došel musí si být jistý že našel správné místo)"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 41,
+      "originalSlideNumber": 41,
       "fileName": "slide41.xml",
       "title": "Fotky – Obrys +-1 km cesty",
       "bg": {
@@ -17689,10 +17847,10 @@
           "kind": "sp",
           "phKey": "title",
           "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
+            "x": 110,
+            "y": 142,
+            "w": 465,
+            "h": 340,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -17719,12 +17877,13 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -17969,10 +18128,12 @@
         "Cesta/ulice musí být viditelná na mapě. Mapa musí být severem nahoru. Během cesty musí hideři udělat alespoň 5 zatáček bez toho aby prošli stejnou cestou znovu.",
         "Cestu nemusí hideři ujít.",
         "Odesílá se opět jen obrys."
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 42,
+      "originalSlideNumber": 42,
       "fileName": "slide42.xml",
       "title": "Herní doba",
       "bg": {
@@ -18082,10 +18243,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.66,
-            "y": 154.16,
-            "w": 499.37,
-            "h": 326.68,
+            "x": 110,
+            "y": 142,
+            "w": 465,
+            "h": 340,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -18112,7 +18273,7 @@
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
@@ -18121,7 +18282,7 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
@@ -18130,7 +18291,7 @@
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
@@ -18139,7 +18300,7 @@
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -18158,7 +18319,7 @@
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -18177,12 +18338,13 @@
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -18231,10 +18393,12 @@
         "Hrajeme od XX:XX v pátek kdy budeme 2 týmy abychom si hru zkusili, konec v pátek bude 20:00",
         "Sobota začneme v 08:00 s tím, že schovávající se vyrazí v 07:00",
         "neděla začátek upravíme podle toho jak nám bude, nicméně začínáte na místě, kde jste včera zkončili"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 43,
+      "originalSlideNumber": 43,
       "fileName": "slide43.xml",
       "title": "Cestování",
       "bg": {
@@ -18541,11 +18705,11 @@
           "kind": "pic",
           "src": "./assets/team/lucie-4.png",
           "box": {
-            "x": 725,
-            "y": 185,
-            "w": 190,
-            "h": 215,
-            "rot": -3,
+            "x": 705,
+            "y": 202,
+            "w": 230,
+            "h": 310,
+            "rot": 0,
             "flipH": false,
             "flipV": false
           },
@@ -18559,499 +18723,12 @@
         "Některé vlaky tut jízdenku podporují také a je povoleno jimi jet",
         "Jezdíme výhradně přepravou PID, pokud se nejedná o nečekanou situaci (hra je pozastavena protože jedete do nemocnice/podobně)",
         "Pokud se jedná o přepravu jiného dopravce, který bere jízdenky PID platí také"
-      ]
+      ],
+      "notes": ""
     },
     {
       "slideNumber": 44,
-      "fileName": "slide44.xml",
-      "title": "Ústí",
-      "bg": {
-        "type": "solid",
-        "color": "#85AC7E"
-      },
-      "layoutElements": [
-        {
-          "kind": "sp",
-          "phKey": null,
-          "box": {
-            "x": 17.21,
-            "y": 60.76,
-            "w": 66.49,
-            "h": 100.88,
-            "rot": 90,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "round2SameRect",
-          "fill": {
-            "type": "solid",
-            "color": "#11457E"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "ctr",
-          "paragraphs": []
-        },
-        {
-          "kind": "pic",
-          "src": "./assets/slides/image1.png",
-          "box": {
-            "x": 0,
-            "y": 0,
-            "w": 960,
-            "h": 540,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "crop": null
-        }
-      ],
-      "elements": [
-        {
-          "kind": "pic",
-          "src": "./assets/slides/image71.png",
-          "box": {
-            "x": 208,
-            "y": 8.1,
-            "w": 193.14,
-            "h": 204.41,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "crop": {
-            "l": 0.0741,
-            "t": 0.3887,
-            "r": 0.0982,
-            "b": 0.2529
-          }
-        },
-        {
-          "kind": "sp",
-          "phKey": "title",
-          "box": {
-            "x": 109.66,
-            "y": 77.96,
-            "w": 756.69,
-            "h": 66.49,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "rect",
-          "fill": {
-            "type": "none"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "ctr",
-          "paragraphs": [
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": null,
-              "bulletColor": "#2E1E0F",
-              "runs": [
-                {
-                  "text": "Ústí",
-                  "sz": 32,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Display"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "sp",
-          "phKey": "body:1",
-          "box": {
-            "x": 109.66,
-            "y": 154.16,
-            "w": 756.69,
-            "h": 109.08,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "rect",
-          "fill": {
-            "type": "none"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "t",
-          "paragraphs": [
-            {
-              "algn": "l",
-              "lineHeight": 1.15,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": null,
-              "bulletColor": "#11457E",
-              "runs": [
-                {
-                  "text": "V ",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "Ústeckém kraji ",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#FFFFFF",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "hrdě pro svoje integrované spoje vybrali ",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "regiojet ",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "místo ČD",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#FFFFFF",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": ". Musíme učinit ",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "společné rozhodnutí",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": ", jestli tyto spoje ",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "započítat také",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": ", nebo jestli si ",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "poradíme bez nich",
-                  "sz": 24,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#2A4D14",
-                  "font": "Red Hat Text"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "sp",
-          "phKey": "sldNum",
-          "box": {
-            "x": 904.97,
-            "y": 486.12,
-            "w": 55.02,
-            "h": 53.89,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "rect",
-          "fill": {
-            "type": "none"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "ctr",
-          "paragraphs": [
-            {
-              "algn": "ctr",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": null,
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "44",
-                  "sz": 13,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#D7141A",
-                  "font": "Red Hat Display"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "sp",
-          "phKey": null,
-          "box": {
-            "x": 117.71,
-            "y": 263.24,
-            "w": 362.29,
-            "h": 203.57,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "rect",
-          "fill": {
-            "type": "none"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "t",
-          "paragraphs": [
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": null,
-              "bulletColor": "#2A4D14",
-              "runs": [
-                {
-                  "text": "Pro:",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Všechny zastávky v ústeckém kraji jsou tímto dostupné",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Nestane se že bychom byli v ústí zaseknuti",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "sp",
-          "phKey": null,
-          "box": {
-            "x": 467.05,
-            "y": 260.19,
-            "w": 399.3,
-            "h": 203.57,
-            "rot": 0,
-            "flipH": false,
-            "flipV": false
-          },
-          "prst": "rect",
-          "fill": {
-            "type": "none"
-          },
-          "stroke": null,
-          "custPaths": null,
-          "anchor": "t",
-          "paragraphs": [
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": null,
-              "bulletColor": "#2A4D14",
-              "runs": [
-                {
-                  "text": "Proti:",
-                  "sz": 24,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Zvyšuje se útrata na osobu",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Složitější hledání spojů",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Mírně složitější správa jízdenek (jednotlivce)",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            },
-            {
-              "algn": "l",
-              "lineHeight": 1,
-              "spcBefPx": 0,
-              "spcAftPx": 0,
-              "bullet": "•",
-              "bulletColor": "#000000",
-              "runs": [
-                {
-                  "text": "Může vést k tomu, že se bude někdo omezovat aby finančně vyšel lépe",
-                  "sz": 20,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#2E1E0F",
-                  "font": "Red Hat Text"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "texts": [
-        "Ústí",
-        "V Ústeckém kraji hrdě pro svoje integrované spoje vybrali regiojet místo ČD. Musíme učinit společné rozhodnutí, jestli tyto spoje započítat také, nebo jestli si poradíme bez nich",
-        "Pro:",
-        "Všechny zastávky v ústeckém kraji jsou tímto dostupné",
-        "Nestane se že bychom byli v ústí zaseknuti",
-        "Proti:",
-        "Zvyšuje se útrata na osobu",
-        "Složitější hledání spojů",
-        "Mírně složitější správa jízdenek (jednotlivce)",
-        "Může vést k tomu, že se bude někdo omezovat aby finančně vyšel lépe"
-      ]
-    },
-    {
-      "slideNumber": 45,
+      "originalSlideNumber": 45,
       "fileName": "slide45.xml",
       "title": "Spaní",
       "bg": {
@@ -19222,7 +18899,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "45",
+                  "text": "44",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -19238,12 +18915,14 @@
       "texts": [
         "Spaní",
         "počítáme se spaním u nás, popř. pokud se nevejdeme u Dana s Janičkou. (ale vešlo se nás sem i víc)"
-      ]
+      ],
+      "notes": ""
     },
     {
-      "slideNumber": 46,
+      "slideNumber": 45,
+      "originalSlideNumber": 46,
       "fileName": "slide46.xml",
-      "title": "Jídlo",
+      "title": "Bonusy",
       "bg": {
         "type": "solid",
         "color": "#85AC7E"
@@ -19330,7 +19009,7 @@
               "bulletColor": "#2E1E0F",
               "runs": [
                 {
-                  "text": "Jídlo",
+                  "text": "Bonusy",
                   "sz": 32,
                   "b": true,
                   "i": false,
@@ -19346,10 +19025,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 93.33,
-            "y": 154.16,
-            "w": 773.02,
-            "h": 289.51,
+            "x": 110,
+            "y": 138,
+            "w": 740,
+            "h": 350,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -19372,74 +19051,74 @@
               "runs": [
                 {
                   "text": "Je požadováno, aby každý snědl ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "minimálně 3 jídla ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "za den. Počítejte s tím, že se ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "může",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " stát, že budete ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "až několik hodin ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "bez ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "možnosti dokoupit si jídlo.",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
@@ -19454,88 +19133,89 @@
               "runs": [
                 {
                   "text": "P",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "roto sebou mějte v batůžku ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "snacky",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": " a ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "vodu",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ", ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "pokud se naskytne možnost ",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": "doplňte si",
-                  "sz": 20,
+                  "sz": 16,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 },
                 {
                   "text": ".",
-                  "sz": 20,
+                  "sz": 16,
                   "b": false,
                   "i": false,
                   "u": false,
-                  "color": "#2A4D14",
+                  "color": "#1B360E",
                   "font": "Red Hat Text"
                 }
               ]
             }
-          ]
+          ],
+          "frostedCard": true
         },
         {
           "kind": "sp",
@@ -19566,7 +19246,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "46",
+                  "text": "45",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -19583,10 +19263,12 @@
         "Jídlo",
         "Je požadováno, aby každý snědl minimálně 3 jídla za den. Počítejte s tím, že se může stát, že budete až několik hodin bez možnosti dokoupit si jídlo.",
         "Proto sebou mějte v batůžku snacky a vodu, pokud se naskytne možnost doplňte si."
-      ]
+      ],
+      "notes": ""
     },
     {
-      "slideNumber": 47,
+      "slideNumber": 46,
+      "originalSlideNumber": 47,
       "fileName": "slide47.xml",
       "title": "Natáčení",
       "bg": {
@@ -19875,7 +19557,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "47",
+                  "text": "46",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -20254,10 +19936,13 @@
         "Máte nějaké fajn jídlo/pití",
         "Plníte cursu",
         "Cokoliv jiného zajímavého uznáte za vhodné"
-      ]
+      ],
+      "notes": "",
+      "customLayout": "nataceni"
     },
     {
-      "slideNumber": 48,
+      "slideNumber": 47,
+      "originalSlideNumber": 48,
       "fileName": "slide48.xml",
       "title": "Nebezpečné situace",
       "bg": {
@@ -20491,7 +20176,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "48",
+                  "text": "47",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -20507,10 +20192,12 @@
       "texts": [
         "Nebezpečné situace",
         "Pokud se dostanete do situace kdy se někomu něco stane hra se pozastaví dokud nebude situace vyřešena. Nechoďte na místa, která zvážíte jako riziková (feťácká ulička, stanové městečko bezdomovců, ….).Bezpečí je důležitější než hra!"
-      ]
+      ],
+      "notes": ""
     },
     {
-      "slideNumber": 49,
+      "slideNumber": 48,
+      "originalSlideNumber": 49,
       "fileName": "slide49.xml",
       "title": "Stres a hádky",
       "bg": {
@@ -20890,7 +20577,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "49",
+                  "text": "48",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -20908,10 +20595,12 @@
         "Během hraní se určitě dostanete do situace kdy někdo způsobí problém někomu jinému (unavenost/nedoběhnete spoj/rozpor v tom co dělat dál). V tento moment je důležité se uklidnit, dýchat a v klidu si o situaci promluvit.",
         "Pokud máte neprosto rozdílné názory a opravdu nikdo nechce ustoupit zvolte rozhodnutí náhodou.(např. hod mincí, hod kostkou(sudá/lichá), kámen nůžky, …)",
         "Pamatujte že hádka vám nikdy nepomůže, ztratíte jí čas a většinou i náladu"
-      ]
+      ],
+      "notes": ""
     },
     {
-      "slideNumber": 50,
+      "slideNumber": 49,
+      "originalSlideNumber": 50,
       "fileName": "slide50.xml",
       "title": "Delší poznámka k mapám",
       "bg": {
@@ -21193,7 +20882,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "50",
+                  "text": "49",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -21212,12 +20901,15 @@
         "*ukázka měření vzdálenosti*",
         "*ukázka online nástroje*",
         "*další užitečné nástroje* kreslení do map"
-      ]
+      ],
+      "notes": "",
+      "customLayout": "map-links"
     },
     {
-      "slideNumber": 51,
+      "slideNumber": 50,
+      "originalSlideNumber": 51,
       "fileName": "slide51.xml",
-      "title": "Všechno!",
+      "title": "Konec hry",
       "bg": {
         "type": "solid",
         "color": "#85AC7E"
@@ -21265,10 +20957,10 @@
           "kind": "sp",
           "phKey": "ctrTitle",
           "box": {
-            "x": 125.3,
-            "y": 126.73,
-            "w": 486.7,
-            "h": 121.76,
+            "x": 180,
+            "y": 160,
+            "w": 600,
+            "h": 220,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -21282,7 +20974,7 @@
           "anchor": "ctr",
           "paragraphs": [
             {
-              "algn": "l",
+              "algn": "ctr",
               "lineHeight": 1,
               "spcBefPx": 0,
               "spcAftPx": 0,
@@ -21290,12 +20982,12 @@
               "bulletColor": "#2E1E0F",
               "runs": [
                 {
-                  "text": "Všechno!",
-                  "sz": 82,
+                  "text": "Konec hry",
+                  "sz": 44,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#D7141A",
                   "font": "Red Hat Display"
                 }
               ]
@@ -21391,7 +21083,7 @@
               "bulletColor": "#000000",
               "runs": [
                 {
-                  "text": "51",
+                  "text": "50",
                   "sz": 13,
                   "b": true,
                   "i": false,
@@ -21438,7 +21130,8 @@
       "texts": [
         "Všechno!",
         "OTÁZKY??"
-      ]
+      ],
+      "notes": ""
     }
   ]
 }

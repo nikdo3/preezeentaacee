@@ -17,8 +17,37 @@
       <span>•</span>
       <span>Diváci: <strong id="viewer-count" data-testid="viewer-count">0</strong></span>
       <span>•</span>
-      <span id="master-slide-pos" data-testid="master-slide-pos">0/0</span>
+      <span id="master-slide-pos" data-testid="master-slide-pos">1 / 50</span>
+      <span>•</span>
+      <button id="notes-toggle-btn" class="hud-notes-btn" data-testid="notes-toggle-btn" title="Poznámky přednášejícího">📝 Poznámky</button>
     </div>
+
+    <!-- Floating Fullscreen Button (Available for Viewers and Master) -->
+    <button id="fullscreen-btn" data-testid="fullscreen-btn" class="floating-fullscreen-btn" title="Celá obrazovka (Fullscreen)" aria-label="Celá obrazovka">
+      <svg class="fs-icon-enter" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+      </svg>
+      <svg class="fs-icon-exit hidden" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 14h6m0 0v6m0-6l-7 7m17-11h-6m0 0V4m0 6l7-7M4 10h6m0 0V4m0 6L3 3m17 11h-6m0 0v6m0-6l7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Presenter Notes Side Panel (Collapsible, Master Only) -->
+    <aside id="presenter-notes-panel" class="hidden" data-testid="presenter-notes-panel">
+      <div class="notes-panel-header">
+        <div class="notes-header-title-wrap">
+          <span class="notes-header-icon">📝</span>
+          <h3 id="notes-slide-title">Poznámky přednášejícího</h3>
+        </div>
+        <button id="notes-close-btn" class="notes-close-btn" aria-label="Zavřít panel poznámek">&times;</button>
+      </div>
+      <div id="notes-content" class="notes-panel-content">
+        <!-- Injected dynamically based on active slide -->
+      </div>
+      <div class="notes-panel-footer">
+        <span>💡 Texty a poznámky můžete upravit v souboru <code>src/data/editovatelne-texty.js</code></span>
+      </div>
+    </aside>
 
     <!-- Reveal.js Presentation Viewport -->
     <div class="reveal">
