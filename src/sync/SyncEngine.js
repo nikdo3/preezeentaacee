@@ -13,6 +13,7 @@ import {
   isNavigationKeyEvent,
   isMasterShortcut
 } from './stateMachine.js';
+import { MqttSyncTransport } from './mqttTransport.js';
 
 export class SyncEngine {
   /**
@@ -22,7 +23,10 @@ export class SyncEngine {
   constructor(revealOrOptions = {}, maybeOptions = {}) {
     let reveal = null;
     let options = {};
-    if (revealOrOptions && (typeof revealOrOptions.configure === 'function' || typeof revealOrOptions.on === 'function')) {
+    if (
+      revealOrOptions &&
+      (typeof revealOrOptions.configure === 'function' || typeof revealOrOptions.on === 'function')
+    ) {
       reveal = revealOrOptions;
       options = maybeOptions || {};
     } else if (typeof revealOrOptions === 'object') {
@@ -36,24 +40,30 @@ export class SyncEngine {
 
     this.isMaster = options.isMaster !== undefined ? Boolean(options.isMaster) : isMasterMode();
     this.masterId = options.masterId || this._getOrCreateMasterId();
+    this.clientId = 'c_' + Math.random().toString(36).slice(2, 10);
     this.seq = 0;
     this.viewersCount = 0;
     this.connected = false;
     this.isOnline = typeof navigator !== 'undefined' ? (navigator.onLine ?? true) : true;
     this.isApplyingRemoteState = false;
+    this.hasUserNavigated = false;
+    this.hasRestoredState = false;
     this.destroyed = false;
 
     this.authoritativeState = null;
     this.ws = null;
     this.bc = null;
+    this.mqtt = null;
     this.peer = null;
     this.peerConnections = new Set();
+    this.mqttViewers = new Map();
     this.badgeElement = null;
     this.badgeTextElement = null;
 
     this._reconnectTimer = null;
     this._heartbeatTimer = null;
     this._pollTimer = null;
+    this._peerRetryTimer = null;
 
     this._boundKeyDown = this._handleKeyDown.bind(this);
     this._boundTouchStart = this._handleTouchEvent.bind(this);
@@ -79,6 +89,12 @@ export class SyncEngine {
     }
   }
 
+  _isStaticHost() {
+    if (typeof window === 'undefined') return false;
+    const h = window.location.hostname;
+    return h !== 'localhost' && h !== '127.0.0.1' && !h.startsWith('192.168.');
+  }
+
   init() {
     if (this.isMaster) {
       this._initMasterState();
@@ -89,9 +105,14 @@ export class SyncEngine {
     this._setupRevealListeners();
     this._setupNetworkListeners();
     this._setupBroadcastChannel();
-    this._connectWebSocket();
-    this._startPollingFallback();
+    this._initMqttTransport();
     this._initPeerJSIfNeeded();
+
+    if (!this._isStaticHost()) {
+      this._connectWebSocket();
+      this._startPollingFallback();
+    }
+
     this._startHeartbeat();
     this._emitStatus();
   }
@@ -113,12 +134,14 @@ export class SyncEngine {
       targetH = storedState.indexh;
       targetV = storedState.indexv;
       targetF = storedState.indexf ?? -1;
-      initialSeq = storedState.seq || 0;
+      initialSeq = storedState.seq || 1;
       this.masterId = storedState.masterId || this.masterId;
+      this.hasRestoredState = true;
     } else if (urlState) {
       targetH = urlState.indexh;
       targetV = urlState.indexv;
       targetF = urlState.indexf ?? -1;
+      this.hasRestoredState = true;
     } else if (this.reveal) {
       const indices = this.reveal.getIndices();
       targetH = indices?.h ?? 0;
@@ -239,7 +262,6 @@ export class SyncEngine {
       e.preventDefault();
       e.stopPropagation();
     }
-    // Revert any manual URL hash manipulation back to Master's authoritative slide
     const target = this.authoritativeState || createInitialState();
     this._applyStateToReveal(target, true);
     this._updateUrlSilently(target);
@@ -248,6 +270,7 @@ export class SyncEngine {
   enableMasterMode() {
     if (this.isMaster) return;
     this.isMaster = true;
+    this.hasUserNavigated = true;
     this._removeClientLockListeners();
 
     if (this.reveal) {
@@ -292,17 +315,17 @@ export class SyncEngine {
     if (this.isApplyingRemoteState) return;
 
     if (!this.isMaster) {
-      // Unauthorized local movement on Client -> snap back to Master state immediately
       if (this.authoritativeState) {
         this._applyStateToReveal(this.authoritativeState, true);
       }
       return;
     }
 
+    this.hasUserNavigated = true;
     const indices = this.reveal.getIndices();
     const indexh = indices?.h ?? 0;
     const indexv = indices?.v ?? 0;
-    const indexf = (indices?.f === undefined || indices?.f === null) ? -1 : indices.f;
+    const indexf = indices?.f === undefined || indices?.f === null ? -1 : indices.f;
 
     this.seq += 1;
     const nextState = createStatePayload({
@@ -340,7 +363,7 @@ export class SyncEngine {
     const indices = this.reveal.getIndices();
     const curH = indices?.h ?? 0;
     const curV = indices?.v ?? 0;
-    const curF = (indices?.f === undefined || indices?.f === null) ? -1 : indices.f;
+    const curF = indices?.f === undefined || indices?.f === null ? -1 : indices.f;
 
     const targetH = state.indexh;
     const targetV = state.indexv;
@@ -369,12 +392,29 @@ export class SyncEngine {
     }
 
     if (this.isMaster) {
-      // Master only accepts incoming state if it has no state yet or if it's from the same master with higher seq
-      if (incomingState.masterId === this.masterId && isStateNewer(incomingState, this.authoritativeState)) {
+      // Accept incoming state if:
+      // 1. Same master session with higher seq, OR
+      // 2. Another Master device is further ahead (seq > this.seq) or this Master was just opened at slide 0
+      const isFreshAtZero =
+        !this.hasUserNavigated &&
+        !this.hasRestoredState &&
+        (this.authoritativeState?.indexh ?? 0) === 0 &&
+        incomingState.indexh > 0;
+
+      const isRemoteMasterAhead =
+        incomingState.masterId !== this.masterId &&
+        (incomingState.seq > this.seq || isFreshAtZero);
+
+      const isSameMasterAhead =
+        incomingState.masterId === this.masterId &&
+        isStateNewer(incomingState, this.authoritativeState);
+
+      if (isSameMasterAhead || isRemoteMasterAhead) {
         this.authoritativeState = incomingState;
         this.seq = Math.max(this.seq, incomingState.seq || 0);
         saveMasterStateToStorage(incomingState);
         this._applyStateToReveal(incomingState, true);
+        this._updateUrlSilently(incomingState);
       }
       this._emitStatus();
       return;
@@ -391,7 +431,6 @@ export class SyncEngine {
       this._applyStateToReveal(incomingState, true);
       this._updateUrlSilently(incomingState);
     } else {
-      // Ensure Reveal DOM indices match authoritativeState even if equal
       this._applyStateToReveal(incomingState, false);
     }
     this._emitStatus();
@@ -406,15 +445,17 @@ export class SyncEngine {
     };
     const serialized = JSON.stringify(msg);
 
-    // 1. WebSocket relay
+    // 1. Local WebSocket relay (when running on Vite dev/preview server)
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       try {
         this.ws.send(serialized);
       } catch {}
     }
 
-    // 2. HTTP relay POST (ensures relay state is always updated even if WS is reconnecting)
-    this._postStateHttp(state);
+    // 2. HTTP relay POST (when running on Vite dev/preview server)
+    if (!this._isStaticHost()) {
+      this._postStateHttp(state);
+    }
 
     // 3. BroadcastChannel (same-browser tabs)
     if (this.bc) {
@@ -423,7 +464,12 @@ export class SyncEngine {
       } catch {}
     }
 
-    // 4. WebRTC PeerJS connections
+    // 4. MQTT over WSS with RETAIN = true (cross-device sync + instant late-joiner state on GitHub Pages)
+    if (this.mqtt) {
+      this.mqtt.publish('state', msg, true);
+    }
+
+    // 5. WebRTC PeerJS connections
     for (const conn of this.peerConnections) {
       try {
         if (conn.open) conn.send(msg);
@@ -431,12 +477,70 @@ export class SyncEngine {
     }
   }
 
+  _initMqttTransport() {
+    if (typeof window === 'undefined' || typeof WebSocket === 'undefined') return;
+    const url = new URL(window.location.href);
+    const enableMqtt = this._isStaticHost() || url.searchParams.get('mqtt') === '1';
+    if (!enableMqtt) return;
+
+    this.mqtt = new MqttSyncTransport({
+      roomId: this.roomId,
+      onConnectChange: (isConnected) => {
+        if (isConnected) {
+          this.connected = true;
+          if (this.isMaster && (this.hasRestoredState || this.hasUserNavigated)) {
+            this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+          } else {
+            // Request current state from any active Master (and receive broker's retained state)
+            this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId }, false);
+          }
+        } else if (this._isStaticHost() && this.peerConnections.size === 0) {
+          this.connected = false;
+        }
+        this._emitStatus();
+      },
+      onMessage: (subTopic, data) => {
+        if (!data) return;
+        if (subTopic === 'state' && data.type === 'state' && data.payload) {
+          this._handleIncomingState(data.payload);
+        } else if (subTopic === 'ctrl') {
+          if (data.type === 'sync_request' || data.type === 'client_ping') {
+            if (data.clientId && data.clientId !== this.clientId) {
+              this.mqttViewers.set(data.clientId, Date.now());
+              this._recomputeStaticViewersCount();
+            }
+            if (
+              data.type === 'sync_request' &&
+              this.isMaster &&
+              this.authoritativeState &&
+              (this.hasUserNavigated || this.hasRestoredState || this.authoritativeState.indexh > 0)
+            ) {
+              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+            }
+          }
+        }
+      }
+    });
+
+    this.mqtt.init();
+  }
+
+  _recomputeStaticViewersCount() {
+    const now = Date.now();
+    for (const [cid, ts] of this.mqttViewers.entries()) {
+      if (now - ts > 25000) {
+        this.mqttViewers.delete(cid);
+      }
+    }
+    this.viewersCount = Math.max(this.peerConnections.size, this.mqttViewers.size);
+    this._emitStatus();
+  }
+
   _setupBroadcastChannel() {
     if (typeof BroadcastChannel === 'undefined') return;
     try {
       this.bc = new BroadcastChannel(`reveal_sync_${this.roomId}`);
       this.bc.onmessage = (ev) => {
-        // Ignore BroadcastChannel when offline so Playwright context.setOffline(true) is respected
         if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
         const data = ev.data;
         if (!data) return;
@@ -515,7 +619,7 @@ export class SyncEngine {
   }
 
   _scheduleReconnect() {
-    if (this.destroyed) return;
+    if (this.destroyed || this._isStaticHost()) return;
     clearTimeout(this._reconnectTimer);
     this._reconnectTimer = setTimeout(() => {
       this._connectWebSocket();
@@ -523,7 +627,7 @@ export class SyncEngine {
   }
 
   async _postStateHttp(state) {
-    if (typeof fetch === 'undefined' || !state) return;
+    if (typeof fetch === 'undefined' || !state || this._isStaticHost()) return;
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
     try {
       const res = await fetch(`/__sync_poll?room=${encodeURIComponent(this.roomId)}`, {
@@ -542,7 +646,7 @@ export class SyncEngine {
   }
 
   async _pollStateHttp() {
-    if (this.destroyed || typeof fetch === 'undefined') return;
+    if (this.destroyed || typeof fetch === 'undefined' || this._isStaticHost()) return;
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
     try {
       const res = await fetch(`/__sync_poll?room=${encodeURIComponent(this.roomId)}`, {
@@ -561,7 +665,7 @@ export class SyncEngine {
   }
 
   _startPollingFallback() {
-    // Immediate hydration request + fast 120ms poll for instant recovery after context.setOffline(false)
+    if (this._isStaticHost()) return;
     this._pollStateHttp();
     this._pollTimer = setInterval(() => {
       if (this.isMaster) {
@@ -582,7 +686,12 @@ export class SyncEngine {
 
   _handleOnline() {
     this.isOnline = true;
-    this._connectWebSocket();
+    if (!this._isStaticHost()) {
+      this._connectWebSocket();
+    }
+    if (this.mqtt) {
+      this.mqtt.reconnectAll();
+    }
     if (this.isMaster && this.authoritativeState) {
       this.broadcastState(this.authoritativeState);
     } else {
@@ -599,19 +708,21 @@ export class SyncEngine {
       } catch {}
       this.ws = null;
     }
+    if (this.mqtt) {
+      this.mqtt.disconnectAll();
+    }
     this._emitStatus();
   }
 
   /**
    * Initializes PeerJS WebRTC DataChannel transport when hosted on static GitHub Pages
-   * or when ?peer=1 is provided in URL.
+   * or when ?peer=1 is provided in URL, with automatic reconnect retry.
    */
   async _initPeerJSIfNeeded() {
     if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
-    const isGitHubPages = window.location.hostname.endsWith('github.io');
     const forcePeer = url.searchParams.get('peer') === '1';
-    if (!isGitHubPages && !forcePeer) return;
+    if (!this._isStaticHost() && !forcePeer) return;
 
     try {
       const { Peer } = await import('peerjs');
@@ -627,11 +738,10 @@ export class SyncEngine {
         peer.on('connection', (conn) => {
           this.peerConnections.add(conn);
           conn.on('open', () => {
-            this.viewersCount = this.peerConnections.size;
+            this._recomputeStaticViewersCount();
             if (this.authoritativeState) {
               conn.send({ type: 'state', payload: this.authoritativeState });
             }
-            this._emitStatus();
           });
           conn.on('data', (data) => {
             if (data && data.type === 'sync_request' && this.authoritativeState) {
@@ -640,25 +750,39 @@ export class SyncEngine {
           });
           conn.on('close', () => {
             this.peerConnections.delete(conn);
-            this.viewersCount = this.peerConnections.size;
-            this._emitStatus();
+            this._recomputeStaticViewersCount();
           });
         });
       } else {
         const peer = new Peer();
         this.peer = peer;
+        let activeConn = null;
+
+        const connectToMaster = () => {
+          if (this.destroyed || !peer || peer.disconnected || peer.destroyed) return;
+          if (activeConn && activeConn.open) return;
+          try {
+            const conn = peer.connect(masterPeerId, { reliable: true });
+            activeConn = conn;
+            conn.on('open', () => {
+              this.connected = true;
+              conn.send({ type: 'sync_request' });
+              this._emitStatus();
+            });
+            conn.on('data', (data) => {
+              if (data && data.type === 'state' && data.payload) {
+                this._handleIncomingState(data.payload);
+              }
+            });
+            conn.on('close', () => {
+              activeConn = null;
+            });
+          } catch {}
+        };
+
         peer.on('open', () => {
-          const conn = peer.connect(masterPeerId, { reliable: true });
-          conn.on('open', () => {
-            this.connected = true;
-            conn.send({ type: 'sync_request' });
-            this._emitStatus();
-          });
-          conn.on('data', (data) => {
-            if (data && data.type === 'state' && data.payload) {
-              this._handleIncomingState(data.payload);
-            }
-          });
+          connectToMaster();
+          this._peerRetryTimer = setInterval(connectToMaster, 2500);
         });
       }
     } catch {}
@@ -673,8 +797,13 @@ export class SyncEngine {
             this.ws.send(JSON.stringify({ type: 'heartbeat' }));
           } catch {}
         }
+        if (this.mqtt) {
+          this._recomputeStaticViewersCount();
+        }
+      } else if (!this.isMaster && this.mqtt) {
+        this.mqtt.publish('ctrl', { type: 'client_ping', clientId: this.clientId }, false);
       }
-    }, 1000);
+    }, 3000);
   }
 
   getState() {
@@ -695,12 +824,21 @@ export class SyncEngine {
   }
 
   requestSync() {
-    this._pollStateHttp();
+    if (!this._isStaticHost()) {
+      this._pollStateHttp();
+    }
     if (this.bc) {
-      try { this.bc.postMessage({ type: 'sync_request' }); } catch {}
+      try {
+        this.bc.postMessage({ type: 'sync_request' });
+      } catch {}
     }
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      try { this.ws.send(JSON.stringify({ type: 'sync_request' })); } catch {}
+      try {
+        this.ws.send(JSON.stringify({ type: 'sync_request' }));
+      } catch {}
+    }
+    if (this.mqtt) {
+      this.mqtt.publish('ctrl', { type: 'sync_request', clientId: this.clientId }, false);
     }
   }
 
@@ -708,7 +846,7 @@ export class SyncEngine {
     if (typeof document === 'undefined') return;
     if (!this.isMaster) return;
 
-    let existingBadge = document.getElementById('master-status-badge');
+    const existingBadge = document.getElementById('master-status-badge');
     if (existingBadge) {
       this.badgeElement = existingBadge;
       this.badgeTextElement = document.getElementById('master-status-badge-text');
@@ -721,8 +859,8 @@ export class SyncEngine {
     badge.setAttribute('aria-live', 'polite');
     badge.style.cssText = [
       'position: fixed',
-      'top: 14px',
-      'right: 18px',
+      'bottom: 14px',
+      'left: 18px',
       'z-index: 9999',
       'display: inline-flex',
       'align-items: center',
@@ -792,6 +930,7 @@ export class SyncEngine {
     clearTimeout(this._reconnectTimer);
     clearInterval(this._heartbeatTimer);
     clearInterval(this._pollTimer);
+    clearInterval(this._peerRetryTimer);
     this._removeClientLockListeners();
     if (typeof window !== 'undefined') {
       window.removeEventListener('online', this._boundOnline);
@@ -809,6 +948,9 @@ export class SyncEngine {
       try {
         this.bc.close();
       } catch {}
+    }
+    if (this.mqtt) {
+      this.mqtt.destroy();
     }
     if (this.peer) {
       try {

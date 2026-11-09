@@ -35,10 +35,9 @@ async function bootstrap() {
     hash: false,
     respondToHashChanges: false,
     history: false,
-    fragments: true,
-    autoAnimate: true,
-    autoAnimateDuration: 0.35,
-    transition: 'convex',
+    fragments: false,
+    autoAnimate: false,
+    transition: 'slide',
     transitionSpeed: 'fast',
     backgroundTransition: 'fade'
   });

@@ -1,248 +1,279 @@
 import presentationData from '../data/presentation-data.json';
 
+const STAGE_WIDTH = presentationData.metadata?.stageWidth || 960;
+const STAGE_HEIGHT = presentationData.metadata?.stageHeight || 540;
+
 /**
- * Builds the Reveal.js DOM hierarchy from extracted PPTX presentation data.
- * Places photos naturally on slides without any player introductions or medallions.
+ * Computes and applies uniform CSS scaling so the 960x540 (16:9) PPTX stage
+ * fits any viewport (mobile 375x667 up to 4K 3840x2160) with zero overflow
+ * while leaving a subtle margin for the 3D WebGL background around the frame.
+ */
+export function updateStageScale() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  const vw = window.innerWidth || 1920;
+  const vh = window.innerHeight || 1080;
+
+  // Use 94% width / 92% height on desktop so the 3D animated space frames the slide
+  const marginFactorW = vw < 600 ? 0.96 : 0.93;
+  const marginFactorH = vh < 600 ? 0.94 : 0.91;
+
+  const scaleX = (vw * marginFactorW) / STAGE_WIDTH;
+  const scaleY = (vh * marginFactorH) / STAGE_HEIGHT;
+  const scale = Math.max(0.2, Math.min(scaleX, scaleY));
+
+  document.documentElement.style.setProperty('--pptx-stage-scale', scale.toFixed(4));
+}
+
+function fillToCss(fill, isSlideBg = false) {
+  if (!fill || fill.type === 'none') return 'transparent';
+  if (fill.type === 'solid') {
+    if (isSlideBg && fill.color && fill.color.startsWith('#') && fill.color.length === 7) {
+      // Subtle translucency (92% opacity) so the 3D background shimmer is visible through the slide
+      const r = parseInt(fill.color.slice(1, 3), 16);
+      const g = parseInt(fill.color.slice(3, 5), 16);
+      const b = parseInt(fill.color.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, 0.92)`;
+    }
+    return fill.color || 'transparent';
+  }
+  if (fill.type === 'linear' && Array.isArray(fill.stops) && fill.stops.length > 0) {
+    const stopsCss = fill.stops.map((s) => `${s.color} ${s.pos}%`).join(', ');
+    return `linear-gradient(${fill.angle ?? 90}deg, ${stopsCss})`;
+  }
+  if (fill.type === 'radial' && Array.isArray(fill.stops) && fill.stops.length > 0) {
+    const stopsCss = fill.stops.map((s) => `${s.color} ${s.pos}%`).join(', ');
+    return `radial-gradient(circle at 50% 50%, ${stopsCss})`;
+  }
+  return 'transparent';
+}
+
+function buildTransformCss(box) {
+  const parts = [];
+  if (box.rot) parts.push(`rotate(${box.rot}deg)`);
+  if (box.flipH) parts.push('scaleX(-1)');
+  if (box.flipV) parts.push('scaleY(-1)');
+  return parts.length > 0 ? parts.join(' ') : '';
+}
+
+function renderPicElement(el, slideIdx) {
+  const { box, src, crop, extraPhoto } = el;
+  const wrapper = document.createElement('div');
+  wrapper.className = extraPhoto ? 'pptx-el pptx-pic pptx-extra-photo' : 'pptx-el pptx-pic';
+  wrapper.style.left = `${box.x}px`;
+  wrapper.style.top = `${box.y}px`;
+  wrapper.style.width = `${box.w}px`;
+  wrapper.style.height = `${box.h}px`;
+
+  const tf = buildTransformCss(box);
+  if (tf) wrapper.style.transform = tf;
+
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';
+  img.loading = slideIdx < 8 ? 'eager' : 'lazy';
+  img.decoding = 'async';
+
+  if (crop && (crop.l || crop.t || crop.r || crop.b)) {
+    wrapper.classList.add('pptx-pic-cropped');
+    const visW = Math.max(0.05, 1 - (crop.l || 0) - (crop.r || 0));
+    const visH = Math.max(0.05, 1 - (crop.t || 0) - (crop.b || 0));
+    img.style.width = `${+(100 / visW).toFixed(3)}%`;
+    img.style.height = `${+(100 / visH).toFixed(3)}%`;
+    img.style.left = `${+(-(crop.l || 0) * 100 / visW).toFixed(3)}%`;
+    img.style.top = `${+(-(crop.t || 0) * 100 / visH).toFixed(3)}%`;
+  } else {
+    img.className = 'pptx-pic-img';
+  }
+
+  wrapper.appendChild(img);
+  return wrapper;
+}
+
+function renderCustGeomSvg(el) {
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('class', 'pptx-cust-svg');
+  const firstPath = el.custPaths[0];
+  const vbW = Math.max(1, firstPath.w || Math.round(el.box.w) || 100);
+  const vbH = Math.max(1, firstPath.h || Math.round(el.box.h) || 100);
+  svg.setAttribute('viewBox', `0 0 ${vbW} ${vbH}`);
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  for (const p of el.custPaths) {
+    const pathEl = document.createElementNS(svgNS, 'path');
+    pathEl.setAttribute('d', p.d);
+    if (p.noFill || !el.fill || el.fill.type === 'none') {
+      pathEl.setAttribute('fill', 'none');
+    } else if (el.fill.type === 'solid') {
+      pathEl.setAttribute('fill', el.fill.color || 'none');
+    } else {
+      pathEl.setAttribute('fill', 'none');
+    }
+
+    if (el.stroke && el.stroke.color) {
+      pathEl.setAttribute('stroke', el.stroke.color);
+      pathEl.setAttribute('stroke-width', String(el.stroke.width || 1.5));
+      pathEl.setAttribute('vector-effect', 'non-scaling-stroke');
+      pathEl.setAttribute('stroke-linecap', 'round');
+      pathEl.setAttribute('stroke-linejoin', 'round');
+    }
+    svg.appendChild(pathEl);
+  }
+  return svg;
+}
+
+function renderSpElement(el) {
+  const { box, prst, fill, stroke, custPaths, anchor, paragraphs, phKey } = el;
+  const div = document.createElement('div');
+  div.className = `pptx-el pptx-sp pptx-prst-${prst || 'rect'}`;
+  if (phKey) {
+    div.setAttribute('data-ph', phKey);
+  }
+
+  div.style.left = `${box.x}px`;
+  div.style.top = `${box.y}px`;
+  div.style.width = `${box.w}px`;
+  div.style.height = `${box.h}px`;
+
+  const tf = buildTransformCss(box);
+  if (tf) div.style.transform = tf;
+
+  if (custPaths && custPaths.length > 0) {
+    div.appendChild(renderCustGeomSvg(el));
+  } else {
+    if (fill && fill.type !== 'none') {
+      div.style.background = fillToCss(fill, false);
+    }
+    if (stroke && stroke.color) {
+      div.style.border = `${stroke.width || 1}px solid ${stroke.color}`;
+    }
+  }
+
+  if (paragraphs && paragraphs.length > 0) {
+    const textWrap = document.createElement('div');
+    textWrap.className = `pptx-txbody pptx-anchor-${anchor || 't'}`;
+
+    for (const p of paragraphs) {
+      const pEl = document.createElement('div');
+      pEl.className = 'pptx-p';
+      pEl.style.textAlign =
+        p.algn === 'ctr' ? 'center' :
+        p.algn === 'r' ? 'right' :
+        p.algn === 'just' ? 'justify' : 'left';
+      pEl.style.lineHeight = String(p.lineHeight || 1.15);
+      if (p.spcBefPx) pEl.style.marginTop = `${p.spcBefPx}px`;
+      if (p.spcAftPx) pEl.style.marginBottom = `${p.spcAftPx}px`;
+
+      let runContainer = pEl;
+      if (p.bullet) {
+        pEl.classList.add('pptx-p-bulleted');
+        const bulletSpan = document.createElement('span');
+        bulletSpan.className = 'pptx-bullet';
+        bulletSpan.textContent = p.bullet;
+        if (p.bulletColor) bulletSpan.style.color = p.bulletColor;
+        const firstRunSz = p.runs.find((r) => r.sz)?.sz || 18;
+        bulletSpan.style.fontSize = `${+(firstRunSz * (4 / 3) * 0.85).toFixed(2)}px`;
+        pEl.appendChild(bulletSpan);
+
+        runContainer = document.createElement('span');
+        runContainer.className = 'pptx-p-content';
+        pEl.appendChild(runContainer);
+      }
+
+      for (const run of p.runs) {
+        if (run.br) {
+          runContainer.appendChild(document.createElement('br'));
+          continue;
+        }
+        const span = document.createElement('span');
+        span.className = 'pptx-run';
+        span.textContent = run.text;
+        const pxSize = +((run.sz || 16) * (4 / 3)).toFixed(2);
+        span.style.fontSize = `${pxSize}px`;
+        if (run.font) {
+          span.style.fontFamily = `'${run.font}', 'Red Hat Text', sans-serif`;
+        }
+        if (run.b) span.style.fontWeight = '700';
+        if (run.i) span.style.fontStyle = 'italic';
+        if (run.u) span.style.textDecoration = 'underline';
+        if (run.color) span.style.color = run.color;
+        runContainer.appendChild(span);
+      }
+
+      textWrap.appendChild(pEl);
+    }
+
+    div.appendChild(textWrap);
+  }
+
+  return div;
+}
+
+function renderSceneElement(el, slideIdx) {
+  if (el.kind === 'pic') {
+    return renderPicElement(el, slideIdx);
+  }
+  if (el.kind === 'sp') {
+    return renderSpElement(el);
+  }
+  return null;
+}
+
+/**
+ * Builds the 1:1 PPTX Reveal.js DOM hierarchy from presentation-data.json.
+ * - Zero fake "Snímek X" or "#12" badges
+ * - Zero per-bullet fragment clicks (1 click = 1 slide, all text immediately visible)
+ * - Exact 960x540 (16:9) PPTX layout, typography, colors, and cropped images
  */
 export function buildSlides(slidesContainer) {
   if (!slidesContainer) return;
   slidesContainer.innerHTML = '';
 
+  updateStageScale();
+  if (typeof window !== 'undefined' && !window.__pptxResizeBound) {
+    window.__pptxResizeBound = true;
+    window.addEventListener('resize', updateStageScale);
+  }
+
   const slides = presentationData.slides || [];
 
   slides.forEach((slide, idx) => {
-    const hIndex = idx;
-    if (hIndex === 0) {
-      const stack = document.createElement('section');
-      stack.setAttribute('data-slide-h', String(hIndex));
+    const section = document.createElement('section');
+    section.className = 'slide-section';
+    section.setAttribute('data-slide-number', String(slide.slideNumber));
 
-      stack.appendChild(createHeroSlide(slide));
-      stack.appendChild(createDetailVerticalSlide(slides[1] || slide, hIndex, 1));
+    const stageOuter = document.createElement('div');
+    stageOuter.className = 'pptx-stage-outer';
 
-      slidesContainer.appendChild(stack);
-    } else if (hIndex === 1 || hIndex === 2 || hIndex === 5) {
-      const stack = document.createElement('section');
-      stack.setAttribute('data-slide-h', String(hIndex));
+    const stage = document.createElement('div');
+    stage.className = 'pptx-stage';
+    stage.style.width = `${STAGE_WIDTH}px`;
+    stage.style.height = `${STAGE_HEIGHT}px`;
+    stage.style.background = fillToCss(slide.bg, true);
 
-      stack.appendChild(createStandardSlide(slide, hIndex, 0));
-      stack.appendChild(createDetailVerticalSlide(slide, hIndex, 1));
-
-      slidesContainer.appendChild(stack);
-    } else {
-      slidesContainer.appendChild(createStandardSlide(slide, hIndex, 0));
-    }
-  });
-}
-
-function createHeroSlide(slide) {
-  const section = document.createElement('section');
-  section.setAttribute('data-auto-animate', '');
-  section.setAttribute('data-slide-number', '1');
-  section.className = 'slide-section hero-slide';
-
-  const frame = document.createElement('div');
-  frame.className = 'slide-card-3d hero-card';
-
-  const badge = document.createElement('div');
-  badge.className = 'slide-badge fragment';
-  badge.setAttribute('data-fragment-index', '0');
-  badge.textContent = 'JET-Česko';
-
-  const title = document.createElement('h1');
-  title.className = 'hero-title';
-  title.setAttribute('data-id', 'main-title');
-  title.textContent = 'JET-Česko';
-
-  const subtitle = document.createElement('p');
-  subtitle.className = 'hero-subtitle fragment';
-  subtitle.setAttribute('data-fragment-index', '1');
-  subtitle.textContent = 'Prezentace';
-
-  const heroMedia = document.createElement('div');
-  heroMedia.className = 'hero-media-wrap fragment';
-  heroMedia.setAttribute('data-fragment-index', '2');
-
-  const img = document.createElement('img');
-  img.src = (slide.images && slide.images[0]) || './assets/slides/image3.png';
-  img.alt = 'JET-Česko';
-  img.loading = 'eager';
-  heroMedia.appendChild(img);
-
-  frame.appendChild(badge);
-  frame.appendChild(title);
-  frame.appendChild(subtitle);
-  frame.appendChild(heroMedia);
-  section.appendChild(frame);
-  return section;
-}
-
-function createStandardSlide(slide, hIndex) {
-  const section = document.createElement('section');
-  section.setAttribute('data-auto-animate', '');
-  section.setAttribute('data-slide-number', String(slide.slideNumber));
-  section.className = 'slide-section';
-
-  const frame = document.createElement('div');
-  frame.className = 'slide-card-3d';
-
-  const header = document.createElement('div');
-  header.className = 'slide-header';
-
-  const badge = document.createElement('span');
-  badge.className = 'slide-index-pill';
-  badge.textContent = `#${slide.slideNumber}`;
-
-  const titleEl = document.createElement('h2');
-  titleEl.className = 'slide-title';
-  titleEl.setAttribute('data-id', `slide-title-${slide.slideNumber}`);
-  titleEl.textContent = slide.title;
-
-  header.appendChild(badge);
-  header.appendChild(titleEl);
-  frame.appendChild(header);
-
-  const body = document.createElement('div');
-  const images = (slide.images || []).slice(0, 3);
-  body.className = images.length > 0 ? 'slide-body has-media' : 'slide-body text-only';
-
-  const textCol = document.createElement('div');
-  textCol.className = 'slide-text-col';
-
-  const bodyLines = (slide.texts || []).slice(1);
-  if (bodyLines.length === 0) {
-    const lead = document.createElement('p');
-    lead.className = 'slide-lead-text fragment';
-    lead.setAttribute('data-fragment-index', '0');
-    lead.textContent = slide.title;
-
-    const sub1 = document.createElement('div');
-    sub1.className = 'slide-Tag-chip fragment';
-    sub1.setAttribute('data-fragment-index', '1');
-    sub1.textContent = `Snímek ${slide.slideNumber}`;
-
-    const sub2 = document.createElement('div');
-    sub2.className = 'slide-Tag-chip fragment';
-    sub2.setAttribute('data-fragment-index', '2');
-    sub2.textContent = 'JET-Česko';
-
-    textCol.appendChild(lead);
-    textCol.appendChild(sub1);
-    textCol.appendChild(sub2);
-  } else {
-    const list = document.createElement('ul');
-    list.className = 'slide-bullet-list';
-
-    bodyLines.forEach((line, i) => {
-      const li = document.createElement('li');
-      const fragIdx = Math.min(i, 2);
-      li.className = 'slide-bullet-item fragment';
-      li.setAttribute('data-fragment-index', String(fragIdx));
-      li.textContent = line;
-      list.appendChild(li);
-    });
-
-    for (let extra = bodyLines.length; extra < 3; extra++) {
-      const li = document.createElement('li');
-      li.className = 'slide-bullet-item slide-meta-bullet fragment';
-      li.setAttribute('data-fragment-index', String(extra));
-      li.textContent = extra === 1 ? `Snímek #${slide.slideNumber}` : 'JET-Česko (varianta L)';
-      list.appendChild(li);
+    // 1. Render Slide Layout background elements (arches, border frames, decorative shapes)
+    if (Array.isArray(slide.layoutElements)) {
+      for (const el of slide.layoutElements) {
+        const node = renderSceneElement(el, idx);
+        if (node) {
+          node.classList.add('pptx-layout-el');
+          stage.appendChild(node);
+        }
+      }
     }
 
-    textCol.appendChild(list);
-  }
+    // 2. Render Slide Foreground elements (photos, titles, cards, custom vectors, slide numbers)
+    if (Array.isArray(slide.elements)) {
+      for (const el of slide.elements) {
+        const node = renderSceneElement(el, idx);
+        if (node) {
+          stage.appendChild(node);
+        }
+      }
+    }
 
-  body.appendChild(textCol);
-
-  if (images.length > 0) {
-    const mediaCol = document.createElement('div');
-    mediaCol.className = `slide-media-col media-count-${images.length}`;
-
-    images.forEach((imgSrc, imgIdx) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'media-frame';
-      wrap.setAttribute('data-id', `media-${slide.slideNumber}-${imgIdx}`);
-
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      img.alt = '';
-      img.loading = hIndex < 6 ? 'eager' : 'lazy';
-
-      wrap.appendChild(img);
-      mediaCol.appendChild(wrap);
-    });
-
-    body.appendChild(mediaCol);
-  }
-
-  frame.appendChild(body);
-  section.appendChild(frame);
-  return section;
-}
-
-function createDetailVerticalSlide(slide, hIndex, vIndex) {
-  const section = document.createElement('section');
-  section.setAttribute('data-auto-animate', '');
-  section.className = 'slide-section vertical-detail-slide';
-
-  const frame = document.createElement('div');
-  frame.className = 'slide-card-3d';
-
-  const header = document.createElement('div');
-  header.className = 'slide-header';
-
-  const badge = document.createElement('span');
-  badge.className = 'slide-index-pill';
-  badge.textContent = `#${slide.slideNumber}.${vIndex}`;
-
-  const h2 = document.createElement('h2');
-  h2.className = 'slide-title';
-  h2.setAttribute('data-id', `slide-title-${slide.slideNumber}`);
-  h2.textContent = slide.title;
-
-  header.appendChild(badge);
-  header.appendChild(h2);
-  frame.appendChild(header);
-
-  const body = document.createElement('div');
-  body.className = 'slide-body has-media';
-
-  const textCol = document.createElement('div');
-  textCol.className = 'slide-text-col';
-
-  const list = document.createElement('ul');
-  list.className = 'slide-bullet-list';
-
-  const summaryItems = (slide.texts || [slide.title]).slice(0, 4);
-  while (summaryItems.length < 3) {
-    summaryItems.push('JET-Česko (varianta L)');
-  }
-
-  summaryItems.forEach((item, idx) => {
-    const li = document.createElement('li');
-    li.className = 'slide-bullet-item fragment';
-    li.setAttribute('data-fragment-index', String(Math.min(idx, 2)));
-    li.textContent = item;
-    list.appendChild(li);
+    stageOuter.appendChild(stage);
+    section.appendChild(stageOuter);
+    slidesContainer.appendChild(section);
   });
-
-  textCol.appendChild(list);
-  body.appendChild(textCol);
-
-  if (slide.images && slide.images.length > 0) {
-    const mediaCol = document.createElement('div');
-    mediaCol.className = 'slide-media-col media-count-1';
-    const wrap = document.createElement('div');
-    wrap.className = 'media-frame';
-    const img = document.createElement('img');
-    img.src = slide.images[0];
-    img.alt = '';
-    wrap.appendChild(img);
-    mediaCol.appendChild(wrap);
-    body.appendChild(mediaCol);
-  }
-
-  frame.appendChild(body);
-  section.appendChild(frame);
-  return section;
 }

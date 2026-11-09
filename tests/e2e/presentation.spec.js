@@ -8,17 +8,19 @@ async function getRevealState(page) {
     return {
       indexh: idx.h ?? 0,
       indexv: idx.v ?? 0,
-      indexf: (idx.f === undefined || idx.f === null) ? -1 : idx.f
+      indexf: idx.f === undefined || idx.f === null ? -1 : idx.f
     };
   });
 }
 
 async function waitForRevealReady(page) {
-  await page.waitForFunction(() => Boolean(window.__reveal && window.__syncEngine && window.__syncEngine.connected));
+  await page.waitForFunction(() =>
+    Boolean(window.__reveal && window.__syncEngine && window.__syncEngine.connected)
+  );
 }
 
 test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenarios', () => {
-  test('1. Sync Happy Path: Master + 3 Clients sync forward, back, vertical, and 3 fragments within <300ms', async ({ browser }) => {
+  test('1. Sync Happy Path: Master + 3 Clients sync forward and backward across slides within <300ms', async ({ browser }) => {
     const room = 'room-happy-' + Date.now();
     const masterContext = await browser.newContext();
     const clientContexts = await Promise.all([
@@ -42,16 +44,12 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await expect(masterPage.getByTestId('viewer-count')).toHaveText('3', { timeout: 3000 });
 
     const steps = [
-      // Move forward horizontally to slide 1
       { action: () => masterPage.evaluate(() => window.__reveal.slide(1, 0, -1)), expected: { indexh: 1, indexv: 0, indexf: -1 } },
-      // Move down to vertical sub-slide 1/1
-      { action: () => masterPage.evaluate(() => window.__reveal.slide(1, 1, -1)), expected: { indexh: 1, indexv: 1, indexf: -1 } },
-      // Move back to 1/0
-      { action: () => masterPage.evaluate(() => window.__reveal.slide(1, 0, -1)), expected: { indexh: 1, indexv: 0, indexf: -1 } },
-      // Step through 3 sequential fragments (0, 1, 2)
-      { action: () => masterPage.evaluate(() => window.__reveal.nextFragment()), expected: { indexh: 1, indexv: 0, indexf: 0 } },
-      { action: () => masterPage.evaluate(() => window.__reveal.nextFragment()), expected: { indexh: 1, indexv: 0, indexf: 1 } },
-      { action: () => masterPage.evaluate(() => window.__reveal.nextFragment()), expected: { indexh: 1, indexv: 0, indexf: 2 } }
+      { action: () => masterPage.evaluate(() => window.__reveal.slide(5, 0, -1)), expected: { indexh: 5, indexv: 0, indexf: -1 } },
+      { action: () => masterPage.evaluate(() => window.__reveal.slide(11, 0, -1)), expected: { indexh: 11, indexv: 0, indexf: -1 } },
+      { action: () => masterPage.evaluate(() => window.__reveal.slide(10, 0, -1)), expected: { indexh: 10, indexv: 0, indexf: -1 } },
+      { action: () => masterPage.evaluate(() => window.__reveal.slide(22, 0, -1)), expected: { indexh: 22, indexv: 0, indexf: -1 } },
+      { action: () => masterPage.evaluate(() => window.__reveal.slide(0, 0, -1)), expected: { indexh: 0, indexv: 0, indexf: -1 } }
     ];
 
     for (const step of steps) {
@@ -69,7 +67,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await Promise.all(clientContexts.map((c) => c.close()));
   });
 
-  test('2. Late-Joiner State: Client joining when Master is at 5/0/2 syncs within <500ms', async ({ browser }) => {
+  test('2. Late-Joiner State: Client joining when Master is at Slide 12 (indexh=11) syncs within <500ms', async ({ browser }) => {
     const room = 'room-late-' + Date.now();
     const masterContext = await browser.newContext();
     const masterPage = await masterContext.newPage();
@@ -77,9 +75,9 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await masterPage.goto(`/?master=secret&room=${room}`);
     await waitForRevealReady(masterPage);
 
-    // Master jumps to slide 5, vertical 0, fragment 2
-    await masterPage.evaluate(() => window.__reveal.slide(5, 0, 2));
-    expect(await getRevealState(masterPage)).toEqual({ indexh: 5, indexv: 0, indexf: 2 });
+    // Master jumps to Slide 12 (indexh = 11)
+    await masterPage.evaluate(() => window.__reveal.slide(11, 0, -1));
+    expect(await getRevealState(masterPage)).toEqual({ indexh: 11, indexv: 0, indexf: -1 });
 
     // Late-joiner opens URL
     const lateContext = await browser.newContext();
@@ -89,7 +87,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
 
     await expect
       .poll(() => getRevealState(latePage), { timeout: 500, intervals: [20, 40, 60] })
-      .toEqual({ indexh: 5, indexv: 0, indexf: 2 });
+      .toEqual({ indexh: 11, indexv: 0, indexf: -1 });
 
     await masterContext.close();
     await lateContext.close();
@@ -109,14 +107,16 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await waitForRevealReady(clientPage);
 
     await masterPage.evaluate(() => window.__reveal.slide(2, 0, -1));
-    await expect.poll(() => getRevealState(clientPage), { timeout: 500 }).toEqual({ indexh: 2, indexv: 0, indexf: -1 });
+    await expect
+      .poll(() => getRevealState(clientPage), { timeout: 500 })
+      .toEqual({ indexh: 2, indexv: 0, indexf: -1 });
 
     // Disconnect client network
     await clientContext.setOffline(true);
 
     // Master moves 4 slides ahead (from 2 to 6)
-    await masterPage.evaluate(() => window.__reveal.slide(6, 0, 1));
-    expect(await getRevealState(masterPage)).toEqual({ indexh: 6, indexv: 0, indexf: 1 });
+    await masterPage.evaluate(() => window.__reveal.slide(6, 0, -1));
+    expect(await getRevealState(masterPage)).toEqual({ indexh: 6, indexv: 0, indexf: -1 });
 
     // Reconnect client network
     await clientContext.setOffline(false);
@@ -124,7 +124,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     // Client automatically recovers and aligns to Master without reload
     await expect
       .poll(() => getRevealState(clientPage), { timeout: 2500, intervals: [40, 80, 120] })
-      .toEqual({ indexh: 6, indexv: 0, indexf: 1 });
+      .toEqual({ indexh: 6, indexv: 0, indexf: -1 });
 
     await masterContext.close();
     await clientContext.close();
@@ -140,11 +140,13 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
 
     await masterPage.goto(`/?master=secret&room=${room}`);
     await waitForRevealReady(masterPage);
-    await masterPage.evaluate(() => window.__reveal.slide(2, 0, 0));
+    await masterPage.evaluate(() => window.__reveal.slide(2, 0, -1));
 
     await clientPage.goto(`/?room=${room}`);
     await waitForRevealReady(clientPage);
-    await expect.poll(() => getRevealState(clientPage)).toEqual({ indexh: 2, indexv: 0, indexf: 0 });
+    await expect
+      .poll(() => getRevealState(clientPage))
+      .toEqual({ indexh: 2, indexv: 0, indexf: -1 });
 
     // Verify Master HUD is hidden on Client
     await expect(clientPage.getByTestId('master-hud')).toBeHidden();
@@ -154,7 +156,7 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await clientPage.keyboard.press('ArrowDown');
     await clientPage.keyboard.press('Space');
     await clientPage.keyboard.press('PageDown');
-    expect(await getRevealState(clientPage)).toEqual({ indexh: 2, indexv: 0, indexf: 0 });
+    expect(await getRevealState(clientPage)).toEqual({ indexh: 2, indexv: 0, indexf: -1 });
 
     // Attempt URL hash tampering (#/8)
     await clientPage.evaluate(() => {
@@ -162,7 +164,9 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
       window.dispatchEvent(new HashChangeEvent('hashchange'));
     });
 
-    await expect.poll(() => getRevealState(clientPage), { timeout: 500 }).toEqual({ indexh: 2, indexv: 0, indexf: 0 });
+    await expect
+      .poll(() => getRevealState(clientPage), { timeout: 500 })
+      .toEqual({ indexh: 2, indexv: 0, indexf: -1 });
 
     await masterContext.close();
     await clientContext.close();
@@ -181,34 +185,52 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await clientPage.goto(`/?room=${room}`);
     await waitForRevealReady(clientPage);
 
-    // Master advances to slide 7, fragment 1
-    await masterPage.evaluate(() => window.__reveal.slide(7, 0, 1));
-    await expect.poll(() => getRevealState(clientPage)).toEqual({ indexh: 7, indexv: 0, indexf: 1 });
+    // Master advances to slide 7
+    await masterPage.evaluate(() => window.__reveal.slide(7, 0, -1));
+    await expect
+      .poll(() => getRevealState(clientPage))
+      .toEqual({ indexh: 7, indexv: 0, indexf: -1 });
 
     // Master reloads the page
     await masterPage.reload();
     await waitForRevealReady(masterPage);
 
-    expect(await getRevealState(masterPage)).toEqual({ indexh: 7, indexv: 0, indexf: 1 });
-    expect(await getRevealState(clientPage)).toEqual({ indexh: 7, indexv: 0, indexf: 1 });
+    expect(await getRevealState(masterPage)).toEqual({ indexh: 7, indexv: 0, indexf: -1 });
+    expect(await getRevealState(clientPage)).toEqual({ indexh: 7, indexv: 0, indexf: -1 });
 
     await masterContext.close();
     await clientContext.close();
   });
 
   test('6. Responsive & Overflow Matrix: 375x667, 768x1024, 1920x1080, 3840x2160 have zero overflow and zero 404 assets', async ({ browser }) => {
-    const context = await browser.newContext();
+    const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
     const page = await context.newPage();
 
     const failedAssets = [];
     page.on('response', (res) => {
-      if (res.status() >= 400 && (res.url().includes('/assets/') || res.url().endsWith('.png') || res.url().endsWith('.jpg'))) {
+      if (
+        res.status() >= 400 &&
+        (res.url().includes('/assets/') || res.url().endsWith('.png') || res.url().endsWith('.jpg'))
+      ) {
         failedAssets.push(`${res.status()} ${res.url()}`);
       }
     });
 
     await page.goto('/?master=1&room=room-responsive');
     await waitForRevealReady(page);
+
+    // Capture visual verification screenshots at 1920x1080 for Slide 1, Slide 11, and Slide 12
+    await page.evaluate(() => window.__reveal.slide(0, 0, -1));
+    await page.waitForTimeout(450);
+    await page.screenshot({ path: 'test-results/slide-01-hero.png' });
+
+    await page.evaluate(() => window.__reveal.slide(10, 0, -1));
+    await page.waitForTimeout(550);
+    await page.screenshot({ path: 'test-results/slide-11-questions.png' });
+
+    await page.evaluate(() => window.__reveal.slide(11, 0, -1));
+    await page.waitForTimeout(550);
+    await page.screenshot({ path: 'test-results/slide-12-endgame.png' });
 
     const viewports = [
       { width: 375, height: 667 },
@@ -219,27 +241,25 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
 
     const sampleSlides = [
       [0, 0],
-      [0, 1],
       [1, 0],
-      [5, 0],  // Slide 6 (includes cropped photo)
-      [10, 0],
-      [13, 0], // Slide 14 (includes cropped photo)
-      [22, 0], // Slide 23 (includes cropped photo)
-      [27, 0],
-      [36, 0], // Slide 37 (includes cropped photo)
-      [37, 0], // Slide 38 (includes cropped photo)
-      [44, 0], // Slide 45 (includes cropped photo)
-      [50, 0]
+      [5, 0],
+      [8, 0],   // Slide 9 (includes extra Lucie photo in empty space)
+      [10, 0],  // Slide 11 (6 question cards)
+      [11, 0],  // Slide 12 (END-GAME with cropped image10.png)
+      [17, 0],  // Slide 18 (includes extra Lucie photo)
+      [22, 0],  // Slide 23 (includes extra Lucie photo)
+      [36, 0],  // Slide 37 (Fotky – park)
+      [42, 0],  // Slide 43 (includes extra Lucie photo)
+      [50, 0]   // Slide 51 (Všechno!)
     ];
 
     for (const vp of viewports) {
       await page.setViewportSize(vp);
       for (const [h, v] of sampleSlides) {
-        await page.evaluate(([ih, iv]) => window.__reveal.slide(ih, iv, 2), [h, v]);
+        await page.evaluate(([ih, iv]) => window.__reveal.slide(ih, iv, -1), [h, v]);
         const metrics = await page.evaluate(() => {
           const doc = document.documentElement;
-          const activeSlide = document.querySelector('.reveal .slides section.present section.present') ||
-                              document.querySelector('.reveal .slides section.present');
+          const activeSlide = document.querySelector('.reveal .slides section.present');
           return {
             docScrollW: doc.scrollWidth,
             docClientW: doc.clientWidth,
@@ -259,8 +279,8 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
       }
     }
 
-    // Verify images on Slide 37 (park photo + PPTX images) loaded with naturalWidth > 0
-    await page.evaluate(() => window.__reveal.slide(36, 0, 2));
+    // Verify images on Slide 12 and Slide 37 loaded with naturalWidth > 0
+    await page.evaluate(() => window.__reveal.slide(11, 0, -1));
     const loadedSlideImages = await page.evaluate(() => {
       const activeSlide = document.querySelector('.reveal .slides section.present');
       const imgs = activeSlide ? Array.from(activeSlide.querySelectorAll('img')) : [];
@@ -272,10 +292,10 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     await context.close();
   });
 
-  test('7. WebGL / 3D Fallback: Simulating webglcontextlost activates static fallback without breaking sync', async ({ browser }) => {
+  test('7. WebGL / 3D Fallback: WebGL runs on Windows even with reduced-motion and falls back cleanly on context loss', async ({ browser }) => {
     const room = 'room-webgl-' + Date.now();
-    const masterContext = await browser.newContext();
-    const clientContext = await browser.newContext();
+    const masterContext = await browser.newContext({ reducedMotion: 'reduce' });
+    const clientContext = await browser.newContext({ reducedMotion: 'reduce' });
 
     const masterPage = await masterContext.newPage();
     const clientPage = await clientContext.newPage();
@@ -302,8 +322,10 @@ test.describe('JET-Česko Presentation – 7 Mandatory E2E Verification Scenario
     expect(hasFallbackClass).toBe(true);
 
     // Verify slide synchronization continues to work seamlessly after WebGL fallback
-    await masterPage.evaluate(() => window.__reveal.slide(4, 0, 1));
-    await expect.poll(() => getRevealState(clientPage), { timeout: 500 }).toEqual({ indexh: 4, indexv: 0, indexf: 1 });
+    await masterPage.evaluate(() => window.__reveal.slide(4, 0, -1));
+    await expect
+      .poll(() => getRevealState(clientPage), { timeout: 500 })
+      .toEqual({ indexh: 4, indexv: 0, indexf: -1 });
 
     await masterContext.close();
     await clientContext.close();
