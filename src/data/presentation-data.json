@@ -1,0 +1,766 @@
+{
+  "metadata": {
+    "title": "JET-Česko – Prezentace",
+    "totalSlides": 51,
+    "extractedAt": "2026-11-09T17:43:34.111Z"
+  },
+  "themeColors": [
+    "#2A4D14",
+    "#11457E",
+    "#D8973C",
+    "#D7141A",
+    "#FFFFFF",
+    "#111111",
+    "#898989",
+    "#85AC7E",
+    "#5DA271",
+    "#2E1E0F"
+  ],
+  "slides": [
+    {
+      "slideNumber": 1,
+      "fileName": "slide1.xml",
+      "title": "JET-Česko Prezentace",
+      "texts": [
+        "JET-Česko Prezentace"
+      ],
+      "images": [
+        "./assets/slides/image3.png"
+      ]
+    },
+    {
+      "slideNumber": 2,
+      "fileName": "slide2.xml",
+      "title": "Základní instrukce (hrajeme variantu L)",
+      "texts": [
+        "Základní instrukce (hrajeme variantu L)",
+        "Jak se hra hraje?",
+        "1. Jeden tým použije PID a dostane se na svůj hiding spot",
+        "2. Ostatní hráči spolupracují a snaží se je najít, za pomocí otázek ohledně jejich lokace, které jsou vybírány z šesti kategorií",
+        "3. Po každé zodpovězené otázce si hideři tahají karty ze svého balíčku karet (hider deck)",
+        "4. Poté, co je tým nalezen se schovává další tým",
+        "5. Na konci vyhrává tým s nejdelším časem, kdy byli schováni (časy se nesčítají, počítá se nejdelší run)",
+        "6. Týmy se mohou rozdělit pouze, pokud to danné skupině nepřinese taktickou výhodu (tzn pokud třeba plní úkol musí být skupina pohromadě)"
+      ],
+      "images": [
+        "./assets/slides/image4.png"
+      ]
+    },
+    {
+      "slideNumber": 3,
+      "fileName": "slide3.xml",
+      "title": "Začátek hry",
+      "texts": [
+        "Začátek hry",
+        "1"
+      ],
+      "images": [
+        "./assets/slides/image20.png"
+      ]
+    },
+    {
+      "slideNumber": 4,
+      "fileName": "slide4.xml",
+      "title": "Vždyť to nemusíme řešit schováš se a jedem, ne?",
+      "texts": [
+        "Vždyť to nemusíme řešit schováš se a jedem, ne?"
+      ],
+      "images": [
+        "./assets/slides/image13.png"
+      ]
+    },
+    {
+      "slideNumber": 5,
+      "fileName": "slide5.xml",
+      "title": "Začátek",
+      "texts": [
+        "Začátek",
+        "Tým vždy při začátku svého schovávacího kola musí:",
+        "Vypnout tracker (je-li u někoho zapnutý)",
+        "Převzít balíček karet, který před ostatními (alespoň 7x ho zamíchá )(chcete-li matematicky vysvětlit proč, míra rád vysvětlí 😏)",
+        "Předat Investigační knihu těm co budou hledat",
+        "(Pokud nemají) převzít knihu s pravidly"
+      ],
+      "images": [
+        "./assets/slides/image8.png"
+      ]
+    },
+    {
+      "slideNumber": 6,
+      "fileName": "slide6.xml",
+      "title": "Hideři",
+      "texts": [
+        "Hideři",
+        "čas nastartovat nepravděpodobnostní pohon"
+      ],
+      "images": [
+        "./assets/slides/image5.png",
+        "./assets/team/lucie-2.png"
+      ]
+    },
+    {
+      "slideNumber": 7,
+      "fileName": "slide7.xml",
+      "title": "Kde se teda schovat?",
+      "texts": [
+        "Kde se teda schovat?",
+        "Jakákoliv zastávka PID, která",
+        "- Je obsluhována po celý herní den v intervalech max 1x za 30 min",
+        "- Je na oblasti PID P, 0, B,",
+        "- Je pro něj dosažitelná do 1 hodiny pomocí kombinace ČD a chůze/běhu*",
+        "Po hodině se musíte zastavit na místě kde jste!!!"
+      ],
+      "images": [
+        "./assets/slides/image6.jpg"
+      ]
+    },
+    {
+      "slideNumber": 8,
+      "fileName": "slide8.xml",
+      "title": "Není spuštěn END-GAME",
+      "texts": [
+        "Není spuštěn END-GAME",
+        "Hiding zóna je určena půl kilometrovou kružnicí okolo stanice Hiderů. Mohou se v ní volně pohybovat a hledat místo pro end game. Nicméně během toho MUSÍ být schopni odpovídat na otázky seekrů",
+        "Co je Hiding zóna?",
+        "Nadešel END-GAME",
+        "END-GAME nastává ve chvíli, kdy seekři dorazí na stanici hidera. V tento moment musí zůstat na místě kde aktuálně jsou. Pokud je v tento moment položena otázka, na kterou fyzicky nejde odpovědět odesílají „nelze odpovědět“"
+      ],
+      "images": [
+        "./assets/slides/image14.png"
+      ]
+    },
+    {
+      "slideNumber": 9,
+      "fileName": "slide9.xml",
+      "title": "Typy otázek?",
+      "texts": [
+        "Typy otázek?"
+      ],
+      "images": [
+        "./assets/slides/image12.png"
+      ]
+    },
+    {
+      "slideNumber": 10,
+      "fileName": "slide10.xml",
+      "title": "Otázky",
+      "texts": [
+        "Otázky",
+        "Hideři mají na zodpovězení otázek 5 min s výjimkou foto otázek, na ty mají 10 min. Pokud nestihnou čas jejich pozastaven do doby než odpoví a netahají si za otázku karty.",
+        "Po zodpovězení otázky si tahají karty (konkrétní počty později).",
+        "Pokud se seekři na stejnou otázku ptají podruhé, je tahání karet znásobeno (2x, 3x, …). ALE taháno postupně (vytáhnu 3, vyberu si jednu, vytáhnu další 3 vyberu si druhou) NE JINAK!",
+        "Maximální počet karet v ruce je 6 (pokud není rozšířena)*"
+      ],
+      "images": [
+        "./assets/slides/image7.png"
+      ]
+    },
+    {
+      "slideNumber": 11,
+      "fileName": "slide11.xml",
+      "title": "Typy otázek a karty za ně",
+      "texts": [
+        "Typy otázek a karty za ně",
+        "Matching",
+        "Je vaše nejbližší X stejné jako, naše X. (cesta, zoo, železnice, kraj, ViaCzechia …)",
+        "Taháte 3 berete 1 kartu",
+        "Mesuring",
+        "Vzhledem k nám jste blíž nebo dál od X. (okraj kraje, Zoo, Park, …)",
+        "Taháte 3 berete 1 kartu",
+        "Teploměr",
+        "Právě jsme urazili X km. Jsme k vám blíž, nebo dál?",
+        "Taháte 2 berete 1 kartu.",
+        "Radar",
+        "Nacházíš se v X km vzdálenosti ode nás?",
+        "Taháte 2 berete 1 kartu",
+        "Chapadla(tentacles)",
+        "Ze všech *místo* ve vzdálenosti X Km od nás kterému jste nejblíž?",
+        "Taháte 4 berete 2 karty.",
+        "Fotky",
+        "Pošli nám fotku *něco*.",
+        "Berete si 1 kartu."
+      ],
+      "images": [
+        "./assets/slides/image21.png"
+      ]
+    },
+    {
+      "slideNumber": 12,
+      "fileName": "slide12.xml",
+      "title": "END-GAME",
+      "texts": [
+        "END-GAME",
+        "V pravidlech je často zmíněna hláška Publicly accessible hiding spot. Znamená to místo, které je veřejně přístupné po celou herní dobu pro všechny hráče. Tohle místo musí být do 3 m od cesty vyznačené v mapě. Místo může být i v oblastech, které nejsou „veřejné“, ale nechceme aby vás z něj někdo v průběhu vykopnul… (restaurace tedy spíš ne, můžete tam být až několik hodin)",
+        "Pokud se spustí END-GAME a nenacházíte se na validním místě, musíte se přesunout na nejbližší takové místo. (vyhodnoceno za pomoci mapy)",
+        "Přijde-li nějaká otázka která není možná odpovědět posíláte již zmíněné „nelze odpovědět“ ale i tak i za otázku berete příslušný počet karet!",
+        "Dobře zvolený spot může přinést hodinu i víc do vašeho času, vybírejte pořádně!"
+      ],
+      "images": [
+        "./assets/slides/image10.png"
+      ]
+    },
+    {
+      "slideNumber": 13,
+      "fileName": "slide13.xml",
+      "title": "Nalezení",
+      "texts": [
+        "Nalezení",
+        "Hideři se počítají jako nalezení pouze když je vidíte a zároveň jste maximálně 2 m od nich. (počítá se i horizontálně🗼)",
+        "Po nalezení a předání všech propriet startuje čas na schování pro následující tým, který startuje z místa, kde byl nalezen tým předchozí.",
+        "(tým má v tento moment maximálně 10 min na předání všech propriet nemůže udělat delší přestávku na research)"
+      ],
+      "images": [
+        "./assets/slides/image9.jpg"
+      ]
+    },
+    {
+      "slideNumber": 14,
+      "fileName": "slide14.xml",
+      "title": "Seekři",
+      "texts": [
+        "Seekři",
+        "Srandokupa ve čtyřech 7:P"
+      ],
+      "images": [
+        "./assets/slides/image11.png",
+        "./assets/team/lucie-3.png"
+      ]
+    },
+    {
+      "slideNumber": 15,
+      "fileName": "slide15.xml",
+      "title": "Je „zakreslování random věcí do mapy“ a „strategizování kam jet“ fakt tak easy?",
+      "texts": [
+        "Je „zakreslování random věcí do mapy“ a „strategizování kam jet“ fakt tak easy?"
+      ],
+      "images": [
+        "./assets/slides/image18.png"
+      ]
+    },
+    {
+      "slideNumber": 16,
+      "fileName": "slide16.xml",
+      "title": "Seekři – základní info",
+      "texts": [
+        "Seekři – základní info",
+        "Základními nástroji jsou Investigační kniha! a Fyzická mapa! (poznámka k online nástroji)",
+        "Je silně doporučeno zaznamenat si všechny dotázané otázky i odpovědi na ně do Investigační knihy.",
+        "VŽDY se můžete ptát jen na jednu otázku, dokud není zodpovězena není možné položit další.",
+        "Je přísně zakázáno používat street view (obrázky na google mapách v náhledu místa jsou dovoleny, nicméně nesmíte jimy scrollovat)",
+        "JE doporučeno dělat si zastávky k projednání strategie a dalšího postupu"
+      ],
+      "images": [
+        "./assets/slides/image28.png"
+      ]
+    },
+    {
+      "slideNumber": 17,
+      "fileName": "slide17.xml",
+      "title": "Krátká poznámka k mapám",
+      "texts": [
+        "Krátká poznámka k mapám",
+        "Musíme používat stejnou mapovou aplikaci. Hra je navržena kolem Google map. Nicméně pro pro nás v tomto ohledu budou mnohem lepší mapy.cz",
+        "hledající při použití otázky musí specifikovat jakou mapu použili a jaká mista na ní viděli, např, pošlou screen s těmito místy apod.",
+        "Pokud nastane jakákoli nejasnost je na hledajících aby požádali a podali dodatečné informace (screenshot jejich mapové aplikace a popis co mají za problém)"
+      ],
+      "images": [
+        "./assets/slides/image15.png"
+      ]
+    },
+    {
+      "slideNumber": 18,
+      "fileName": "slide18.xml",
+      "title": "Jak si zapisovat jednotlivé typy otázek a jak se na ně ptát?",
+      "texts": [
+        "Jak si zapisovat jednotlivé typy otázek a jak se na ně ptát?"
+      ],
+      "images": [
+        "./assets/slides/image26.png",
+        "./assets/team/lucie-5.png"
+      ]
+    },
+    {
+      "slideNumber": 19,
+      "fileName": "slide19.xml",
+      "title": "Matching otázky",
+      "texts": [
+        "Matching otázky",
+        "Věci, které jsou mimo ČR nepočítáme (např. zahraniční letiště)",
+        "PřepravníLetiště (komerční letiště, ze kterého létají letadla*), Vlaková linka (seekři musí být v hýbajícím se vlaku), délka názvu stanice (počítají se i mezery), ulice/cestaPřírodníHora, ŘekaZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
+      ],
+      "images": [
+        "./assets/slides/image19.png",
+        "./assets/slides/image22.jpg"
+      ]
+    },
+    {
+      "slideNumber": 20,
+      "fileName": "slide20.xml",
+      "title": "Mesuring otázky",
+      "texts": [
+        "Mesuring otázky",
+        "PřepravníKomerční letiště, Trasy via czechia, Vlakové staniceHraniceStátní hranice, Hranice historického dělení, Kraje, OkresyPřírodníNadmořská výška, Vodní plochy, pobřeží, Hory, ParkyZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
+      ],
+      "images": [
+        "./assets/slides/image16.png",
+        "./assets/slides/image17.jpg"
+      ]
+    },
+    {
+      "slideNumber": 21,
+      "fileName": "slide21.xml",
+      "title": "Radary",
+      "texts": [
+        "Radary",
+        "Velikosti radarů:",
+        "500 m",
+        "1 km",
+        "2 km",
+        "5 km",
+        "10 km",
+        "15 km",
+        "40 km",
+        "80 km",
+        "160 km",
+        "??? (vyber si libovolnou vzdálenost)"
+      ],
+      "images": [
+        "./assets/slides/image34.png",
+        "./assets/slides/image25.jpg"
+      ]
+    },
+    {
+      "slideNumber": 22,
+      "fileName": "slide22.xml",
+      "title": "Teploměry",
+      "texts": [
+        "Teploměry",
+        "Počítá se od středu uražené cesty, kolmicí",
+        "Vzdálenosti",
+        "1 km",
+        "5 km",
+        "15 km",
+        "75 km"
+      ],
+      "images": [
+        "./assets/slides/image23.jpg",
+        "./assets/slides/image36.png"
+      ]
+    },
+    {
+      "slideNumber": 23,
+      "fileName": "slide23.xml",
+      "title": "Fotečky",
+      "texts": [
+        "Fotečky",
+        "Fotky musí být vyfoceny v originálním poměru, jako má telefon. Zoomování je dovoleno, ale na fotce musí být zachycena všechna vypsaná kritéria. Pokud fotografii nelze vyfotit je odesláno „nelze odpovědět“",
+        "*K fotkám bude dále speciální sekce později*"
+      ],
+      "images": [
+        "./assets/slides/image30.png",
+        "./assets/team/lucie-8.png"
+      ]
+    },
+    {
+      "slideNumber": 24,
+      "fileName": "slide24.xml",
+      "title": "Chapadla (tentacles)",
+      "texts": [
+        "Chapadla (tentacles)",
+        "Seekři vyšlou svá „chapadla“, která vycítí.Otázka je opravdu drahá, ale velmi efektivní v zabydlených oblastech.",
+        "Použitelná místa:2 kmMuzea, Knihovny, Kina, Nemocnice25kmLinky metra, Zoo, Akvária, Zábavní parky",
+        "Doporučuji použít, minule jsme moc nepoužívalí"
+      ],
+      "images": [
+        "./assets/slides/image27.png",
+        "./assets/slides/image29.jpg"
+      ]
+    },
+    {
+      "slideNumber": 25,
+      "fileName": "slide25.xml",
+      "title": "Mapa",
+      "texts": [
+        "Mapa"
+      ],
+      "images": [
+        "./assets/slides/image24.png"
+      ]
+    },
+    {
+      "slideNumber": 26,
+      "fileName": "slide26.xml",
+      "title": "Dopřesnění",
+      "texts": [
+        "Dopřesnění",
+        "Spánek, jídlo, nebezpečí?",
+        "2"
+      ],
+      "images": [
+        "./assets/slides/image47.png"
+      ]
+    },
+    {
+      "slideNumber": 27,
+      "fileName": "slide27.xml",
+      "title": "Vůbec nevím co se děje a mám tak tisíc otázek…(ptej se)",
+      "texts": [
+        "Vůbec nevím co se děje a mám tak tisíc otázek…(ptej se)"
+      ],
+      "images": [
+        "./assets/slides/image52.png"
+      ]
+    },
+    {
+      "slideNumber": 28,
+      "fileName": "slide28.xml",
+      "title": "Hajdr dek (hider deck)",
+      "texts": [
+        "Hajdr dek (hider deck)",
+        "Obsahuje 3 typy karet – power up, časový bonus, prokletí",
+        "Je důležité karty hrát a hrát je ve správný moment, aby měli co největší efekt! (a nebojte se je používat)"
+      ],
+      "images": [
+        "./assets/slides/image46.png",
+        "./assets/slides/image32.jpg"
+      ]
+    },
+    {
+      "slideNumber": 29,
+      "fileName": "slide29.xml",
+      "title": "Časové bonusy",
+      "texts": [
+        "Časové bonusy",
+        "Na kartách bereme čas pro variantu L, je jich zhruba polovina balíčku a jsou v různých velikostech.",
+        "Tyto karty platí pouze pokud je máte v ruce, když jste chyceni (ne nutně fyzicky, ale chápeme se)"
+      ],
+      "images": [
+        "./assets/slides/image39.jpg",
+        "./assets/slides/image38.jpg"
+      ]
+    },
+    {
+      "slideNumber": 30,
+      "fileName": "slide30.xml",
+      "title": "Power-upy",
+      "texts": [
+        "Power-upy",
+        "Karty můžete zahrát kdykoliv, balíček jich obsahuje několik typů:",
+        "Veto; randomize; Discard 1, draw 2; Draw 1, expand max hand size by 1; Duplicate; Move"
+      ],
+      "images": [
+        "./assets/slides/image33.jpg",
+        "./assets/slides/image40.png"
+      ]
+    },
+    {
+      "slideNumber": 31,
+      "fileName": "slide31.xml",
+      "title": "Kurvy (cursy)",
+      "texts": [
+        "Kurvy (cursy)",
+        "Je jich spousta, každá má casting cost. Některé se dají zahrát jen v určité chvíle.",
+        "bla bla bla obrázek"
+      ],
+      "images": [
+        "./assets/slides/image35.jpg",
+        "./assets/slides/image37.png"
+      ]
+    },
+    {
+      "slideNumber": 32,
+      "fileName": "slide32.xml",
+      "title": "Fotky – nejvyšší budova viditelná ze zastávky",
+      "texts": [
+        "Fotky – nejvyšší budova viditelná ze zastávky",
+        "Nejedná se o fyzicky nejvyšší budovu, ale o nejvyšší z vašeho pohledu",
+        "Musíte stát přímo u východu ze stanice, pokud je východů víc hideři si vyberou.",
+        "Budova se musí nacházet v horní 1/3 fotky a fotka musí obsahovat střechu a obě strany budovy",
+        "Přepravní budova a její součásti se nepočítají."
+      ],
+      "images": [
+        "./assets/slides/image50.png",
+        "./assets/slides/image31.jpg"
+      ]
+    },
+    {
+      "slideNumber": 33,
+      "fileName": "slide33.xml",
+      "title": "Fotky – nejvyšší hora viditelná ze stanice",
+      "texts": [
+        "Fotky – nejvyšší hora viditelná ze stanice",
+        "Největší z vaší perspektivy. Max 3x zoom, musí být ve vrchní 1/3 fotky"
+      ],
+      "images": [
+        "./assets/slides/image45.jpg",
+        "./assets/slides/image43.jpg"
+      ]
+    },
+    {
+      "slideNumber": 34,
+      "fileName": "slide34.xml",
+      "title": "Fotky – Obrys nejbližší cesty",
+      "texts": [
+        "Fotky – Obrys nejbližší cesty",
+        "Cesta/ulice musí být viditelná na mapě. Mapa musí být severem nahoru.",
+        "Jak na to?",
+        "Tužka/fix + papírnebo screenshot cesty a začernění všeho okolo na telefonu"
+      ],
+      "images": [
+        "./assets/slides/image48.png",
+        "./assets/slides/image41.jpg"
+      ]
+    },
+    {
+      "slideNumber": 35,
+      "fileName": "slide35.xml",
+      "title": "Fotky – 2 budovy",
+      "texts": [
+        "Fotky – 2 budovy",
+        "Spodek a až 4 patra (pokud má budova méně, tak všechny parta, ale můžete zoomovat)",
+        "Začernění všech identifikovatelných textů a čísel je povoleno"
+      ],
+      "images": [
+        "./assets/slides/image42.png",
+        "./assets/slides/image53.jpg"
+      ]
+    },
+    {
+      "slideNumber": 36,
+      "fileName": "slide36.xml",
+      "title": "Fotky – interiér restaurece",
+      "texts": [
+        "Fotky – interiér restaurece",
+        "Není dovoleno zoomování, pouze začernění.",
+        "Musí být pořízeno zvenku skrz okno."
+      ],
+      "images": [
+        "./assets/slides/image55.png",
+        "./assets/slides/image44.jpg"
+      ]
+    },
+    {
+      "slideNumber": 37,
+      "fileName": "slide37.xml",
+      "title": "Fotky – park",
+      "texts": [
+        "Fotky – park",
+        "Není dovoleno zoomování, telefon musí být vzpřímený vzhledem k zemi, fotící musí stát alespoň 2 m od překážky bránící ve výhledu, začernění čísel a názvů dovoleno."
+      ],
+      "images": [
+        "./assets/slides/image49.png",
+        "./assets/slides/image51.jpg",
+        "./assets/team/lucie-6.png"
+      ]
+    },
+    {
+      "slideNumber": 38,
+      "fileName": "slide38.xml",
+      "title": "Fotky – ulička v obchodě",
+      "texts": [
+        "Fotky – ulička v obchodě",
+        "Není dovoleno zoomování, fotící musí stát na jednom konci uličky, telefon musí být vzpřímený vzhledem k zemi, začernění identifikujících čísel a názvů dovoleno."
+      ],
+      "images": [
+        "./assets/slides/image65.png",
+        "./assets/slides/image54.jpg",
+        "./assets/team/lucie-7.png"
+      ]
+    },
+    {
+      "slideNumber": 39,
+      "fileName": "slide39.xml",
+      "title": "Fotky – místo vyznání víry",
+      "texts": [
+        "Fotky – místo vyznání víry",
+        "Musí obsahovat 2 m x 2 m sekci budovy s alespoň třemi identifikujícími znaky. (pokud by na to místo někdo došel musí si být jistý že našel správné místo)"
+      ],
+      "images": [
+        "./assets/slides/image56.jpg",
+        "./assets/slides/image59.jpg",
+        "./assets/slides/image61.png"
+      ]
+    },
+    {
+      "slideNumber": 40,
+      "fileName": "slide40.xml",
+      "title": "Fotky – nádražní budova",
+      "texts": [
+        "Fotky – nádražní budova",
+        "Musí obsahovat 2 m x 2 m sekci budovy s alespoň třemi identifikujícími znaky. (pokud by na to místo někdo došel musí si být jistý že našel správné místo)"
+      ],
+      "images": [
+        "./assets/slides/image66.png",
+        "./assets/slides/image63.jpg",
+        "./assets/slides/image58.jpg"
+      ]
+    },
+    {
+      "slideNumber": 41,
+      "fileName": "slide41.xml",
+      "title": "Fotky – Obrys +-1 km cesty",
+      "texts": [
+        "Fotky – Obrys +-1 km cesty",
+        "Cesta/ulice musí být viditelná na mapě. Mapa musí být severem nahoru. Během cesty musí hideři udělat alespoň 5 zatáček bez toho aby prošli stejnou cestou znovu.",
+        "Cestu nemusí hideři ujít.",
+        "Odesílá se opět jen obrys."
+      ],
+      "images": [
+        "./assets/slides/image60.png",
+        "./assets/slides/image57.jpg"
+      ]
+    },
+    {
+      "slideNumber": 42,
+      "fileName": "slide42.xml",
+      "title": "Herní doba",
+      "texts": [
+        "Herní doba",
+        "Hrajeme od XX:XX v pátek kdy budeme 2 týmy abychom si hru zkusili, konec v pátek bude 20:00",
+        "Sobota začneme v 08:00 s tím, že schovávající se vyrazí v 07:00",
+        "neděla začátek upravíme podle toho jak nám bude, nicméně začínáte na místě, kde jste včera zkončili"
+      ],
+      "images": [
+        "./assets/slides/image62.png"
+      ]
+    },
+    {
+      "slideNumber": 43,
+      "fileName": "slide43.xml",
+      "title": "Cestování",
+      "texts": [
+        "Cestování",
+        "Používáme třídenní jízdenku na PID, popř. pokud máte lítačku na pásma P, 0, B",
+        "Některé vlaky tut jízdenku podporují také a je povoleno jimi jet",
+        "Jezdíme výhradně přepravou PID, pokud se nejedná o nečekanou situaci (hra je pozastavena protože jedete do nemocnice/podobně)",
+        "Pokud se jedná o přepravu jiného dopravce, který bere jízdenky PID platí také"
+      ],
+      "images": [
+        "./assets/slides/image70.png"
+      ]
+    },
+    {
+      "slideNumber": 44,
+      "fileName": "slide44.xml",
+      "title": "Ústí",
+      "texts": [
+        "Ústí",
+        "V Ústeckém kraji hrdě pro svoje integrované spoje vybrali regiojet místo ČD. Musíme učinit společné rozhodnutí, jestli tyto spoje započítat také, nebo jestli si poradíme bez nich",
+        "Pro:",
+        "Všechny zastávky v ústeckém kraji jsou tímto dostupné",
+        "Nestane se že bychom byli v ústí zaseknuti",
+        "Proti:",
+        "Zvyšuje se útrata na osobu",
+        "Složitější hledání spojů",
+        "Mírně složitější správa jízdenek (jednotlivce)",
+        "Může vést k tomu, že se bude někdo omezovat aby finančně vyšel lépe"
+      ],
+      "images": [
+        "./assets/slides/image71.png"
+      ]
+    },
+    {
+      "slideNumber": 45,
+      "fileName": "slide45.xml",
+      "title": "Spaní",
+      "texts": [
+        "Spaní",
+        "počítáme se spaním u nás, popř. pokud se nevejdeme u Dana s Janičkou. (ale vešlo se nás sem i víc)"
+      ],
+      "images": [
+        "./assets/slides/image67.png",
+        "./assets/team/lucie-4.png"
+      ]
+    },
+    {
+      "slideNumber": 46,
+      "fileName": "slide46.xml",
+      "title": "Jídlo",
+      "texts": [
+        "Jídlo",
+        "Je požadováno, aby každý snědl minimálně 3 jídla za den. Počítejte s tím, že se může stát, že budete až několik hodin bez možnosti dokoupit si jídlo.",
+        "Proto sebou mějte v batůžku snacky a vodu, pokud se naskytne možnost doplňte si."
+      ],
+      "images": [
+        "./assets/slides/image72.png"
+      ]
+    },
+    {
+      "slideNumber": 47,
+      "fileName": "slide47.xml",
+      "title": "Natáčení",
+      "texts": [
+        "Natáčení",
+        "Točte vše co vám přijde jako důležitý moment (videa můžeme vždy smazat, když tam nebude nic important) optimální je si někde zapřít telefon a namířit ho na sebe (popř. kdyby nebylo slyšet můžete nahrát zvuk na jiný telefon, který budete držet) ideálně natáčejte na šířku",
+        "Videa a fotky mi po konci vašeho runu naposílejte na signal!!!!",
+        "Jedná se primárně o momenty kdy:",
+        "Strategizujete",
+        "Zadáváte/odpovídáte na otázku/cursu",
+        "Taháte si karty",
+        "Stěžujete si (na cokoliv)",
+        "Nastupujete/vystupujete ze spoje",
+        "Spoj má zpoždění/ujel/zjistíte že na něj musíte běžet",
+        "Máte nějaké fajn jídlo/pití",
+        "Plníte cursu",
+        "Cokoliv jiného zajímavého uznáte za vhodné"
+      ],
+      "images": [
+        "./assets/slides/image64.png"
+      ]
+    },
+    {
+      "slideNumber": 48,
+      "fileName": "slide48.xml",
+      "title": "Nebezpečné situace",
+      "texts": [
+        "Nebezpečné situace",
+        "Pokud se dostanete do situace kdy se někomu něco stane hra se pozastaví dokud nebude situace vyřešena. Nechoďte na místa, která zvážíte jako riziková (feťácká ulička, stanové městečko bezdomovců, ….).Bezpečí je důležitější než hra!"
+      ],
+      "images": [
+        "./assets/slides/image68.png"
+      ]
+    },
+    {
+      "slideNumber": 49,
+      "fileName": "slide49.xml",
+      "title": "Stres a hádky",
+      "texts": [
+        "Stres a hádky",
+        "Během hraní se určitě dostanete do situace kdy někdo způsobí problém někomu jinému (unavenost/nedoběhnete spoj/rozpor v tom co dělat dál). V tento moment je důležité se uklidnit, dýchat a v klidu si o situaci promluvit.",
+        "Pokud máte neprosto rozdílné názory a opravdu nikdo nechce ustoupit zvolte rozhodnutí náhodou.(např. hod mincí, hod kostkou(sudá/lichá), kámen nůžky, …)",
+        "Pamatujte že hádka vám nikdy nepomůže, ztratíte jí čas a většinou i náladu"
+      ],
+      "images": [
+        "./assets/slides/image73.png",
+        "./assets/team/lucie-1.png"
+      ]
+    },
+    {
+      "slideNumber": 50,
+      "fileName": "slide50.xml",
+      "title": "Delší poznámka k mapám",
+      "texts": [
+        "Delší poznámka k mapám",
+        "Využijte možnost stažení map (jak google mapy, tak mapy.cz je mají)",
+        "*ukázka měření vzdálenosti*",
+        "*ukázka online nástroje*",
+        "*další užitečné nástroje* kreslení do map"
+      ],
+      "images": [
+        "./assets/slides/image69.png"
+      ]
+    },
+    {
+      "slideNumber": 51,
+      "fileName": "slide51.xml",
+      "title": "Všechno!",
+      "texts": [
+        "Všechno!",
+        "OTÁZKY??"
+      ],
+      "images": [
+        "./assets/slides/image74.png"
+      ]
+    }
+  ]
+}

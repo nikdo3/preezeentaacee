@@ -1,0 +1,11 @@
+node_modules/
+_pptx_extracted/
+test-results/
+playwright-report/
+_*.mjs
+_*.js
+*.pptx
+*.HEIC
+/*.jpg
+/*.png
+!public/assets/**

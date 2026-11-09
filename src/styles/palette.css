@@ -1,0 +1,32 @@
+:root {
+  /* Exact PPTX Extracted Palette */
+  --color-primary: #2A4D14;
+  --color-primary-rgb: 42, 77, 20;
+
+  --color-secondary: #11457E;
+  --color-secondary-rgb: 17, 69, 126;
+
+  --color-accent: #D8973C;
+  --color-accent-rgb: 216, 151, 60;
+
+  --color-danger: #D7141A;
+  --color-danger-rgb: 215, 20, 26;
+
+  --color-surface-light: #FFFFFF;
+  --color-surface-light-rgb: 255, 255, 255;
+
+  --color-surface-dark: #111111;
+  --color-surface-dark-rgb: 17, 17, 17;
+
+  --color-muted: #898989;
+  --color-muted-rgb: 137, 137, 137;
+
+  --color-sage: #85AC7E;
+  --color-sage-rgb: 133, 172, 126;
+
+  --color-green-tint: #5DA271;
+  --color-green-tint-rgb: 93, 162, 113;
+
+  --color-brown: #2E1E0F;
+  --color-brown-rgb: 46, 30, 15;
+}
