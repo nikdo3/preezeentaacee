@@ -774,8 +774,8 @@ function compilePresentation() {
         angle: 90,
         stops: [
           { pos: 0, color: '#FFFFFF' },
-          { pos: 45, color: '#C8E2C2' },
-          { pos: 100, color: '#85AC7E' }
+          { pos: 55, color: '#DCEDD9' },
+          { pos: 100, color: '#97BA90' }
         ],
         breathe: true
       };
@@ -785,12 +785,12 @@ function compilePresentation() {
         for (const p of (titleSp.paragraphs || [])) {
           for (const r of (p.runs || [])) {
             if (r.text?.includes('Základní instrukce')) {
-              r.sz = 22;
+              r.sz = 18;
               r.color = '#1B360E';
             }
             if (r.text?.includes('variantu')) {
               r.text = r.text.replace(/variantu L/g, 'variantu M');
-              r.sz = 14;
+              r.sz = 13;
               r.color = '#1B360E';
             }
           }
@@ -1202,6 +1202,9 @@ function compilePresentation() {
         bodySp.box = { x: 120, y: 140, w: 280, h: 340, rot: 0, flipH: false, flipV: false };
         for (const p of (bodySp.paragraphs || [])) {
           for (const r of (p.runs || [])) {
+            if (r.text) {
+              r.text = r.text.replace(/Spodek a až 4 patra/g, 'Spodek a 4 patra').replace(/všechny parta/g, 'všechna patra');
+            }
             r.color = '#1B360E';
             r.sz = 14;
           }
@@ -1217,7 +1220,7 @@ function compilePresentation() {
       if (croppedPic) {
         croppedPic.fragmentZoom = true;
         croppedPic.fragmentIndex = 1;
-        croppedPic.zoomBadge = 'ZOOM: MAX 4 PATRA';
+        croppedPic.zoomBadge = '4 PATRA';
         croppedPic.box = { x: 680, y: 140, w: 240, h: 320, rot: 0, flipH: false, flipV: false };
       }
     }
@@ -1274,7 +1277,7 @@ function compilePresentation() {
       }
     }
 
-    // Slide 41: Restore title, road outline follows 1 km route on image57.jpg, text dark green #1B360E
+    // Slide 41: Restore title, separate person on left from clear body text, road outline follows full circuit
     if (origNum === 41) {
       const titleSp = slideElements.find(e => e.kind === 'sp' && (e.phKey === 'title' || e.phKey === 'ctrTitle'));
       if (titleSp) {
@@ -1285,18 +1288,26 @@ function compilePresentation() {
           }
         }
       }
+      const pic60 = slideElements.find(e => e.kind === 'pic' && e.src?.includes('image60.png'));
+      if (pic60) {
+        pic60.box = { x: 25, y: 160, w: 195, h: 380, rot: 0, flipH: false, flipV: false };
+        pic60.grounded = true;
+      }
       const bodySp = slideElements.find(e => e.kind === 'sp' && e.phKey !== 'title' && e.phKey !== 'ctrTitle' && (e.phKey?.startsWith('body') || e.paragraphs?.some(p => p.runs?.some(r => r.text?.includes('Cesta/ulice') || r.text?.includes('1 km')))));
       if (bodySp) {
-        bodySp.box = { x: 110, y: 140, w: 420, h: 340, rot: 0, flipH: false, flipV: false };
+        bodySp.box = { x: 235, y: 140, w: 265, h: 340, rot: 0, flipH: false, flipV: false };
         for (const p of (bodySp.paragraphs || [])) {
+          p.lineHeight = 1.22;
+          p.spcBefPx = 6;
           for (const r of (p.runs || [])) {
             r.color = '#1B360E';
-            r.sz = 14.5;
+            r.sz = 14;
           }
         }
       }
       const pic57 = slideElements.find(e => e.kind === 'pic' && e.src?.includes('image57.jpg'));
       if (pic57) {
+        pic57.box = { x: 515, y: 140, w: 395, h: 338, rot: 0, flipH: false, flipV: false };
         pic57.fragmentRoadOutline = '1km';
         pic57.fragmentIndex = 1;
       }
@@ -1416,9 +1427,9 @@ function compilePresentation() {
       }
     }
 
-    // Slide 50 (orig 51): Title "Konec hry", big centered original final slide content ("Všechno!", "OTÁZKY??")
+    // Slide 50 (orig 51): Title "Všechno!", big centered final slide content ("Všechno!", "OTÁZKY??")
     if (origNum === 51) {
-      slideTitle = 'Konec hry';
+      slideTitle = 'Všechno!';
       const ctrSp = slideElements.find(e => e.kind === 'sp' && (e.phKey === 'ctrTitle' || e.paragraphs?.some(p => p.runs?.some(r => r.text?.includes('Všechno')))));
       if (ctrSp) {
         ctrSp.box = { x: 180, y: 140, w: 600, h: 140, rot: 0, flipH: false, flipV: false };
@@ -1462,6 +1473,19 @@ function compilePresentation() {
       }
     }
 
+    // Re-collect finalized texts from slideElements after all customizations have run
+    const finalizedTexts = [];
+    for (const el of slideElements) {
+      if (el.kind === 'sp' && el.paragraphs && el.phKey !== 'sldNum') {
+        for (const p of el.paragraphs) {
+          const line = (p.runs || []).map(r => r.text || '').join('').trim();
+          if (line && line !== String(origNum) && line !== String(slideNum)) {
+            finalizedTexts.push(line);
+          }
+        }
+      }
+    }
+
     slidesData.push({
       slideNumber: slideNum,
       originalSlideNumber: origNum,
@@ -1470,7 +1494,7 @@ function compilePresentation() {
       bg,
       layoutElements,
       elements: slideElements,
-      texts,
+      texts: finalizedTexts,
       notes,
       ...(customLayout ? { customLayout } : {})
     });
@@ -1478,7 +1502,7 @@ function compilePresentation() {
 
   const output = {
     metadata: {
-      title: 'JET-Česko – Prezentace',
+      title: 'JET-PID – Prezentace',
       totalSlides: slidesData.length,
       stageWidth: 960,
       stageHeight: 540,

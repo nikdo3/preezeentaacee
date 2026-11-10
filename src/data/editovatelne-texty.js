@@ -24,7 +24,7 @@ export const EDITABLE_SLIDES = {
     title: "JET-PID Prezentace",
     notes: "",
     paragraphs: [
-          "JET-Česko Prezentace"
+          "JET-PID Prezentace"
     ]
   },
 
@@ -33,7 +33,7 @@ export const EDITABLE_SLIDES = {
     title: "Základní instrukce (hrajeme variantu M)",
     notes: "",
     paragraphs: [
-          "Základní instrukce (hrajeme variantu L)",
+          "Základní instrukce (hrajeme variantu M)",
           "Jak se hra hraje?",
           "1.  Jeden tým použije PID a dostane se na svůj hiding spot",
           "2.  Ostatní hráči spolupracují a snaží se je najít, za pomocí otázek ohledně jejich lokace, které jsou vybírány z šesti kategorií",
@@ -259,7 +259,11 @@ export const EDITABLE_SLIDES = {
     notes: "Strana 22-28",
     paragraphs: [
           "Mesuring otázky",
-          "PřepravníKomerční letiště, Trasy via czechia, Vlakové staniceHraniceStátní hranice, Hranice historického dělení, Kraje, OkresyPřírodníNadmořská výška, Vodní plochy, pobřeží, Hory, ParkyZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
+          "Přepravní: Komerční letiště, Trasy Via Czechia, Vlakové stanice",
+          "Hranice: Státní hranice, Hranice historického dělení, Kraje, Okresy",
+          "Přírodní: Nadmořská výška, Vodní plochy, Pobřeží, Hory, Parky",
+          "Zájmová místa: Zábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, Kina",
+          "Služby: Nemocnice, Knihovny, Ambasády"
     ]
   },
 
@@ -437,7 +441,7 @@ export const EDITABLE_SLIDES = {
     notes: "",
     paragraphs: [
           "Fotky – 2 budovy",
-          "Spodek a až 4 patra (pokud má budova méně, tak všechny parta, ale můžete zoomovat)",
+          "Spodek a až 4 patra (pokud má budova méně, tak všechna patra, ale můžete zoomovat)",
           "Začernění všech identifikovatelných textů a čísel je povoleno"
     ]
   },
@@ -558,7 +562,7 @@ export const EDITABLE_SLIDES = {
     paragraphs: [
           "Natáčení",
           "Točte vše co vám přijde jako důležitý moment (videa můžeme vždy smazat, když tam nebude nic important) optimální je si někde zapřít telefon a namířit ho na sebe (popř. kdyby nebylo slyšet můžete nahrát zvuk na jiný telefon, který budete držet) ideálně natáčejte na šířku",
-          "Videa a fotky mi po konci vašeho runu naposílejte na signal!!!!",
+          "Videa a fotky mi po konci vašeho runu naposílejte nějak ať neztratí tolik kvalitu!",
           "Jedná se primárně o momenty kdy:",
           "Strategizujete",
           "Zadáváte/odpovídáte na otázku/cursu",
@@ -607,9 +611,9 @@ export const EDITABLE_SLIDES = {
     ]
   },
 
-  // Snímek 50: Konec hry
+  // Snímek 50: Všechno!
   50: {
-    title: "Konec hry",
+    title: "Všechno!",
     notes: "",
     paragraphs: [
           "Všechno!",

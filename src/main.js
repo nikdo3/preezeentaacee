@@ -94,7 +94,7 @@ async function bootstrap() {
     fragments: true, // Enabled for interactive step-animations (cards, maps, popups, zoombadges)
     autoAnimate: false,
     transition: 'slide',
-    transitionSpeed: 'fast',
+    transitionSpeed: 'default',
     backgroundTransition: 'fade'
   });
 

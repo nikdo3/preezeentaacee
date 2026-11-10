@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "JET-Česko – Prezentace",
+    "title": "JET-PID – Prezentace",
     "totalSlides": 50,
     "stageWidth": 960,
     "stageHeight": 540,
-    "extractedAt": "2026-11-10T12:20:29.802Z"
+    "extractedAt": "2026-11-10T14:26:52.228Z"
   },
   "themeColors": [
     "#2A4D14",
@@ -166,7 +166,7 @@
         }
       ],
       "texts": [
-        "JET-Česko Prezentace"
+        "JET-PID Prezentace"
       ],
       "notes": ""
     },
@@ -184,12 +184,12 @@
             "color": "#FFFFFF"
           },
           {
-            "pos": 45,
-            "color": "#C8E2C2"
+            "pos": 55,
+            "color": "#DCEDD9"
           },
           {
             "pos": 100,
-            "color": "#85AC7E"
+            "color": "#97BA90"
           }
         ],
         "breathe": true
@@ -282,7 +282,7 @@
               "runs": [
                 {
                   "text": "Základní instrukce ",
-                  "sz": 22,
+                  "sz": 18,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -291,7 +291,7 @@
                 },
                 {
                   "text": "(hrajeme variantu M)",
-                  "sz": 14,
+                  "sz": 13,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -804,7 +804,7 @@
         }
       ],
       "texts": [
-        "Základní instrukce (hrajeme variantu L)",
+        "Základní instrukce (hrajeme variantu M)",
         "Jak se hra hraje?",
         "1.  Jeden tým použije PID a dostane se na svůj hiding spot",
         "2.  Ostatní hráči spolupracují a snaží se je najít, za pomocí otázek ohledně jejich lokace, které jsou vybírány z šesti kategorií",
@@ -10480,7 +10480,11 @@
       ],
       "texts": [
         "Mesuring otázky",
-        "PřepravníKomerční letiště, Trasy via czechia, Vlakové staniceHraniceStátní hranice, Hranice historického dělení, Kraje, OkresyPřírodníNadmořská výška, Vodní plochy, pobřeží, Hory, ParkyZájmová místaZábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, KinaSlužbyNemocnice, Knihovny, Ambasády"
+        "Přepravní: Komerční letiště, Trasy Via Czechia, Vlakové stanice",
+        "Hranice: Státní hranice, Hranice historického dělení, Kraje, Okresy",
+        "Přírodní: Nadmořská výška, Vodní plochy, Pobřeží, Hory, Parky",
+        "Zájmová místa: Zábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, Kina",
+        "Služby: Nemocnice, Knihovny, Ambasády"
       ],
       "notes": "Strana 22-28"
     },
@@ -15941,7 +15945,7 @@
           },
           "fragmentZoom": true,
           "fragmentIndex": 1,
-          "zoomBadge": "ZOOM: MAX 4 PATRA"
+          "zoomBadge": "4 PATRA"
         },
         {
           "kind": "sp",
@@ -15999,7 +16003,7 @@
                   "font": "Red Hat Text"
                 },
                 {
-                  "text": "všechny parta",
+                  "text": "všechna patra",
                   "sz": 14,
                   "b": true,
                   "i": false,
@@ -16060,7 +16064,7 @@
       ],
       "texts": [
         "Fotky – 2 budovy",
-        "Spodek a až 4 patra (pokud má budova méně, tak všechny parta, ale můžete zoomovat)",
+        "Spodek a až 4 patra (pokud má budova méně, tak všechna patra, ale můžete zoomovat)",
         "Začernění všech identifikovatelných textů a čísel je povoleno"
       ],
       "notes": ""
@@ -17553,24 +17557,25 @@
           "kind": "pic",
           "src": "./assets/slides/image60.png",
           "box": {
-            "x": 87.39,
-            "y": 105.59,
-            "w": 325.81,
-            "h": 434.41,
+            "x": 25,
+            "y": 160,
+            "w": 195,
+            "h": 380,
             "rot": 0,
             "flipH": false,
             "flipV": false
           },
-          "crop": null
+          "crop": null,
+          "grounded": true
         },
         {
           "kind": "pic",
           "src": "./assets/slides/image57.jpg",
           "box": {
-            "x": 506.49,
-            "y": 147.2,
-            "w": 398.48,
-            "h": 338.91,
+            "x": 515,
+            "y": 140,
+            "w": 395,
+            "h": 338,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -17670,9 +17675,9 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 110,
+            "x": 235,
             "y": 140,
-            "w": 420,
+            "w": 265,
             "h": 340,
             "rot": 0,
             "flipH": false,
@@ -17688,15 +17693,15 @@
           "paragraphs": [
             {
               "algn": "l",
-              "lineHeight": 1.15,
-              "spcBefPx": 0,
+              "lineHeight": 1.22,
+              "spcBefPx": 6,
               "spcAftPx": 0,
               "bullet": null,
               "bulletColor": "#000000",
               "runs": [
                 {
                   "text": "Cesta/ulice ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17705,7 +17710,7 @@
                 },
                 {
                   "text": "musí",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17714,7 +17719,7 @@
                 },
                 {
                   "text": " být viditelná na ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17723,7 +17728,7 @@
                 },
                 {
                   "text": "mapě",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17732,7 +17737,7 @@
                 },
                 {
                   "text": ". Mapa ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17741,7 +17746,7 @@
                 },
                 {
                   "text": "musí",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17750,7 +17755,7 @@
                 },
                 {
                   "text": " být severem nahoru. Během cesty musí hideři udělat ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17759,7 +17764,7 @@
                 },
                 {
                   "text": "alespoň 5 zatáček",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17768,7 +17773,7 @@
                 },
                 {
                   "text": " bez toho aby prošli stejnou cestou ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17777,7 +17782,7 @@
                 },
                 {
                   "text": "znovu",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17786,7 +17791,7 @@
                 },
                 {
                   "text": ".",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17797,15 +17802,15 @@
             },
             {
               "algn": "l",
-              "lineHeight": 1.15,
-              "spcBefPx": 8,
+              "lineHeight": 1.22,
+              "spcBefPx": 6,
               "spcAftPx": 0,
               "bullet": null,
               "bulletColor": "#000000",
               "runs": [
                 {
                   "text": "Cestu nemusí hideři ujít",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17814,7 +17819,7 @@
                 },
                 {
                   "text": ".",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17825,15 +17830,15 @@
             },
             {
               "algn": "l",
-              "lineHeight": 1.15,
-              "spcBefPx": 8,
+              "lineHeight": 1.22,
+              "spcBefPx": 6,
               "spcAftPx": 8,
               "bullet": null,
               "bulletColor": "#000000",
               "runs": [
                 {
                   "text": "Odesílá se opět ",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -17842,7 +17847,7 @@
                 },
                 {
                   "text": "jen obrys",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
@@ -17851,7 +17856,7 @@
                 },
                 {
                   "text": ".",
-                  "sz": 14.5,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -19663,7 +19668,7 @@
       "texts": [
         "Natáčení",
         "Točte vše co vám přijde jako důležitý moment (videa můžeme vždy smazat, když tam nebude nic important) optimální je si někde zapřít telefon a namířit ho na sebe (popř. kdyby nebylo slyšet můžete nahrát zvuk na jiný telefon, který budete držet) ideálně natáčejte na šířku",
-        "Videa a fotky mi po konci vašeho runu naposílejte na signal!!!!",
+        "Videa a fotky mi po konci vašeho runu naposílejte nějak ať neztratí tolik kvalitu!",
         "Jedná se primárně o momenty kdy:",
         "Strategizujete",
         "Zadáváte/odpovídáte na otázku/cursu",
@@ -20648,7 +20653,7 @@
       "slideNumber": 50,
       "originalSlideNumber": 51,
       "fileName": "slide51.xml",
-      "title": "Konec hry",
+      "title": "Všechno!",
       "bg": {
         "type": "solid",
         "color": "#85AC7E"

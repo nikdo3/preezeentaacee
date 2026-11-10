@@ -457,7 +457,7 @@ html, body {
 @keyframes pptxTitleEnter {
   0% {
     opacity: 0;
-    transform: translate3d(-18px, -6px, 0) scale(0.97);
+    transform: translate3d(-14px, -4px, 0) scale(0.98);
   }
   100% {
     opacity: 1;
@@ -468,7 +468,7 @@ html, body {
 @keyframes pptxParagraphEnter {
   0% {
     opacity: 0;
-    transform: translate3d(0, 12px, 0);
+    transform: translate3d(0, 10px, 0);
   }
   100% {
     opacity: 1;
@@ -480,7 +480,18 @@ html, body {
 @keyframes pptxPicEnter {
   0% {
     opacity: 0;
-    transform: translate3d(14px, 18px, 0) scale(0.92);
+    transform: translate3d(10px, 12px, 0) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes pptxPicEnterGrounded {
+  0% {
+    opacity: 0;
+    transform: translate3d(12px, 0, 0) scale(0.97);
   }
   100% {
     opacity: 1;
@@ -546,26 +557,26 @@ html, body {
 /* Title kinetic entrance */
 .reveal .slides section.present .pptx-sp[data-ph="title"] .pptx-p,
 .reveal .slides section.present .pptx-sp[data-ph="ctrTitle"] .pptx-p {
-  animation: pptxTitleEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pptxTitleEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Body & card paragraphs staggered entrance */
 .reveal .slides section.present .pptx-sp:not([data-ph="title"]):not([data-ph="ctrTitle"]):not([data-ph="sldNum"]) .pptx-p {
-  animation: pptxParagraphEnter 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(min(var(--p-idx, 0), 5) * 35ms + 30ms);
+  animation: pptxParagraphEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(min(var(--p-idx, 0), 6) * 45ms + 40ms);
 }
 
 /* Foreground photos: Entrance + Gentle Idle Breathing (NO flickering!) */
 .reveal .slides section.present .pptx-pic:not(.pptx-layout-el):not(.pptx-pic-grounded) .pptx-pic-motion {
   filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.36));
-  animation: pptxPicEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) 1 both, pptxPicFloat 4.2s ease-in-out infinite 0.45s;
-  animation-delay: calc(min(var(--el-order, 0), 4) * 40ms), calc(min(var(--el-order, 0), 4) * 40ms + 0.45s);
+  animation: pptxPicEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1 both, pptxPicFloat 4.2s ease-in-out infinite 0.52s;
+  animation-delay: calc(min(var(--el-order, 0), 4) * 45ms), calc(min(var(--el-order, 0), 4) * 45ms + 0.52s);
 }
 
 /* Grounded Character Cutouts (Slides 19-24 & boundary touchers): strictly zero vertical movement */
 .reveal .slides section.present .pptx-pic.pptx-pic-grounded .pptx-pic-motion {
   transform: none !important;
-  animation: pptxPicEnterGrounded 0.42s cubic-bezier(0.22, 1, 0.36, 1) 1 both !important;
+  animation: pptxPicEnterGrounded 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1 both !important;
 }
 
 /* Custom vector arrows & callouts pulse subtly */
@@ -887,12 +898,13 @@ html, body {
 .pptx-road-outline-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(8, 12, 10, 0.92);
+  background: transparent;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .pptx-road-outline-overlay.fragment:not(.visible) {
@@ -910,9 +922,12 @@ html, body {
 }
 
 .pptx-road-path {
-  stroke-dasharray: 600;
-  stroke-dashoffset: 600;
-  animation: roadTrace 1.6s ease-out forwards;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+}
+
+.pptx-road-outline-overlay.fragment.visible .pptx-road-path {
+  animation: roadTrace 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes roadTrace {

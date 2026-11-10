@@ -369,10 +369,10 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
           </filter>
         </defs>
         <!-- Obrys nejbližší cesty: přesně kopíruje silnici na image41.jpg -->
-        <path class="pptx-road-path" d="M 75,415 C 80,380 90,340 95,310 C 100,280 108,255 110,230 C 125,200 150,175 156,150 C 165,120 162,60 165,20"
+        <path class="pptx-road-path" d="M 72,425 C 70,390 60,350 60,300 C 60,260 72,230 95,190 C 115,160 135,140 148,115 C 160,90 155,65 142,45 C 138,30 150,15 165,5"
               fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-nearest)" />
-        <circle cx="75" cy="415" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
-        <circle cx="165" cy="20" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="72" cy="425" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="165" cy="5" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
         <rect x="75" y="16" width="180" height="26" rx="13" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
         <text x="165" y="33" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Nejbližší cesta</text>
       `;
@@ -386,18 +386,11 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
-        <!-- Obrys +-1 km cesty: přesně kopíruje trasu na image57.jpg -->
-        <path class="pptx-road-path" d="M 56,5 C 75,20 95,35 115,55 C 135,75 160,95 175,115 C 190,135 210,155 228,175 C 248,195 275,215 305,235 C 330,250 332,270 318,285 C 308,298 298,310 288,325"
-              fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-1km)" />
-        <!-- Turn points S, 1..5 -->
-        <g fill="#11457E" stroke="#FFFFFF" stroke-width="2" font-size="10" font-weight="800" text-anchor="middle">
-          <circle cx="56" cy="5" r="9" /><text x="56" y="9" fill="#FFF" stroke="none">S</text>
-          <circle cx="105" cy="50" r="9" /><text x="105" y="54" fill="#FFF" stroke="none">1</text>
-          <circle cx="141" cy="95" r="9" /><text x="141" y="99" fill="#FFF" stroke="none">2</text>
-          <circle cx="179" cy="140" r="9" /><text x="179" y="144" fill="#FFF" stroke="none">3</text>
-          <circle cx="270" cy="215" r="9" /><text x="270" y="219" fill="#FFF" stroke="none">4</text>
-          <circle cx="288" cy="325" r="9" fill="#4ADE80" /><text x="288" y="329" fill="#0E161C" stroke="none">5</text>
-        </g>
+        <!-- Obrys trasy 1 km: plynule kopíruje reálný modrý okruh na mapě image57.jpg -->
+        <path class="pptx-road-path" d="M 60,5 C 75,20 90,35 105,50 C 120,65 145,85 165,105 C 185,125 205,145 225,165 C 245,185 265,205 282,225 C 285,228 270,230 240,230 L 190,232 C 170,240 145,260 125,280 C 105,300 85,315 55,332"
+              fill="none" stroke="#4ADE80" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-1km)" />
+        <circle cx="60" cy="5" r="6.5" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.5" />
+        <circle cx="55" cy="332" r="6.5" fill="#4ADE80" stroke="#11457E" stroke-width="2.5" />
         <rect x="115" y="15" width="170" height="24" rx="12" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
         <text x="200" y="31" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Trasa +-1 km</text>
       `;
@@ -548,8 +541,13 @@ function renderSpElement(el, elOrder, globalPCountRef, slide, slidePCountRef) {
       const currPIdx = (!isSldNum && slidePCountRef) ? slidePCountRef.count++ : -1;
       const editablePText = (currPIdx >= 0 && slide) ? EDITABLE_SLIDES[slide.slideNumber]?.paragraphs?.[currPIdx] : null;
 
-      // Title override support
-      if (isTitleEl && pIdx === 0 && overrideTitle) {
+      // Title override support: only override if user explicitly customized it in editovatelne-texty.js
+      const originalTitleText = (p.runs || []).map((r) => r.text || '').join('').trim();
+      const hasCustomTitleOverride = isTitleEl && pIdx === 0 && overrideTitle &&
+        overrideTitle.trim() !== (slide.title || '').trim() &&
+        overrideTitle.trim() !== originalTitleText;
+
+      if (hasCustomTitleOverride) {
         const span = document.createElement('span');
         span.className = 'pptx-run';
         span.textContent = overrideTitle;

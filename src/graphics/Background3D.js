@@ -401,12 +401,22 @@ export class Background3D {
     const gRgb = hexToRgbString(g, '133, 172, 126');
 
     const gradientCss = [
-      `radial-gradient(circle at 14% 18%, rgba(${pRgb}, 0.72) 0%, transparent 60%)`,
-      `radial-gradient(circle at 86% 82%, rgba(${sRgb}, 0.72) 0%, transparent 60%)`,
-      `radial-gradient(circle at 82% 16%, rgba(${aRgb}, 0.44) 0%, transparent 48%)`,
-      `radial-gradient(circle at 18% 84%, rgba(${gRgb}, 0.40) 0%, transparent 52%)`,
-      `linear-gradient(135deg, rgba(${pRgb}, 0.50) 0%, rgba(10, 16, 22, 0.94) 52%, rgba(${sRgb}, 0.58) 100%)`
+      `radial-gradient(circle at 16% 20%, rgba(${pRgb}, 0.85) 0%, transparent 60%)`,
+      `radial-gradient(circle at 84% 80%, rgba(${sRgb}, 0.85) 0%, transparent 60%)`,
+      `radial-gradient(circle at 80% 18%, rgba(${aRgb}, 0.55) 0%, transparent 50%)`,
+      `radial-gradient(circle at 20% 82%, rgba(${gRgb}, 0.50) 0%, transparent 55%)`,
+      `linear-gradient(135deg, rgba(${pRgb}, 0.65) 0%, rgba(10, 16, 22, 0.55) 50%, rgba(${sRgb}, 0.70) 100%)`
     ].join(', ');
+
+    // On initial load, initialize both layers so the background immediately reflects the first slide
+    if (!this._ambientInitialized) {
+      this._ambientInitialized = true;
+      layerA.style.background = gradientCss;
+      layerB.style.background = gradientCss;
+      layerA.classList.add('active');
+      layerB.classList.remove('active');
+      return;
+    }
 
     // Smooth dual cross-fade: active layer fades out while target layer fades in
     const isAActive = layerA.classList.contains('active');
