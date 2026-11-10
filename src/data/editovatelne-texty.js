@@ -28,9 +28,9 @@ export const EDITABLE_SLIDES = {
     ]
   },
 
-  // Snímek 2: Základní instrukce (hrajeme variantu L)
+  // Snímek 2: Základní instrukce (hrajeme variantu M)
   2: {
-    title: "Základní instrukce (hrajeme variantu L)",
+    title: "Základní instrukce (hrajeme variantu M)",
     notes: "",
     paragraphs: [
           "Základní instrukce (hrajeme variantu L)",

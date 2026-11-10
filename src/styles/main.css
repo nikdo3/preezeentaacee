@@ -299,35 +299,36 @@ html, body {
 /* Clean Modal Popup for Slides 30 & 31 */
 .pptx-clean-popup {
   position: absolute;
-  background: rgba(14, 22, 28, 0.94);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  border-radius: 18px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+  background: rgba(10, 16, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  pointer-events: none;
-  transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .pptx-clean-popup.fragment:not(.visible) {
-  opacity: 0;
-  transform: scale(0.92);
-  pointer-events: none;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .pptx-clean-popup.fragment.visible {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .pptx-clean-popup-img {
-  max-width: 95%;
-  max-height: 95%;
+  max-width: 98%;
+  max-height: 98%;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .pptx-map-placeholder-clean {
@@ -1310,6 +1311,56 @@ html, body {
 .hud-dot.offline {
   background: var(--color-danger);
   box-shadow: 0 0 8px var(--color-danger);
+}
+
+.hud-slide-jump-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#master-slide-input {
+  width: 36px;
+  height: 22px;
+  padding: 0 2px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  -moz-appearance: textfield;
+}
+
+#master-slide-input::-webkit-outer-spin-button,
+#master-slide-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#master-slide-input:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+#master-slide-input:focus {
+  background: rgba(14, 22, 28, 0.95);
+  border-color: #4ADE80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+}
+
+.hud-slide-total {
+  opacity: 0.85;
+  font-size: 11px;
+}
+
+/* Slide 8 Text Legibility - subtle text-shadow halo */
+.reveal .slides section[data-slide="8"] .pptx-p {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8), 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 .hud-notes-btn {

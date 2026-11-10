@@ -4,7 +4,7 @@
     "totalSlides": 50,
     "stageWidth": 960,
     "stageHeight": 540,
-    "extractedAt": "2026-11-10T10:11:32.976Z"
+    "extractedAt": "2026-11-10T12:20:29.802Z"
   },
   "themeColors": [
     "#2A4D14",
@@ -174,22 +174,22 @@
       "slideNumber": 2,
       "originalSlideNumber": 2,
       "fileName": "slide2.xml",
-      "title": "Základní instrukce (hrajeme variantu L)",
+      "title": "Základní instrukce (hrajeme variantu M)",
       "bg": {
         "type": "radial",
         "angle": 90,
         "stops": [
           {
             "pos": 0,
-            "color": "#F4FAF2"
+            "color": "#FFFFFF"
           },
           {
-            "pos": 62,
-            "color": "#A8CCA1"
+            "pos": 45,
+            "color": "#C8E2C2"
           },
           {
             "pos": 100,
-            "color": "#2A4D14"
+            "color": "#85AC7E"
           }
         ],
         "breathe": true
@@ -282,20 +282,20 @@
               "runs": [
                 {
                   "text": "Základní instrukce ",
-                  "sz": 32,
+                  "sz": 22,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 },
                 {
-                  "text": "(hrajeme variantu L)",
+                  "text": "(hrajeme variantu M)",
                   "sz": 14,
                   "b": true,
                   "i": false,
                   "u": false,
-                  "color": "#2E1E0F",
+                  "color": "#1B360E",
                   "font": "Red Hat Display"
                 }
               ]
@@ -2735,9 +2735,9 @@
           "kind": "pic",
           "src": "./assets/slides/image14.png",
           "box": {
-            "x": 395,
+            "x": 350,
             "y": 110,
-            "w": 170,
+            "w": 260,
             "h": 430,
             "rot": 0,
             "flipH": false,
@@ -2750,9 +2750,9 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 55,
+            "x": 45,
             "y": 135,
-            "w": 320,
+            "w": 295,
             "h": 360,
             "rot": 0,
             "flipH": false,
@@ -2896,9 +2896,9 @@
           "kind": "sp",
           "phKey": "body:2",
           "box": {
-            "x": 585,
+            "x": 620,
             "y": 135,
-            "w": 320,
+            "w": 295,
             "h": 360,
             "rot": 0,
             "flipH": false,
@@ -10324,10 +10324,10 @@
           "kind": "sp",
           "phKey": "body:1",
           "box": {
-            "x": 109.66,
-            "y": 128.72,
-            "w": 579.54,
-            "h": 350.08,
+            "x": 110,
+            "y": 130,
+            "w": 600,
+            "h": 380,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -10342,150 +10342,131 @@
           "paragraphs": [
             {
               "algn": "l",
-              "lineHeight": 1.15,
-              "spcBefPx": 10.7,
-              "spcAftPx": 10.7,
+              "lineHeight": 1.25,
+              "spcBefPx": 0,
+              "spcAftPx": 6,
               "bullet": null,
-              "bulletColor": "#11457E",
               "runs": [
                 {
-                  "text": "Přepravní",
-                  "sz": 16,
+                  "text": "Přepravní: ",
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
-                  "font": "Red Hat Text"
+                  "font": "Red Hat Display"
                 },
                 {
-                  "text": "Komerční letiště, ",
-                  "sz": 16,
+                  "text": "Komerční letiště, Trasy Via Czechia, Vlakové stanice",
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
                   "font": "Red Hat Text"
-                },
+                }
+              ]
+            },
+            {
+              "algn": "l",
+              "lineHeight": 1.25,
+              "spcBefPx": 8,
+              "spcAftPx": 6,
+              "bullet": null,
+              "runs": [
                 {
-                  "text": "Trasy via czechia",
-                  "sz": 16,
-                  "b": false,
-                  "i": false,
-                  "u": true,
-                  "color": "#1B360E",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": ", Vlakové stanice",
-                  "sz": 16,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#1B360E",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "Hranice",
-                  "sz": 16,
+                  "text": "Hranice: ",
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
-                  "font": "Red Hat Text"
+                  "font": "Red Hat Display"
                 },
                 {
                   "text": "Státní hranice, Hranice historického dělení, Kraje, Okresy",
-                  "sz": 16,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
                   "font": "Red Hat Text"
-                },
+                }
+              ]
+            },
+            {
+              "algn": "l",
+              "lineHeight": 1.25,
+              "spcBefPx": 8,
+              "spcAftPx": 6,
+              "bullet": null,
+              "runs": [
                 {
-                  "text": "Přírodní",
-                  "sz": 16,
+                  "text": "Přírodní: ",
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
-                  "font": "Red Hat Text"
+                  "font": "Red Hat Display"
                 },
                 {
-                  "text": "Nadmořská výška, Vodní plochy, ",
-                  "sz": 16,
+                  "text": "Nadmořská výška, Vodní plochy, Pobřeží, Hory, Parky",
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
                   "font": "Red Hat Text"
-                },
+                }
+              ]
+            },
+            {
+              "algn": "l",
+              "lineHeight": 1.25,
+              "spcBefPx": 8,
+              "spcAftPx": 6,
+              "bullet": null,
+              "runs": [
                 {
-                  "text": "pobřeží",
-                  "sz": 16,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#1B360E",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": ", Hory, Parky",
-                  "sz": 16,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#1B360E",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "Záj",
-                  "sz": 16,
-                  "b": true,
-                  "i": false,
-                  "u": false,
-                  "color": "#FFFFFF",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "mová místa",
-                  "sz": 16,
+                  "text": "Zájmová místa: ",
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
-                  "font": "Red Hat Text"
+                  "font": "Red Hat Display"
                 },
                 {
-                  "text": "Zá",
-                  "sz": 16,
-                  "b": false,
-                  "i": false,
-                  "u": false,
-                  "color": "#FFFFFF",
-                  "font": "Red Hat Text"
-                },
-                {
-                  "text": "bavní parky, Zoo, Akvária, Golfová hřiště, Muzea, Kina",
-                  "sz": 16,
+                  "text": "Zábavní parky, Zoo, Akvária, Golfová hřiště, Muzea, Kina",
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
                   "font": "Red Hat Text"
-                },
+                }
+              ]
+            },
+            {
+              "algn": "l",
+              "lineHeight": 1.25,
+              "spcBefPx": 8,
+              "spcAftPx": 6,
+              "bullet": null,
+              "runs": [
                 {
-                  "text": "Služby",
-                  "sz": 16,
+                  "text": "Služby: ",
+                  "sz": 14.5,
                   "b": true,
                   "i": false,
                   "u": false,
                   "color": "#1B360E",
-                  "font": "Red Hat Text"
+                  "font": "Red Hat Display"
                 },
                 {
                   "text": "Nemocnice, Knihovny, Ambasády",
-                  "sz": 16,
+                  "sz": 14,
                   "b": false,
                   "i": false,
                   "u": false,
@@ -14537,7 +14518,7 @@
             "b": 0.0915
           },
           "fragmentPopup": true,
-          "fragmentIndex": 1
+          "fragmentIndex": 0
         },
         {
           "kind": "pic",
@@ -14824,7 +14805,7 @@
             "b": 0.1915
           },
           "fragmentPopup": true,
-          "fragmentIndex": 1
+          "fragmentIndex": 0
         },
         {
           "kind": "pic",
@@ -15344,10 +15325,10 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 85,
-            "y": 230,
-            "w": 300,
-            "h": 150,
+            "x": 60,
+            "y": 170,
+            "w": 320,
+            "h": 268,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15361,9 +15342,9 @@
           "anchor": "ctr",
           "paragraphs": [
             {
-              "algn": "ctr",
+              "algn": "l",
               "lineHeight": 1.25,
-              "spcBefPx": 10,
+              "spcBefPx": 8,
               "spcAftPx": 8,
               "bullet": null,
               "bulletColor": "#000000",
@@ -15928,10 +15909,10 @@
           "kind": "pic",
           "src": "./assets/slides/image53.jpg",
           "box": {
-            "x": 496.43,
-            "y": 122.29,
-            "w": 408.54,
-            "h": 316.21,
+            "x": 420,
+            "y": 140,
+            "w": 240,
+            "h": 320,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15944,10 +15925,10 @@
           "kind": "pic",
           "src": "./assets/slides/image53.jpg",
           "box": {
-            "x": 496.43,
-            "y": 122.29,
-            "w": 408.54,
-            "h": 316.21,
+            "x": 680,
+            "y": 140,
+            "w": 240,
+            "h": 320,
             "rot": 0,
             "flipH": false,
             "flipV": false
@@ -15966,9 +15947,9 @@
           "kind": "sp",
           "phKey": "body:4294967295",
           "box": {
-            "x": 175,
+            "x": 120,
             "y": 140,
-            "w": 300,
+            "w": 280,
             "h": 340,
             "rot": 0,
             "flipH": false,

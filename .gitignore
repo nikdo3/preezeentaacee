@@ -3,6 +3,7 @@ _pptx_extracted/
 test-results/
 playwright-report/
 _*.mjs
+!_generate_data.mjs
 _*.js
 *.pptx
 *.HEIC

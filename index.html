@@ -21,7 +21,10 @@
       <span>•</span>
       <span>Diváci: <strong id="viewer-count" data-testid="viewer-count">0</strong></span>
       <span>•</span>
-      <span id="master-slide-pos" data-testid="master-slide-pos">1 / 50</span>
+      <div class="hud-slide-jump-wrap" title="Zadejte číslo snímku (1–50) a stiskněte Enter pro okamžitý přechod">
+        <input id="master-slide-input" data-testid="master-slide-input" type="number" min="1" max="50" value="1" aria-label="Číslo snímku" />
+        <span id="master-slide-total" class="hud-slide-total">/ 50</span>
+      </div>
       <span>•</span>
       <button id="notes-toggle-btn" class="hud-notes-btn" data-testid="notes-toggle-btn" title="Poznámky přednášejícího">📝 Poznámky</button>
     </div>

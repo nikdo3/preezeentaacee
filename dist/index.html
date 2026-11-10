@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&family=Red+Hat+Text:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="./assets/index-BNdDVYSv.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B2FJ5M_d.css">
+  <script type="module" crossorigin src="./assets/index-Bix1y5ol.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Dqm0lw3n.css">
 </head>
 <body>
   <div id="app-root">
@@ -23,7 +23,10 @@
       <span>•</span>
       <span>Diváci: <strong id="viewer-count" data-testid="viewer-count">0</strong></span>
       <span>•</span>
-      <span id="master-slide-pos" data-testid="master-slide-pos">1 / 50</span>
+      <div class="hud-slide-jump-wrap" title="Zadejte číslo snímku (1–50) a stiskněte Enter pro okamžitý přechod">
+        <input id="master-slide-input" data-testid="master-slide-input" type="number" min="1" max="50" value="1" aria-label="Číslo snímku" />
+        <span id="master-slide-total" class="hud-slide-total">/ 50</span>
+      </div>
       <span>•</span>
       <button id="notes-toggle-btn" class="hud-notes-btn" data-testid="notes-toggle-btn" title="Poznámky přednášejícího">📝 Poznámky</button>
     </div>

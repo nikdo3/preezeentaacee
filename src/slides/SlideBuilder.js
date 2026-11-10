@@ -271,11 +271,11 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
     const popup = document.createElement('div');
     popup.className = 'pptx-el pptx-clean-popup fragment';
     popup.setAttribute('data-fragment-index', '0');
-    popup.style.left = '60px';
-    popup.style.top = '40px';
-    popup.style.width = '840px';
-    popup.style.height = '460px';
-    popup.style.zIndex = '40';
+    popup.style.left = '40px';
+    popup.style.top = '25px';
+    popup.style.width = '880px';
+    popup.style.height = '490px';
+    popup.style.zIndex = '50';
 
     const popImg = document.createElement('img');
     popImg.src = src;
@@ -369,12 +369,12 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
           </filter>
         </defs>
         <!-- Obrys nejbližší cesty: přesně kopíruje silnici na image41.jpg -->
-        <path class="pptx-road-path" d="M 165,415 L 163,350 C 160,290 170,225 185,185 C 205,130 225,85 255,20"
+        <path class="pptx-road-path" d="M 75,415 C 80,380 90,340 95,310 C 100,280 108,255 110,230 C 125,200 150,175 156,150 C 165,120 162,60 165,20"
               fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-nearest)" />
-        <circle cx="165" cy="415" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
-        <circle cx="255" cy="20" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
-        <rect x="50" y="16" width="180" height="26" rx="13" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
-        <text x="140" y="33" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Nejbližší cesta</text>
+        <circle cx="75" cy="415" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="165" cy="20" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <rect x="75" y="16" width="180" height="26" rx="13" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
+        <text x="165" y="33" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Nejbližší cesta</text>
       `;
     } else {
       // 1 km route on Slide 41 (398x339 map image57.jpg)
@@ -387,16 +387,16 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
           </filter>
         </defs>
         <!-- Obrys +-1 km cesty: přesně kopíruje trasu na image57.jpg -->
-        <path class="pptx-road-path" d="M 40,10 C 75,40 120,70 145,100 S 185,150 205,185 S 255,245 280,270 S 315,305 325,330"
+        <path class="pptx-road-path" d="M 56,5 C 75,20 95,35 115,55 C 135,75 160,95 175,115 C 190,135 210,155 228,175 C 248,195 275,215 305,235 C 330,250 332,270 318,285 C 308,298 298,310 288,325"
               fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-1km)" />
         <!-- Turn points S, 1..5 -->
         <g fill="#11457E" stroke="#FFFFFF" stroke-width="2" font-size="10" font-weight="800" text-anchor="middle">
-          <circle cx="40" cy="10" r="9" /><text x="40" y="14" fill="#FFF" stroke="none">S</text>
-          <circle cx="115" cy="68" r="9" /><text x="115" y="72" fill="#FFF" stroke="none">1</text>
-          <circle cx="165" cy="128" r="9" /><text x="165" y="132" fill="#FFF" stroke="none">2</text>
-          <circle cx="205" cy="185" r="9" /><text x="205" y="189" fill="#FFF" stroke="none">3</text>
-          <circle cx="260" cy="250" r="9" /><text x="260" y="254" fill="#FFF" stroke="none">4</text>
-          <circle cx="325" cy="330" r="9" fill="#4ADE80" /><text x="325" y="334" fill="#0E161C" stroke="none">5</text>
+          <circle cx="56" cy="5" r="9" /><text x="56" y="9" fill="#FFF" stroke="none">S</text>
+          <circle cx="105" cy="50" r="9" /><text x="105" y="54" fill="#FFF" stroke="none">1</text>
+          <circle cx="141" cy="95" r="9" /><text x="141" y="99" fill="#FFF" stroke="none">2</text>
+          <circle cx="179" cy="140" r="9" /><text x="179" y="144" fill="#FFF" stroke="none">3</text>
+          <circle cx="270" cy="215" r="9" /><text x="270" y="219" fill="#FFF" stroke="none">4</text>
+          <circle cx="288" cy="325" r="9" fill="#4ADE80" /><text x="288" y="329" fill="#0E161C" stroke="none">5</text>
         </g>
         <rect x="115" y="15" width="170" height="24" rx="12" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
         <text x="200" y="31" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Trasa +-1 km</text>

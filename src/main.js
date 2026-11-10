@@ -13,6 +13,8 @@ async function bootstrap() {
   const masterHud = document.getElementById('master-hud');
   const viewerCountEl = document.getElementById('viewer-count');
   const slidePosEl = document.getElementById('master-slide-pos');
+  const slideInputEl = document.getElementById('master-slide-input');
+  const slideTotalEl = document.getElementById('master-slide-total');
   const syncDotEl = document.getElementById('sync-dot');
 
   const fsBtn = document.getElementById('fullscreen-btn');
@@ -21,6 +23,46 @@ async function bootstrap() {
   const notesCloseBtn = document.getElementById('notes-close-btn');
 
   const totalSlides = presentationData.slides?.length || 50;
+  if (slideTotalEl) {
+    slideTotalEl.textContent = `/ ${totalSlides}`;
+  }
+
+  function updateSlidePosition(slideNum1Based) {
+    if (slideInputEl && document.activeElement !== slideInputEl) {
+      slideInputEl.value = String(slideNum1Based);
+    }
+    if (slidePosEl) {
+      slidePosEl.textContent = `${slideNum1Based} / ${totalSlides}`;
+    }
+  }
+
+  // Presenter direct slide jump input handling
+  if (slideInputEl) {
+    const handleJump = () => {
+      let target = parseInt(slideInputEl.value, 10);
+      if (Number.isNaN(target) || target < 1) target = 1;
+      if (target > totalSlides) target = totalSlides;
+      slideInputEl.value = String(target);
+      slideInputEl.blur();
+      reveal.slide(target - 1);
+    };
+
+    slideInputEl.addEventListener('keydown', (e) => {
+      e.stopPropagation(); // Avoid triggering Reveal keyboard handlers while typing numbers
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleJump();
+      }
+    });
+
+    slideInputEl.addEventListener('change', () => {
+      handleJump();
+    });
+
+    slideInputEl.addEventListener('focus', () => {
+      slideInputEl.select();
+    });
+  }
 
   // 1. Build DOM slides from PPTX JSON & normalized Lucie Brabencová assets
   buildSlides(slidesContainer);
@@ -159,8 +201,8 @@ async function bootstrap() {
       if (viewerCountEl) {
         viewerCountEl.textContent = String(viewersCount ?? 0);
       }
-      if (slidePosEl && state) {
-        slidePosEl.textContent = `${(state.indexh ?? 0) + 1} / ${totalSlides}`;
+      if (state) {
+        updateSlidePosition((state.indexh ?? 0) + 1);
       }
       if (syncDotEl) {
         syncDotEl.classList.toggle('offline', !connected);
@@ -176,9 +218,7 @@ async function bootstrap() {
     const idxH = event.indexh || 0;
     const idxV = event.indexv || 0;
     bg3d.onSlideChange(idxH, idxV, getSlideThemePalette(idxH));
-    if (slidePosEl) {
-      slidePosEl.textContent = `${idxH + 1} / ${totalSlides}`;
-    }
+    updateSlidePosition(idxH + 1);
     if (notesPanel && !notesPanel.classList.contains('hidden')) {
       updateNotes(idxH);
     }
