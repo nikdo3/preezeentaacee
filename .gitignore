@@ -10,3 +10,4 @@ _*.js
 /*.png
 !public/assets/**
 scratch/
+_gh_pages/

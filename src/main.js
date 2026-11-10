@@ -176,6 +176,9 @@ async function bootstrap() {
     const idxH = event.indexh || 0;
     const idxV = event.indexv || 0;
     bg3d.onSlideChange(idxH, idxV, getSlideThemePalette(idxH));
+    if (slidePosEl) {
+      slidePosEl.textContent = `${idxH + 1} / ${totalSlides}`;
+    }
     if (notesPanel && !notesPanel.classList.contains('hidden')) {
       updateNotes(idxH);
     }

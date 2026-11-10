@@ -33,22 +33,25 @@ html, body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 14% 18%, rgba(var(--ambient-primary-rgb), 0.78) 0%, transparent 55%),
-    radial-gradient(circle at 86% 82%, rgba(var(--ambient-secondary-rgb), 0.78) 0%, transparent 55%),
-    radial-gradient(circle at 84% 16%, rgba(var(--ambient-accent-rgb), 0.48) 0%, transparent 46%),
-    radial-gradient(circle at 18% 84%, rgba(var(--ambient-glow-rgb), 0.45) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(var(--ambient-primary-rgb), 0.55) 0%, rgba(10, 16, 22, 0.94) 52%, rgba(var(--ambient-secondary-rgb), 0.62) 100%);
+  background-color: #0A1014;
   perspective: 1400px;
-  transition: background 0.8s ease;
 }
 
-#app-root.webgl-fallback-active {
-  background:
-    radial-gradient(circle at 20% 22%, rgba(var(--ambient-primary-rgb), 0.75) 0%, transparent 58%),
-    radial-gradient(circle at 80% 78%, rgba(var(--ambient-secondary-rgb), 0.68) 0%, transparent 58%),
-    linear-gradient(145deg, rgba(var(--ambient-primary-rgb), 0.8) 0%, #101A12 52%, rgba(var(--ambient-secondary-rgb), 0.8) 100%);
-  transition: background 0.8s ease;
+/* Smooth Hardware-Accelerated Dual Cross-Fading Ambient Gradient Layers */
+.ambient-bg-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.ambient-bg-layer.active {
+  opacity: 1;
 }
 
 /* ============================================================================
@@ -247,6 +250,38 @@ html, body {
   max-width: none !important;
   max-height: none !important;
   margin: 0 !important;
+}
+
+/* Gentle Floating & Breathing Animation for Presenter & Team Cutouts */
+.pptx-pic:not(.pptx-pic-grounded) .pptx-pic-img,
+.pptx-pic:not(.pptx-pic-grounded) img {
+  animation: gentleFigureFloat 6.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.pptx-pic.pptx-pic-grounded .pptx-pic-img,
+.pptx-pic.pptx-pic-grounded img {
+  transform-origin: bottom center;
+  animation: gentleFigureBreathe 7.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes gentleFigureFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-5px) rotate(0.4deg);
+  }
+}
+
+@keyframes gentleFigureBreathe {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.02);
+  }
 }
 
 .pptx-extra-photo {
@@ -1111,11 +1146,12 @@ html, body {
 }
 
 #app-root.is-master .reveal .controls {
+  position: fixed !important;
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
-  bottom: clamp(14px, 2.4vh, 24px) !important;
-  right: clamp(16px, 2.4vw, 28px) !important;
+  gap: 12px !important;
+  bottom: clamp(16px, 2.6vh, 26px) !important;
+  right: clamp(18px, 2.6vw, 30px) !important;
   width: auto !important;
   height: auto !important;
   z-index: 95 !important;

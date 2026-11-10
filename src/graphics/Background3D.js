@@ -48,9 +48,9 @@ const PHOTO_PATHS = [
   './assets/photos/Screenshot_20260706_122757_Photos.jpg',
   './assets/photos/Screenshot_20260714_124114_Gallery.jpg',
   './assets/photos/Snapchat-1067852516.jpg',
-  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_164950_0000.png',
-  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_165347_0000.png',
-  './assets/photos/White Minimalist Summer Aesthetic Grid Collage Instagram Story_20260718_233934_0000.png'
+  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_164950_0000.jpg',
+  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_165347_0000.jpg',
+  './assets/photos/White Minimalist Summer Aesthetic Grid Collage Instagram Story_20260718_233934_0000.jpg'
 ];
 
 const PHOTO_SLOTS = [
@@ -381,8 +381,41 @@ export class Background3D {
   }
 
   _applyAmbientTheme(palette) {
-    if (!this.container || !palette) return;
-    this.container.setAttribute('data-slide-primary', palette.primary);
+    if (!palette || typeof document === 'undefined') return;
+    if (this.container) {
+      this.container.setAttribute('data-slide-primary', palette.primary || '#2A4D14');
+    }
+
+    const layerA = document.getElementById('ambient-bg-a');
+    const layerB = document.getElementById('ambient-bg-b');
+    if (!layerA || !layerB) return;
+
+    const p = palette.primary || '#2A4D14';
+    const s = palette.secondary || '#11457E';
+    const a = palette.accent || '#D8973C';
+    const g = palette.glow || p;
+
+    const pRgb = hexToRgbString(p, '42, 77, 20');
+    const sRgb = hexToRgbString(s, '17, 69, 126');
+    const aRgb = hexToRgbString(a, '216, 151, 60');
+    const gRgb = hexToRgbString(g, '133, 172, 126');
+
+    const gradientCss = [
+      `radial-gradient(circle at 14% 18%, rgba(${pRgb}, 0.72) 0%, transparent 60%)`,
+      `radial-gradient(circle at 86% 82%, rgba(${sRgb}, 0.72) 0%, transparent 60%)`,
+      `radial-gradient(circle at 82% 16%, rgba(${aRgb}, 0.44) 0%, transparent 48%)`,
+      `radial-gradient(circle at 18% 84%, rgba(${gRgb}, 0.40) 0%, transparent 52%)`,
+      `linear-gradient(135deg, rgba(${pRgb}, 0.50) 0%, rgba(10, 16, 22, 0.94) 52%, rgba(${sRgb}, 0.58) 100%)`
+    ].join(', ');
+
+    // Smooth dual cross-fade: active layer fades out while target layer fades in
+    const isAActive = layerA.classList.contains('active');
+    const targetLayer = isAActive ? layerB : layerA;
+    const currentLayer = isAActive ? layerA : layerB;
+
+    targetLayer.style.background = gradientCss;
+    targetLayer.classList.add('active');
+    currentLayer.classList.remove('active');
   }
 
   onSlideChange(indexh = 0, indexv = 0, palette = null) {

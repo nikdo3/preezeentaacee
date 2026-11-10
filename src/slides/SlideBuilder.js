@@ -261,7 +261,7 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
     wrapper.style.borderRadius = '0';
   }
 
-  // Slides 30 & 31: clean modal enlargement overlay
+  // Slides 30 & 31: clean modal enlargement overlay shown ONLY on click/advance (NOT initially!)
   const isFragmentPopup =
     el.fragmentPopup ||
     (slideNum === 30 && src?.includes('image33')) ||
@@ -283,7 +283,7 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
     popImg.alt = 'Detail karet';
     popup.appendChild(popImg);
 
-    wrapper.__extraOverlay = popup;
+    return popup;
   }
 
   wrapper.style.left = `${box.x}px`;
@@ -296,10 +296,11 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
   if (tf) wrapper.style.transform = tf;
 
   // Slides 33, 35, 39, 40: Detail Zoom Reveal
+  // Crucial on Slide 35: ONLY the cropped photo zooms in on click; the base uncropped photo stays visible immediately!
   const isFragmentZoom =
     el.fragmentZoom ||
     (slideNum === 33 && src?.includes('image43')) ||
-    (slideNum === 35 && elOrder >= 2 && src?.includes('image53')) ||
+    (slideNum === 35 && Boolean(crop) && src?.includes('image53')) ||
     (slideNum === 39 && src?.includes('image59')) ||
     (slideNum === 40 && src?.includes('image58'));
 
@@ -356,10 +357,10 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
 
     const svgNS = 'http://www.w3.org/2000/svg';
     const roadSvg = document.createElementNS(svgNS, 'svg');
-    roadSvg.setAttribute('viewBox', '0 0 280 430');
     roadSvg.setAttribute('class', 'pptx-road-svg');
 
     if (isRoadOutline === 'nearest' || isRoadOutline === true) {
+      roadSvg.setAttribute('viewBox', '0 0 280 433');
       roadSvg.innerHTML = `
         <defs>
           <filter id="road-glow-nearest" x="-20%" y="-20%" width="140%" height="140%">
@@ -367,16 +368,17 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
-        <!-- Obrys nejbližší cesty: plynulá křivka silnice na image41.jpg -->
-        <path class="pptx-road-path" d="M 188,405 C 160,310 180,200 215,110 S 240,40 250,25"
+        <!-- Obrys nejbližší cesty: přesně kopíruje silnici na image41.jpg -->
+        <path class="pptx-road-path" d="M 165,415 L 163,350 C 160,290 170,225 185,185 C 205,130 225,85 255,20"
               fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-nearest)" />
-        <circle cx="188" cy="405" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
-        <circle cx="250" cy="25" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="165" cy="415" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
+        <circle cx="255" cy="20" r="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="3" />
         <rect x="50" y="16" width="180" height="26" rx="13" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
         <text x="140" y="33" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Nejbližší cesta</text>
       `;
     } else {
-      // 1 km route with 5 numbered turns
+      // 1 km route on Slide 41 (398x339 map image57.jpg)
+      roadSvg.setAttribute('viewBox', '0 0 398 339');
       roadSvg.innerHTML = `
         <defs>
           <filter id="road-glow-1km" x="-20%" y="-20%" width="140%" height="140%">
@@ -384,20 +386,20 @@ function renderPicElement(el, slideIdx, elOrder, slide) {
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
-        <!-- Obrys +-1 km cesty: 5 bodů na image57.jpg -->
-        <path class="pptx-road-path" d="M 195,410 L 195,330 L 160,260 L 130,200 L 105,125 L 30,25"
+        <!-- Obrys +-1 km cesty: přesně kopíruje trasu na image57.jpg -->
+        <path class="pptx-road-path" d="M 40,10 C 75,40 120,70 145,100 S 185,150 205,185 S 255,245 280,270 S 315,305 325,330"
               fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#road-glow-1km)" />
         <!-- Turn points S, 1..5 -->
         <g fill="#11457E" stroke="#FFFFFF" stroke-width="2" font-size="10" font-weight="800" text-anchor="middle">
-          <circle cx="195" cy="410" r="9" /><text x="195" y="414" fill="#FFF" stroke="none">S</text>
-          <circle cx="195" cy="330" r="9" /><text x="195" y="334" fill="#FFF" stroke="none">1</text>
-          <circle cx="160" cy="260" r="9" /><text x="160" y="264" fill="#FFF" stroke="none">2</text>
-          <circle cx="130" cy="200" r="9" /><text x="130" y="204" fill="#FFF" stroke="none">3</text>
-          <circle cx="105" cy="125" r="9" /><text x="105" y="129" fill="#FFF" stroke="none">4</text>
-          <circle cx="30" cy="25" r="9" fill="#4ADE80" /><text x="30" y="29" fill="#0E161C" stroke="none">5</text>
+          <circle cx="40" cy="10" r="9" /><text x="40" y="14" fill="#FFF" stroke="none">S</text>
+          <circle cx="115" cy="68" r="9" /><text x="115" y="72" fill="#FFF" stroke="none">1</text>
+          <circle cx="165" cy="128" r="9" /><text x="165" y="132" fill="#FFF" stroke="none">2</text>
+          <circle cx="205" cy="185" r="9" /><text x="205" y="189" fill="#FFF" stroke="none">3</text>
+          <circle cx="260" cy="250" r="9" /><text x="260" y="254" fill="#FFF" stroke="none">4</text>
+          <circle cx="325" cy="330" r="9" fill="#4ADE80" /><text x="325" y="334" fill="#0E161C" stroke="none">5</text>
         </g>
-        <rect x="55" y="15" width="170" height="24" rx="12" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
-        <text x="140" y="31" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Trasa +-1 km</text>
+        <rect x="115" y="15" width="170" height="24" rx="12" fill="rgba(14,22,28,0.9)" stroke="#4ADE80" stroke-width="1.5" />
+        <text x="200" y="31" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Trasa +-1 km</text>
       `;
     }
 
