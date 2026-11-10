@@ -165,4 +165,76 @@ describe('Sync State Machine Unit Tests', () => {
 
     clientEngine.destroy();
   });
+
+  it('SyncEngine deduplicates Peer connections and prunes stale viewers in _recomputeStaticViewersCount', async () => {
+    const { SyncEngine } = await import('../../src/sync/SyncEngine.js');
+
+    const masterEngine = new SyncEngine({}, { isMaster: true, roomId: 'unit-dedup' });
+    masterEngine.init();
+
+    // 1. Map deduplication
+    expect(masterEngine.peerConnections instanceof Map).toBe(true);
+
+    const openConn1 = { open: true, destroyed: false, close: () => {} };
+    const closedConn = { open: false, destroyed: false, close: () => {} };
+    const openConn2 = { open: true, destroyed: false, close: () => {} };
+
+    masterEngine.peerConnections.set('peer-A', { conn: openConn1, lastSeen: Date.now() });
+    masterEngine.peerConnections.set('peer-B', { conn: closedConn, lastSeen: Date.now() });
+    masterEngine.peerConnections.set('peer-C', { conn: openConn2, lastSeen: Date.now() });
+
+    // Stale MQTT viewer vs active MQTT viewer
+    masterEngine.mqttViewers.set('client-stale', Date.now() - 15000); // 15s ago (>10s)
+    masterEngine.mqttViewers.set('client-active', Date.now() - 2000);  // 2s ago (<10s)
+
+    masterEngine._recomputeStaticViewersCount();
+
+    // Closed conn 'peer-B' should be pruned, 'peer-A' and 'peer-C' remain
+    expect(masterEngine.peerConnections.has('peer-B')).toBe(false);
+    expect(masterEngine.peerConnections.has('peer-A')).toBe(true);
+    expect(masterEngine.peerConnections.has('peer-C')).toBe(true);
+
+    // Stale MQTT viewer should be deleted
+    expect(masterEngine.mqttViewers.has('client-stale')).toBe(false);
+    expect(masterEngine.mqttViewers.has('client-active')).toBe(true);
+
+    // viewersCount should be Math.max(activePeers (2), activeMqtt (1)) = 2
+    expect(masterEngine.viewersCount).toBe(2);
+
+    masterEngine.destroy();
+  });
+
+  it('SyncEngine client ignores local reveal navigation and reverts to authoritative state', async () => {
+    const { SyncEngine } = await import('../../src/sync/SyncEngine.js');
+
+    let slidTarget = null;
+    let registeredCallback = null;
+    const mockReveal = {
+      configure: () => {},
+      on: (evt, cb) => {
+        if (evt === 'slidechanged') registeredCallback = cb;
+      },
+      getIndices: () => ({ h: 3, v: 0, f: -1 }),
+      slide: (h, v, f) => { slidTarget = { h, v, f }; }
+    };
+
+    const clientEngine = new SyncEngine(mockReveal, { isMaster: false, roomId: 'unit-lock' });
+    clientEngine.init();
+
+    // Set an authoritative state at slide 1
+    const authState = createStatePayload({ indexh: 1, indexv: 0, indexf: -1, seq: 5 });
+    clientEngine.applyMasterState(authState);
+
+    expect(slidTarget).toEqual({ h: 1, v: 0, f: -1 });
+
+    // Simulate an accidental local slide change on client
+    if (registeredCallback) {
+      registeredCallback();
+    }
+
+    // Must snap back to authoritative state
+    expect(slidTarget).toEqual({ h: 1, v: 0, f: -1 });
+
+    clientEngine.destroy();
+  });
 });

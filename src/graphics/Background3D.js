@@ -9,78 +9,72 @@ function hexToRgbString(hex, fallback = '133, 172, 126') {
   return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
 }
 
-const PHOTO_SETS = [
-  // Phase 0: Úvod & Pravidla (slides 1-5)
-  [
-    './assets/team/lucie-1.png',
-    './assets/slides/image2.png',
-    './assets/slides/image3.png',
-    './assets/team/lucie-2.png',
-    './assets/slides/image1.png',
-    './assets/slides/image10.png'
-  ],
-  // Phase 1: Hideři & Schovávání (slides 6-13)
-  [
-    './assets/slides/image11.png',
-    './assets/slides/image13.png',
-    './assets/slides/image16.png',
-    './assets/slides/image17.jpg',
-    './assets/team/lucie-3.png',
-    './assets/slides/image18.png'
-  ],
-  // Phase 2: Seekři & Mapy (slides 14-24)
-  [
-    './assets/slides/image20.png',
-    './assets/slides/image22.jpg',
-    './assets/slides/image23.jpg',
-    './assets/slides/image24.png',
-    './assets/team/lucie-4.png',
-    './assets/slides/image25.jpg'
-  ],
-  // Phase 3: Karty, Decky & Bonusy (slides 25-31)
-  [
-    './assets/slides/image27.png',
-    './assets/slides/image33.jpg',
-    './assets/slides/image35.jpg',
-    './assets/slides/image37.png',
-    './assets/team/lucie-5.png',
-    './assets/slides/image40.png'
-  ],
-  // Phase 4: Fotografické výzvy (slides 32-41)
-  [
-    './assets/slides/image43.jpg',
-    './assets/slides/image45.jpg',
-    './assets/slides/image53.jpg',
-    './assets/slides/image56.jpg',
-    './assets/slides/image57.jpg',
-    './assets/team/lucie-6.png'
-  ],
-  // Phase 5: Taktika, Filmování & Závěr (slides 42-50)
-  [
-    './assets/slides/image64.png',
-    './assets/slides/image66.png',
-    './assets/slides/image69.png',
-    './assets/slides/image72.png',
-    './assets/slides/image73.png',
-    './assets/team/lucie-7.png'
-  ]
+const PHOTO_PATHS = [
+  './assets/photos/20241113_172411.jpg',
+  './assets/photos/20241113_172443.jpg',
+  './assets/photos/20241113_172444.jpg',
+  './assets/photos/20250115_101442.jpg',
+  './assets/photos/20250212_202843.jpg',
+  './assets/photos/20250529_135654.jpg',
+  './assets/photos/20251031_125837.jpg',
+  './assets/photos/IMG_20230305_150733.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.17.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.30.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.33.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.35.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.38.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.40.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.43.jpg',
+  './assets/photos/Lucie Brabencova - 2026-11-09 17.20.45.jpg',
+  './assets/photos/PXL_20231101_131938790.jpg',
+  './assets/photos/PXL_20231115_053341909.MP.jpg',
+  './assets/photos/PXL_20240306_071324979.jpg',
+  './assets/photos/PXL_20260710_112437392.jpg',
+  './assets/photos/Screenshot_20250105_031945_Photos.jpg',
+  './assets/photos/Screenshot_20260706_022523_Drive.jpg',
+  './assets/photos/Screenshot_20260706_023829_Drive.jpg',
+  './assets/photos/Screenshot_20260706_023907_Drive.jpg',
+  './assets/photos/Screenshot_20260706_025046_Photos.jpg',
+  './assets/photos/Screenshot_20260706_025503_Photos.jpg',
+  './assets/photos/Screenshot_20260706_025733_Photos.jpg',
+  './assets/photos/Screenshot_20260706_084004_Photos.jpg',
+  './assets/photos/Screenshot_20260706_084111_Photos.jpg',
+  './assets/photos/Screenshot_20260706_120516_Photos.jpg',
+  './assets/photos/Screenshot_20260706_120653_Photos.jpg',
+  './assets/photos/Screenshot_20260706_120843_Photos.jpg',
+  './assets/photos/Screenshot_20260706_121011_Photos.jpg',
+  './assets/photos/Screenshot_20260706_121056_Photos.jpg',
+  './assets/photos/Screenshot_20260706_121249_Photos.jpg',
+  './assets/photos/Screenshot_20260706_122757_Photos.jpg',
+  './assets/photos/Screenshot_20260714_124114_Gallery.jpg',
+  './assets/photos/Snapchat-1067852516.jpg',
+  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_164950_0000.png',
+  './assets/photos/Hnědý Prostý Koláž Post na Facebook_20260719_165347_0000.png',
+  './assets/photos/White Minimalist Summer Aesthetic Grid Collage Instagram Story_20260718_233934_0000.png'
 ];
 
-const SLOT_CONFIGS = [
-  { id: 'tl', label: 'top-left', rot: -4 },
-  { id: 'ml', label: 'mid-left', rot: 3 },
-  { id: 'bl', label: 'bottom-left', rot: -3 },
-  { id: 'tr', label: 'top-right', rot: 4 },
-  { id: 'mr', label: 'mid-right', rot: -2 },
-  { id: 'br', label: 'bottom-right', rot: 3 }
+const PHOTO_SLOTS = [
+  // Left perimeter slots framing the slide
+  { x: -24.0, y: 12.0, z: 2.0, rotZ: -0.09, rotY: 0.16, ampX: 0.8, ampY: 1.1, speed: 0.65 },
+  { x: -26.5, y: 0.5, z: 8.0, rotZ: 0.07, rotY: 0.22, ampX: 1.1, ampY: 0.9, speed: 0.75 },
+  { x: -23.0, y: -11.5, z: -2.0, rotZ: -0.06, rotY: 0.14, ampX: 0.7, ampY: 1.2, speed: 0.60 },
+  { x: -28.0, y: 6.5, z: 14.0, rotZ: 0.11, rotY: 0.25, ampX: 1.0, ampY: 0.8, speed: 0.80 },
+  // Right perimeter slots framing the slide
+  { x: 24.0, y: 12.0, z: 3.0, rotZ: 0.08, rotY: -0.16, ampX: 0.8, ampY: 1.1, speed: 0.70 },
+  { x: 26.5, y: -0.5, z: 7.0, rotZ: -0.07, rotY: -0.22, ampX: 1.1, ampY: 0.9, speed: 0.60 },
+  { x: 23.0, y: -11.5, z: -1.5, rotZ: 0.06, rotY: -0.14, ampX: 0.7, ampY: 1.2, speed: 0.75 },
+  { x: 28.0, y: 6.5, z: 13.0, rotZ: -0.10, rotY: -0.25, ampX: 1.0, ampY: 0.8, speed: 0.65 },
+  // Top framing perimeter slots
+  { x: -9.5, y: 15.5, z: -3.0, rotZ: 0.05, rotY: 0.08, ampX: 0.9, ampY: 0.7, speed: 0.55 },
+  { x: 10.5, y: 15.0, z: -2.0, rotZ: -0.05, rotY: -0.08, ampX: 0.9, ampY: 0.7, speed: 0.58 }
 ];
 
 /**
- * 60 FPS Three.js WebGL 3D background synchronized with each slide's color palette,
- * featuring rotating 3D radar rings, floating 3D wireframe polyhedra,
- * dynamic 3D particle field, perimeter floating photos framing the slide,
- * and interactive 3D stage parallax & smooth gradient transitions.
- * Automatically falls back to static CSS when WebGL is unavailable or context is lost.
+ * High-performance 60 FPS Three.js WebGL 3D background.
+ * Synchronized with each slide's color palette, featuring rotating 3D radar rings,
+ * floating 3D wireframe polyhedra, dynamic 3D particle field,
+ * true 3D floating photos drifting in space around the slide perimeter,
+ * and butter-smooth camera parallax without touching the DOM.
  */
 export class Background3D {
   constructor(container) {
@@ -94,6 +88,10 @@ export class Background3D {
     this.ringsGroup = null;
     this.ringMeshes = [];
     this.polyhedra = [];
+    this.photoMeshes = [];
+    this.photoGeometry = null;
+    this.textureLoader = null;
+    this.textureCache = new Map();
     this.animFrameId = null;
     this.fallbackActive = false;
     this.clock = new THREE.Clock();
@@ -109,7 +107,7 @@ export class Background3D {
     this.smoothPointerX = 0;
     this.smoothPointerY = 0;
 
-    // Dynamic palette colors (smoothly lerped per frame at 60 FPS)
+    // Dynamic palette colors for WebGL elements
     this.currColors = [
       new THREE.Color('#D7141A'),
       new THREE.Color('#11457E'),
@@ -123,11 +121,6 @@ export class Background3D {
       new THREE.Color('#FFFFFF')
     ];
 
-    // Floating photos surroundings
-    this.floatingPhotosContainer = null;
-    this.floatingSlots = [];
-    this.currentPhotoSetIdx = -1;
-
     this._boundResize = this._onResize.bind(this);
     this._boundPointerMove = this._onPointerMove.bind(this);
     this._boundContextLost = this._onContextLost.bind(this);
@@ -138,9 +131,6 @@ export class Background3D {
     if (!this.container || typeof window === 'undefined') return;
 
     window.addEventListener('pointermove', this._boundPointerMove, { passive: true });
-
-    // Initialize the perimeter floating photos layer in the surroundings
-    this._initFloatingPhotos();
 
     try {
       const canvas = document.createElement('canvas');
@@ -192,89 +182,19 @@ export class Background3D {
     }
   }
 
-  _initFloatingPhotos() {
-    if (!this.container || typeof document === 'undefined') return;
-
-    let el = this.container.querySelector('#ambient-floating-photos');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = 'ambient-floating-photos';
-      el.setAttribute('data-testid', 'ambient-floating-photos');
-      this.container.appendChild(el);
+  _getTexture(path) {
+    if (!this.textureLoader) {
+      this.textureLoader = new THREE.TextureLoader();
     }
-    this.floatingPhotosContainer = el;
-    this.floatingPhotosContainer.innerHTML = '';
-    this.floatingSlots = [];
-
-    SLOT_CONFIGS.forEach((cfg) => {
-      const slotEl = document.createElement('div');
-      slotEl.className = `floating-photo-slot slot-${cfg.id}`;
-      slotEl.style.setProperty('--slot-rot', `${cfg.rot}deg`);
-
-      const imgA = document.createElement('img');
-      imgA.className = 'floating-photo-img active';
-      imgA.alt = '';
-      imgA.loading = 'lazy';
-
-      const imgB = document.createElement('img');
-      imgB.className = 'floating-photo-img inactive';
-      imgB.alt = '';
-      imgB.loading = 'lazy';
-
-      slotEl.appendChild(imgA);
-      slotEl.appendChild(imgB);
-      this.floatingPhotosContainer.appendChild(slotEl);
-
-      this.floatingSlots.push({
-        slotEl,
-        imgA,
-        imgB,
-        activeTarget: 'A',
-        currentSrc: ''
-      });
-    });
-
-    this._updateFloatingPhotos(0);
-  }
-
-  _getPhotoSetIndex(slideIndex = 0) {
-    if (slideIndex <= 5) return 0;
-    if (slideIndex <= 13) return 1;
-    if (slideIndex <= 24) return 2;
-    if (slideIndex <= 31) return 3;
-    if (slideIndex <= 41) return 4;
-    return 5;
-  }
-
-  _updateFloatingPhotos(slideIndex = 0) {
-    const setIdx = this._getPhotoSetIndex(slideIndex);
-    if (setIdx === this.currentPhotoSetIdx && this.currentPhotoSetIdx !== -1) return;
-    this.currentPhotoSetIdx = setIdx;
-
-    const photos = PHOTO_SETS[setIdx] || PHOTO_SETS[0];
-
-    this.floatingSlots.forEach((slot, i) => {
-      const newSrc = photos[i % photos.length];
-      if (!newSrc || slot.currentSrc === newSrc) return;
-      slot.currentSrc = newSrc;
-
-      // Cross-fade between imgA and imgB
-      if (slot.activeTarget === 'A') {
-        slot.imgB.src = newSrc;
-        slot.imgB.classList.remove('inactive');
-        slot.imgB.classList.add('active');
-        slot.imgA.classList.remove('active');
-        slot.imgA.classList.add('inactive');
-        slot.activeTarget = 'B';
-      } else {
-        slot.imgA.src = newSrc;
-        slot.imgA.classList.remove('inactive');
-        slot.imgA.classList.add('active');
-        slot.imgB.classList.remove('active');
-        slot.imgB.classList.add('inactive');
-        slot.activeTarget = 'A';
+    const encoded = encodeURI(path);
+    if (!this.textureCache.has(encoded)) {
+      const tex = this.textureLoader.load(encoded);
+      if (THREE.SRGBColorSpace) {
+        tex.colorSpace = THREE.SRGBColorSpace;
       }
-    });
+      this.textureCache.set(encoded, tex);
+    }
+    return this.textureCache.get(encoded);
   }
 
   _buildSceneObjects() {
@@ -311,7 +231,7 @@ export class Background3D {
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
 
-    // 2. 3D Gyroscopic Radar Rings (Jet Lag radar/thermometer theme)
+    // 2. 3D Gyroscopic Radar Rings
     this.ringsGroup = new THREE.Group();
     this.ringMeshes = [];
 
@@ -352,7 +272,7 @@ export class Background3D {
 
     this.scene.add(this.ringsGroup);
 
-    // 3. Floating 3D Low-Poly Geometric Beacons around the viewport perimeter
+    // 3. Floating 3D Low-Poly Geometric Beacons
     this.polyhedra = [];
     const beaconConfigs = [
       { x: -20.5, y: 10.5, z: -3.5, r: 2.7, slot: 0, type: 'ico' },
@@ -388,6 +308,76 @@ export class Background3D {
       this.scene.add(mesh);
       this.polyhedra.push(mesh);
     });
+
+    // 4. True 3D Floating Photos drifting around the perimeter
+    this.photoMeshes = [];
+    this.photoGeometry = new THREE.PlaneGeometry(3.6, 2.7);
+
+    PHOTO_SLOTS.forEach((cfg, idx) => {
+      const initialPath = PHOTO_PATHS[idx % PHOTO_PATHS.length];
+      const tex = this._getTexture(initialPath);
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0.75,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      const mesh = new THREE.Mesh(this.photoGeometry, mat);
+      mesh.position.set(cfg.x, cfg.y, cfg.z);
+      mesh.rotation.z = cfg.rotZ;
+      mesh.rotation.y = cfg.rotY;
+
+      mesh.userData = {
+        baseRotZ: cfg.rotZ,
+        baseRotY: cfg.rotY,
+        currentBaseX: cfg.x,
+        currentBaseY: cfg.y,
+        currentBaseZ: cfg.z,
+        targetBaseX: cfg.x,
+        targetBaseY: cfg.y,
+        targetBaseZ: cfg.z,
+        ampX: cfg.ampX,
+        ampY: cfg.ampY,
+        speed: cfg.speed,
+        phase: idx * 0.85,
+        impulse: 0,
+        currentPath: initialPath
+      };
+
+      this.scene.add(mesh);
+      this.photoMeshes.push(mesh);
+    });
+  }
+
+  _updateFloatingPhotos(slideIndex = 0) {
+    if (!this.photoMeshes || this.photoMeshes.length === 0) return;
+
+    const stride = 3;
+    const startIdx = (slideIndex * stride) % PHOTO_PATHS.length;
+
+    for (let i = 0; i < this.photoMeshes.length; i++) {
+      const mesh = this.photoMeshes[i];
+      const u = mesh.userData;
+      const photoIdx = (startIdx + i) % PHOTO_PATHS.length;
+      const photoPath = PHOTO_PATHS[photoIdx];
+
+      if (u.currentPath !== photoPath) {
+        u.currentPath = photoPath;
+        mesh.material.map = this._getTexture(photoPath);
+        mesh.material.needsUpdate = true;
+      }
+
+      const cfg = PHOTO_SLOTS[i];
+      const driftX = Math.sin(slideIndex * 0.7 + i * 1.3) * 1.4;
+      const driftY = Math.cos(slideIndex * 0.5 + i * 1.1) * 1.0;
+      const driftZ = Math.sin(slideIndex * 0.9 + i * 0.8) * 1.6;
+
+      u.targetBaseX = cfg.x + driftX;
+      u.targetBaseY = cfg.y + driftY;
+      u.targetBaseZ = cfg.z + driftZ;
+      u.impulse = 1.0;
+    }
   }
 
   _applyAmbientTheme(palette) {
@@ -408,6 +398,29 @@ export class Background3D {
       this.targetColors[2].set(palette.accent || '#D8973C');
       this.targetColors[3].set(palette.glow || '#FFFFFF');
       this._applyAmbientTheme(palette);
+
+      // Update ambient palette CSS variables ONCE when slide changes
+      if (this.container) {
+        this.container.style.setProperty('--ambient-primary-rgb', hexToRgbString(palette.primary, '215, 20, 26'));
+        this.container.style.setProperty('--ambient-secondary-rgb', hexToRgbString(palette.secondary, '17, 69, 126'));
+        this.container.style.setProperty('--ambient-accent-rgb', hexToRgbString(palette.accent, '216, 151, 60'));
+        this.container.style.setProperty('--ambient-glow-rgb', hexToRgbString(palette.glow, '215, 20, 26'));
+      }
+
+      // Update particle geometry colors ONCE when slide changes
+      if (this.particles) {
+        const colorAttr = this.particles.geometry.getAttribute('color');
+        if (colorAttr && this.particleSlots) {
+          const arr = colorAttr.array;
+          for (let i = 0; i < this.particleSlots.length; i++) {
+            const c = this.targetColors[this.particleSlots[i]];
+            arr[i * 3] = c.r;
+            arr[i * 3 + 1] = c.g;
+            arr[i * 3 + 2] = c.b;
+          }
+          colorAttr.needsUpdate = true;
+        }
+      }
     }
 
     this._updateFloatingPhotos(indexh);
@@ -433,49 +446,13 @@ export class Background3D {
       this.transitionImpulse *= 0.93;
       if (this.transitionImpulse < 0.001) this.transitionImpulse = 0;
 
-      // Smooth pointer parallax for both 3D camera, active slide stage, and surrounding photos
+      // Smooth pointer parallax strictly inside WebGL without touching DOM
       this.smoothPointerX += (this.pointerX - this.smoothPointerX) * 0.08;
       this.smoothPointerY += (this.pointerY - this.smoothPointerY) * 0.08;
 
-      if (this.container) {
-        const waveTiltX = Math.sin(elapsed * 1.1) * 0.65 + this.transitionImpulse * 2.4;
-        const waveTiltY = Math.cos(elapsed * 0.85) * 0.85 - this.transitionImpulse * 2.8;
-        const tiltX = (-this.smoothPointerY * 2.6 + waveTiltX).toFixed(2);
-        const tiltY = (this.smoothPointerX * 3.2 + waveTiltY).toFixed(2);
-        const floatY = (Math.sin(elapsed * 1.45) * 3.5).toFixed(2);
-        this.container.style.setProperty('--stage-tilt-x', `${tiltX}deg`);
-        this.container.style.setProperty('--stage-tilt-y', `${tiltY}deg`);
-        this.container.style.setProperty('--stage-float-y', `${floatY}px`);
-      }
-
-      // Smoothly interpolate active slide palette colors in 3D space & CSS at 60 FPS
+      // Smoothly interpolate active slide palette colors in 3D materials
       for (let s = 0; s < 4; s++) {
         this.currColors[s].lerp(this.targetColors[s], 0.06);
-      }
-
-      // Update ambient gradient CSS variables every frame for buttery-smooth 60 FPS transitions
-      if (this.container) {
-        const c0 = this.currColors[0];
-        const c1 = this.currColors[1];
-        const c2 = this.currColors[2];
-        const c3 = this.currColors[3];
-        const r0 = Math.round(c0.r * 255);
-        const g0 = Math.round(c0.g * 255);
-        const b0 = Math.round(c0.b * 255);
-        const r1 = Math.round(c1.r * 255);
-        const g1 = Math.round(c1.g * 255);
-        const b1 = Math.round(c1.b * 255);
-        const r2 = Math.round(c2.r * 255);
-        const g2 = Math.round(c2.g * 255);
-        const b2 = Math.round(c2.b * 255);
-        const r3 = Math.round(c3.r * 255);
-        const g3 = Math.round(c3.g * 255);
-        const b3 = Math.round(c3.b * 255);
-
-        this.container.style.setProperty('--ambient-primary-rgb', `${r0}, ${g0}, ${b0}`);
-        this.container.style.setProperty('--ambient-secondary-rgb', `${r1}, ${g1}, ${b1}`);
-        this.container.style.setProperty('--ambient-accent-rgb', `${r2}, ${g2}, ${b2}`);
-        this.container.style.setProperty('--ambient-glow-rgb', `${r3}, ${g3}, ${b3}`);
       }
 
       if (this.ringMeshes.length === 3) {
@@ -493,22 +470,13 @@ export class Background3D {
 
       const speedBoost = 1 + this.transitionImpulse * 5.5;
 
+      // 1. Particle field rotation
       if (this.particles) {
         this.particles.rotation.y += 0.0018 * speedBoost;
         this.particles.rotation.x += 0.0007 * speedBoost;
-        const colorAttr = this.particles.geometry.getAttribute('color');
-        if (colorAttr && this.particleSlots) {
-          const arr = colorAttr.array;
-          for (let i = 0; i < this.particleSlots.length; i++) {
-            const c = this.currColors[this.particleSlots[i]];
-            arr[i * 3] = c.r;
-            arr[i * 3 + 1] = c.g;
-            arr[i * 3 + 2] = c.b;
-          }
-          colorAttr.needsUpdate = true;
-        }
       }
 
+      // 2. Radar rings rotation & scaling
       if (this.ringsGroup) {
         this.ringsGroup.rotation.z += 0.003 * speedBoost;
         this.ringsGroup.rotation.y = Math.sin(elapsed * 0.48) * 0.35 + this.smoothPointerX * 0.18;
@@ -517,6 +485,7 @@ export class Background3D {
         this.ringsGroup.scale.setScalar(ringScale);
       }
 
+      // 3. Polyhedra floating & rotation
       for (const mesh of this.polyhedra) {
         const u = mesh.userData;
         mesh.material.color.copy(this.currColors[u.slot]);
@@ -526,6 +495,37 @@ export class Background3D {
         mesh.position.x = u.baseX + Math.cos(elapsed * 0.95 + u.phase) * 0.85;
         const pulseScale = 1 + Math.sin(elapsed * 2.1 + u.phase) * 0.06 + this.transitionImpulse * 0.22;
         mesh.scale.setScalar(pulseScale);
+      }
+
+      // 4. True 3D Floating Photos drifting & gentle bobbing
+      for (let i = 0; i < this.photoMeshes.length; i++) {
+        const mesh = this.photoMeshes[i];
+        const u = mesh.userData;
+
+        // Smooth drift to target base positions
+        u.currentBaseX += (u.targetBaseX - u.currentBaseX) * 0.04;
+        u.currentBaseY += (u.targetBaseY - u.currentBaseY) * 0.04;
+        u.currentBaseZ += (u.targetBaseZ - u.currentBaseZ) * 0.04;
+
+        // Gentle sin/cos floating bobbing
+        const bobX = Math.sin(elapsed * u.speed * 0.85 + u.phase) * u.ampX;
+        const bobY = Math.cos(elapsed * u.speed * 1.1 + u.phase) * u.ampY;
+        const bobZ = Math.sin(elapsed * 0.65 + u.phase) * 0.7;
+
+        mesh.position.x = u.currentBaseX + bobX;
+        mesh.position.y = u.currentBaseY + bobY;
+        mesh.position.z = u.currentBaseZ + bobZ;
+
+        // Subtle rotation with slight pointer parallax influence
+        mesh.rotation.z = u.baseRotZ + Math.sin(elapsed * 0.75 + u.phase) * 0.05;
+        mesh.rotation.y = u.baseRotY + Math.cos(elapsed * 0.55 + u.phase) * 0.08 + this.smoothPointerX * 0.10;
+        mesh.rotation.x = Math.sin(elapsed * 0.5 + u.phase) * 0.05 - this.smoothPointerY * 0.08;
+
+        // Slide transition impulse decay
+        if (u.impulse > 0.001) {
+          mesh.rotation.y += u.impulse * 0.035;
+          u.impulse *= 0.93;
+        }
       }
 
       this.renderer.render(this.scene, this.camera);
@@ -575,12 +575,47 @@ export class Background3D {
   destroy() {
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
     }
     window.removeEventListener('resize', this._boundResize);
     window.removeEventListener('pointermove', this._boundPointerMove);
     if (this.canvas) {
       this.canvas.removeEventListener('webglcontextlost', this._boundContextLost);
       this.canvas.removeEventListener('webglcontextrestored', this._boundContextRestored);
+      if (this.canvas.parentNode) {
+        this.canvas.parentNode.removeChild(this.canvas);
+      }
+    }
+    if (this.photoGeometry) {
+      this.photoGeometry.dispose();
+      this.photoGeometry = null;
+    }
+    for (const mesh of this.photoMeshes) {
+      if (mesh.material) mesh.material.dispose();
+    }
+    this.photoMeshes = [];
+    for (const tex of this.textureCache.values()) {
+      tex.dispose();
+    }
+    this.textureCache.clear();
+    for (const mesh of this.polyhedra) {
+      if (mesh.geometry) mesh.geometry.dispose();
+      if (mesh.material) mesh.material.dispose();
+    }
+    this.polyhedra = [];
+    for (const mesh of this.ringMeshes) {
+      if (mesh.geometry) mesh.geometry.dispose();
+      if (mesh.material) mesh.material.dispose();
+    }
+    this.ringMeshes = [];
+    if (this.particles) {
+      if (this.particles.geometry) this.particles.geometry.dispose();
+      if (this.particles.material) this.particles.material.dispose();
+      this.particles = null;
+    }
+    if (this.renderer) {
+      this.renderer.dispose();
+      this.renderer = null;
     }
   }
 }

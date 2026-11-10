@@ -29,6 +29,9 @@ export class SyncEngine {
     ) {
       reveal = revealOrOptions;
       options = maybeOptions || {};
+    } else if (maybeOptions && typeof maybeOptions === 'object' && Object.keys(maybeOptions).length > 0) {
+      reveal = revealOrOptions && typeof revealOrOptions.configure === 'function' ? revealOrOptions : null;
+      options = maybeOptions;
     } else if (typeof revealOrOptions === 'object') {
       options = revealOrOptions || {};
       reveal = options.reveal || null;
@@ -55,7 +58,7 @@ export class SyncEngine {
     this.bc = null;
     this.mqtt = null;
     this.peer = null;
-    this.peerConnections = new Set();
+    this.peerConnections = new Map();
     this.mqttViewers = new Map();
     this.badgeElement = null;
     this.badgeTextElement = null;
@@ -224,7 +227,8 @@ export class SyncEngine {
         progress: false,
         overview: false,
         hash: false,
-        respondToHashChanges: false
+        respondToHashChanges: false,
+        mouseWheel: false
       });
     }
 
@@ -367,9 +371,8 @@ export class SyncEngine {
     if (this.isApplyingRemoteState) return;
 
     if (!this.isMaster) {
-      if (this.authoritativeState) {
-        this._applyStateToReveal(this.authoritativeState, true);
-      }
+      const target = this.authoritativeState || createInitialState();
+      this._applyStateToReveal(target, true);
       return;
     }
 
@@ -434,7 +437,7 @@ export class SyncEngine {
   }
 
   _handleIncomingState(incomingState, clientsCount) {
-    if (typeof clientsCount === 'number') {
+    if (typeof clientsCount === 'number' && !this.isMaster) {
       this.viewersCount = clientsCount;
     }
 
@@ -522,9 +525,9 @@ export class SyncEngine {
     }
 
     // 5. WebRTC PeerJS connections
-    for (const conn of this.peerConnections) {
+    for (const { conn } of this.peerConnections.values()) {
       try {
-        if (conn.open) conn.send(msg);
+        if (conn && conn.open) conn.send(msg);
       } catch {}
     }
   }
@@ -561,15 +564,20 @@ export class SyncEngine {
       onMessage: (subTopic, data) => {
         if (!data) return;
         if (subTopic === 'state' && data.type === 'state' && data.payload) {
-          this._handleIncomingState(data.payload);
+          this._handleIncomingState(data.payload, data.clientsCount);
         } else if (subTopic === 'ctrl') {
           if (data.type === 'client_leave') {
-            if (data.clientId) {
+            if (this.isMaster && data.clientId) {
               this.mqttViewers.delete(data.clientId);
               this._recomputeStaticViewersCount();
             }
+          } else if (data.type === 'viewers_count') {
+            if (!this.isMaster && typeof data.count === 'number') {
+              this.viewersCount = data.count;
+              this._emitStatus();
+            }
           } else if (data.type === 'sync_request' || data.type === 'client_ping') {
-            if (data.role === 'client' && typeof data.clientId === 'string' && data.clientId !== this.clientId) {
+            if (this.isMaster && data.role === 'client' && typeof data.clientId === 'string' && data.clientId !== this.clientId) {
               this.mqttViewers.set(data.clientId, Date.now());
               this._recomputeStaticViewersCount();
             }
@@ -579,7 +587,7 @@ export class SyncEngine {
               this.authoritativeState &&
               (this.hasUserNavigated || this.hasRestoredState || this.authoritativeState.indexh > 0)
             ) {
-              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState, clientsCount: this.viewersCount }, true);
             }
           } else if (data.type === 'master_sync_request') {
             if (
@@ -587,7 +595,7 @@ export class SyncEngine {
               this.authoritativeState &&
               (this.hasUserNavigated || this.hasRestoredState || this.authoritativeState.indexh > 0)
             ) {
-              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState }, true);
+              this.mqtt.publish('state', { type: 'state', payload: this.authoritativeState, clientsCount: this.viewersCount }, true);
             }
           }
         }
@@ -598,14 +606,45 @@ export class SyncEngine {
   }
 
   _recomputeStaticViewersCount() {
+    if (!this.isMaster) {
+      this._emitStatus();
+      return;
+    }
+
     const now = Date.now();
     for (const [cid, ts] of this.mqttViewers.entries()) {
       if (now - ts > 10000) {
         this.mqttViewers.delete(cid);
       }
     }
-    this.viewersCount = Math.max(this.peerConnections.size, this.mqttViewers.size);
+
+    let activePeerCount = 0;
+    for (const [pid, entry] of this.peerConnections.entries()) {
+      const conn = entry?.conn;
+      if (!conn || !conn.open || conn.destroyed) {
+        try {
+          if (conn && typeof conn.close === 'function') conn.close();
+        } catch {}
+        this.peerConnections.delete(pid);
+      } else {
+        activePeerCount++;
+      }
+    }
+
+    this.viewersCount = Math.max(this.mqttViewers.size, activePeerCount);
     this._emitStatus();
+
+    // Broadcast viewersCount to clients via MQTT & PeerJS
+    if (this.mqtt) {
+      this.mqtt.publish('ctrl', { type: 'viewers_count', count: this.viewersCount }, false);
+    }
+    for (const { conn } of this.peerConnections.values()) {
+      try {
+        if (conn && conn.open) {
+          conn.send({ type: 'viewers_count', count: this.viewersCount });
+        }
+      } catch {}
+    }
   }
 
   _setupBroadcastChannel() {
@@ -808,20 +847,46 @@ export class SyncEngine {
           this._emitStatus();
         });
         peer.on('connection', (conn) => {
-          this.peerConnections.add(conn);
+          const peerId = conn.peer || conn.id || Math.random().toString(36).slice(2, 9);
+          if (this.peerConnections.has(peerId)) {
+            try {
+              const old = this.peerConnections.get(peerId);
+              if (old?.conn && old.conn !== conn) {
+                old.conn.close();
+              }
+            } catch {}
+          }
+          this.peerConnections.set(peerId, { conn, lastSeen: Date.now() });
+
           conn.on('open', () => {
+            this.peerConnections.set(peerId, { conn, lastSeen: Date.now() });
             this._recomputeStaticViewersCount();
             if (this.authoritativeState) {
-              conn.send({ type: 'state', payload: this.authoritativeState });
+              conn.send({
+                type: 'state',
+                payload: this.authoritativeState,
+                clientsCount: this.viewersCount
+              });
             }
           });
           conn.on('data', (data) => {
+            if (this.peerConnections.has(peerId)) {
+              this.peerConnections.get(peerId).lastSeen = Date.now();
+            }
             if (data && data.type === 'sync_request' && this.authoritativeState) {
-              conn.send({ type: 'state', payload: this.authoritativeState });
+              conn.send({
+                type: 'state',
+                payload: this.authoritativeState,
+                clientsCount: this.viewersCount
+              });
             }
           });
           conn.on('close', () => {
-            this.peerConnections.delete(conn);
+            this.peerConnections.delete(peerId);
+            this._recomputeStaticViewersCount();
+          });
+          conn.on('error', () => {
+            this.peerConnections.delete(peerId);
             this._recomputeStaticViewersCount();
           });
         });
@@ -829,24 +894,41 @@ export class SyncEngine {
         const peer = new Peer();
         this.peer = peer;
         let activeConn = null;
+        let connectingSince = 0;
 
         const connectToMaster = () => {
           if (this.destroyed || !peer || peer.disconnected || peer.destroyed) return;
-          if (activeConn && activeConn.open) return;
+          if (activeConn) {
+            if (activeConn.open) return;
+            if (!activeConn.destroyed && Date.now() - connectingSince < 8000) return;
+            try {
+              activeConn.close();
+            } catch {}
+            activeConn = null;
+          }
           try {
+            connectingSince = Date.now();
             const conn = peer.connect(masterPeerId, { reliable: true });
             activeConn = conn;
             conn.on('open', () => {
               this.connected = true;
-              conn.send({ type: 'sync_request' });
+              conn.send({ type: 'sync_request', clientId: this.clientId });
               this._emitStatus();
             });
             conn.on('data', (data) => {
               if (data && data.type === 'state' && data.payload) {
-                this._handleIncomingState(data.payload);
+                this._handleIncomingState(data.payload, data.clientsCount);
+              } else if (data && data.type === 'viewers_count') {
+                if (!this.isMaster && typeof data.count === 'number') {
+                  this.viewersCount = data.count;
+                  this._emitStatus();
+                }
               }
             });
             conn.on('close', () => {
+              activeConn = null;
+            });
+            conn.on('error', () => {
               activeConn = null;
             });
           } catch {}
@@ -855,6 +937,10 @@ export class SyncEngine {
         peer.on('open', () => {
           connectToMaster();
           this._peerRetryTimer = setInterval(connectToMaster, 2500);
+        });
+
+        peer.on('error', () => {
+          activeConn = null;
         });
       }
     } catch {}
@@ -972,5 +1058,11 @@ export class SyncEngine {
         this.peer.destroy();
       } catch {}
     }
+    for (const { conn } of this.peerConnections.values()) {
+      try {
+        if (conn && typeof conn.close === 'function') conn.close();
+      } catch {}
+    }
+    this.peerConnections.clear();
   }
 }

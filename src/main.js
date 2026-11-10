@@ -104,22 +104,37 @@ async function bootstrap() {
     });
   }
 
-  // 5. Fullscreen Button Wiring (available for both viewers and presenter)
+  // 5. Fullscreen Button Wiring (available for both viewers and presenter, with iOS/WebKit fallback)
   if (fsBtn) {
-    fsBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
+    fsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const doc = document;
+      const el = document.documentElement;
+      const isFs = Boolean(doc.fullscreenElement || doc.webkitFullscreenElement);
+      if (!isFs) {
+        if (el.requestFullscreen) {
+          el.requestFullscreen().catch(() => {});
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        }
       } else {
-        document.exitFullscreen().catch(() => {});
+        if (doc.exitFullscreen) {
+          doc.exitFullscreen().catch(() => {});
+        } else if (doc.webkitExitFullscreen) {
+          doc.webkitExitFullscreen();
+        }
       }
     });
 
-    document.addEventListener('fullscreenchange', () => {
-      const isFs = Boolean(document.fullscreenElement);
+    const updateFsIcon = () => {
+      const isFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
       fsBtn.querySelector('.fs-icon-enter')?.classList.toggle('hidden', isFs);
       fsBtn.querySelector('.fs-icon-exit')?.classList.toggle('hidden', !isFs);
       fsBtn.setAttribute('title', isFs ? 'Ukončit celou obrazovku' : 'Celá obrazovka (Fullscreen)');
-    });
+    };
+
+    document.addEventListener('fullscreenchange', updateFsIcon);
+    document.addEventListener('webkitfullscreenchange', updateFsIcon);
   }
 
   // 6. Initialize Master-Client Synchronization Engine

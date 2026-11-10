@@ -540,9 +540,9 @@ export const EDITABLE_SLIDES = {
     ]
   },
 
-  // Snímek 45: Bonusy
+  // Snímek 45: Jídlo
   45: {
-    title: "Bonusy",
+    title: "Jídlo",
     notes: "",
     paragraphs: [
           "Jídlo",
